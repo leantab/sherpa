@@ -4,19 +4,19 @@ namespace CompanyHike\Sherpa\Events;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
-use CompanyHike\Sherpa\Models\Match;
+use CompanyHike\Sherpa\Models\Game;
 
 class StageProcessed
 {
     use Dispatchable, SerializesModels;
 
-    public $match;
+    public $game;
     public $stage;
 
-    public function __construct(Match $match, $stage)
+    public function __construct(Game $game, $stage)
     {
 
-        $this->match = $match;
+        $this->game = $game;
         $this->stage = $stage;
     }
 }

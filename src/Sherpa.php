@@ -2,8 +2,9 @@
 
 namespace CompanyHike\Sherpa;
 
-use CompanyHike\Sherpa\Models\Match;
+use CompanyHike\Sherpa\Models\Game;
 use CompanyHike\Sherpa\Models\User;
+use CompanyHike\Sherpa\Models\GameUser;
 use CompanyHike\Sherpa\Jobs\ProcessStage;
 
 class Sherpa
@@ -38,7 +39,7 @@ class Sherpa
     */
     public function getSchema($version = 'current')
     {
-        if($version == 'current'){
+        if ($version == 'current') {
             $versions = $this->getVersions();
             $version = array_shift($versions);
         }
@@ -54,7 +55,7 @@ class Sherpa
     */
     public function getVariables($version = 'current')
     {
-        if($version == 'current'){
+        if ($version == 'current') {
             $versions = $this->getVersions();
             $version = array_shift($versions);
         }
@@ -72,82 +73,82 @@ class Sherpa
     *   Retorna el schema json de variables de gobierno para la partida indicada
     *
     */
-    public function getGovermentVariables($match_id){
-        $match = Match::findOrFail($match_id);
-        $schema = $this->getSchema($match->version);
+    public function getGovermentVariables($game_id)
+    {
+        $game = Game::findOrFail($game_id);
+        $schema = $this->getSchema($game->version);
         $goverment_parameters = [];
 
-        foreach($schema['goverment_parameters'] as $index => $field){
+        foreach ($schema['goverment_parameters'] as $index => $field) {
 
             // Reemplaza las variables dinamicas
-            if(isset($field['max']) && is_string($field['max']) && substr($field['max'], 0, 9) == '$industry'){
-                $field['max'] = $this->industry($match, substr($field['max'], 10));
+            if (isset($field['max']) && is_string($field['max']) && substr($field['max'], 0, 9) == '$industry') {
+                $field['max'] = $this->industry($game, substr($field['max'], 10));
             }
-            if(isset($field['min']) && is_string($field['min']) && substr($field['min'], 0, 9) == '$industry'){
-                $field['min'] = $this->industry($match, substr($field['min'], 10));
+            if (isset($field['min']) && is_string($field['min']) && substr($field['min'], 0, 9) == '$industry') {
+                $field['min'] = $this->industry($game, substr($field['min'], 10));
             }
-            
 
-            if(isset($field['required_if_match'])){
-                $explode = explode(':', $field['required_if_match']);
-                $match_field = $explode[0];
+
+            if (isset($field['required_if_game'])) {
+                $explode = explode(':', $field['required_if_game']);
+                $game_field = $explode[0];
                 $values = explode(',', $explode[1]);
-                if (isset($match['match_parameters'][$match_field]) && in_array($match['match_parameters'][$match_field], $values)) {
+                if (isset($game['game_parameters'][$game_field]) && in_array($game['game_parameters'][$game_field], $values)) {
                     $field['required'] = true;
-                    unset($field['required_if_match']);
+                    unset($field['required_if_game']);
                     $goverment_parameters[$index] = $field;
                 }
-
-            }else{
+            } else {
                 $goverment_parameters[$index] = $field;
             }
         }
         return $goverment_parameters;
     }
 
-    public function getCeoVariables($match_id, $user_id){
-        $match = Match::findOrFail($match_id);
-        $schema = $this->getSchema($match->version);
-        $user = $match->ceos()->where('user_id', $user_id)->first();
+    public function getCeoVariables($game_id, $user_id)
+    {
+        $game = Game::findOrFail($game_id);
+        $schema = $this->getSchema($game->version);
+        $user = $game->ceos()->where('user_id', $user_id)->first();
 
         $ceo_parameters = [];
 
-        include(__DIR__ . '/Core/' . $match->version . '/functions.php');
+        include(__DIR__ . '/Core/' . $game->version . '/functions.php');
 
-        foreach($schema['ceo_parameters'] as $index => $field){
+        foreach ($schema['ceo_parameters'] as $index => $field) {
 
             // Reemplaza las variables dinamicas
-            if(isset($field['max']) && is_string($field['max'])){
+            if (isset($field['max']) && is_string($field['max'])) {
                 $function = substr($field['max'], 0, strlen($field['max']) - 2);
-                $field['max'] = $function($match, $user);
+                $field['max'] = $function($game, $user);
             }
-            if(isset($field['min']) && is_string($field['min'])){
+            if (isset($field['min']) && is_string($field['min'])) {
                 $function = substr($field['min'], 0, strlen($field['min']) - 2);
-                $field['min'] = $function($match, $user);
+                $field['min'] = $function($game, $user);
             }
 
-            if(isset($field['required_if_match'])){
-                $explode = explode(':', $field['required_if_match']);
-                $match_field = $explode[0];
+            if (isset($field['required_if_game'])) {
+                $explode = explode(':', $field['required_if_game']);
+                $game_field = $explode[0];
                 $values = explode(',', $explode[1]);
-                if (isset($match['match_parameters'][$match_field]) && in_array($match['match_parameters'][$match_field], $values)) {
+                if (isset($game['game_parameters'][$game_field]) && in_array($game['game_parameters'][$game_field], $values)) {
                     $field['required'] = true;
-                    unset($field['required_if_match']);
+                    unset($field['required_if_game']);
                     $ceo_parameters[$index] = $field;
                 }
-
-            }else{
+            } else {
                 $ceo_parameters[$index] = $field;
             }
         }
         return $ceo_parameters;
     }
 
-    public function industry($match, $var)
+    public function industry($game, $var)
     {
         try {
-            $industry = $match->match_parameters['industry'];
-            $vars = json_decode(file_get_contents(__DIR__ . '/Core/' . $match->version . '/industries/' . $industry . '.json'), true);
+            $industry = $game->game_parameters['industry'];
+            $vars = json_decode(file_get_contents(__DIR__ . '/Core/' . $game->version . '/industries/' . $industry . '.json'), true);
             if ($vars) {
                 return $vars[$var];
             } else {
@@ -159,193 +160,146 @@ class Sherpa
     }
 
 
-    public function getMatches($user_id, $segment_id){
-        $matches = [];
+    public function getGamees($user_id, $segment_id)
+    {
+        $gamees = [];
         $user = User::findOrFail($user_id);
-        $govs = $user->goverment_matches()->where('segment_id', $segment_id)->latest()->get();
+        $govs = $user->goverment_gamees()->where('segment_id', $segment_id)->latest()->get();
 
-        foreach($govs as $item){
-            $matches[] = [
+        foreach ($govs as $item) {
+            $gamees[] = [
                 'player_type' => 'goverment',
                 'id' => $item->id,
                 'name' => $item->name,
                 'current_stage' => $item->current_stage,
-                'type' => $item->match_parameters['type'],
-                'players' => $item->match_parameters['players'],
-                'industry' => $item->match_parameters['industry'],
-                'stages' => $item->match_parameters['stages'],
-                'country' => $item->match_parameters['country'] ?? '',
-                'scenario' => $item->match_parameters['scenario'] ?? '',
+                'type' => $item->game_parameters['type'],
+                'players' => $item->game_parameters['players'],
+                'industry' => $item->game_parameters['industry'],
+                'stages' => $item->game_parameters['stages'],
+                'country' => $item->game_parameters['country'] ?? '',
+                'scenario' => $item->game_parameters['scenario'] ?? '',
                 'active' => ($item->status_id == 2) ? true : false
             ];
         }
-        $ceos = $user->ceo_matches()->where('segment_id', $segment_id)->latest()->get();
+        $ceos = $user->ceo_gamees()->where('segment_id', $segment_id)->latest()->get();
         foreach ($ceos as $item) {
-            $matches[] = [
+            $gamees[] = [
                 'player_type' => 'ceo',
                 'id' => $item->id,
                 'name' => $item->name,
                 'current_stage' => $item->current_stage,
-                'type' => $item->match_parameters['type'],
-                'players' => $item->match_parameters['players'],
-                'industry' => $item->match_parameters['industry'],
-                'players' => $item->match_parameters['players'],
-                'stages' => $item->match_parameters['stages'],
-                'country' => $item->match_parameters['country'] ?? '',
-                'scenario' => $item->match_parameters['scenario'] ?? '',
+                'type' => $item->game_parameters['type'],
+                'players' => $item->game_parameters['players'],
+                'industry' => $item->game_parameters['industry'],
+                'players' => $item->game_parameters['players'],
+                'stages' => $item->game_parameters['stages'],
+                'country' => $item->game_parameters['country'] ?? '',
+                'scenario' => $item->game_parameters['scenario'] ?? '',
                 'active' => ($item->status_id == 2) ? true : false
             ];
         }
 
-        return $matches;
+        return $gamees;
     }
 
 
-    public function createMatch($version, $match_parameters, $creator_id, $segment_id)
-    {   
+    public function createGame($version, $game_parameters, $creator_id, $segment_id)
+    {
         $schema = $this->getSchema($version);
 
-        $res = $this->validateJsonData($schema['match_parameters'], $match_parameters);
+        $res = $this->validateJsonData($schema['game_parameters'], $game_parameters);
 
-        if($res->status === true){
+        if ($res->status === true) {
 
             if ($res->parameters['type'] == 'scenario') {
                 // Merge variables de escenario
-                $scenarioMatchParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/scenarios/' . $match_parameters['scenario'] . '.json'), true);
-                $res->parameters = array_merge($res->parameters, $scenarioMatchParameters['match_parameters']);
-            }elseif($res->parameters['type'] == 'country'){
+                $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/scenarios/' . $game_parameters['scenario'] . '.json'), true);
+                $res->parameters = array_merge($res->parameters, $scenarioGameParameters['game_parameters']);
+            } elseif ($res->parameters['type'] == 'country') {
                 // Merge variables de pais
-                $countryMatchParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/countries/' . $match_parameters['country'] . '.json'), true);
-                $res->parameters = array_merge($res->parameters, $countryMatchParameters['match_parameters']);
-            }else{
+                $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/countries/' . $game_parameters['country'] . '.json'), true);
+                $res->parameters = array_merge($res->parameters, $countryGameParameters['game_parameters']);
+            } else {
                 // Merge variables de tipo de gobierno
                 if ($res->parameters['goverment_side'] != 'custom') {
-                    $govermentSideMatchParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/data/goverment_sides.json'), true);
-                    $res->parameters = array_merge($res->parameters, $govermentSideMatchParameters[$res->parameters['goverment_side']]);
+                    $govermentSideGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/data/goverment_sides.json'), true);
+                    $res->parameters = array_merge($res->parameters, $govermentSideGameParameters[$res->parameters['goverment_side']]);
                 }
             }
 
-            $match_data = [
+            $game_data = [
                 'version' => $version,
                 'status_id' => 1,
                 'segment_id' => $segment_id,
-                'match_parameters' => $res->parameters,
+                'game_parameters' => $res->parameters,
                 'creator_id' => $creator_id
             ];
 
             if ($res->parameters['type'] == 'scenario') {
-                $match_data['goverment_parameters'] = $scenarioMatchParameters['goverment_parameters'];
+                $game_data['goverment_parameters'] = $scenarioGameParameters['goverment_parameters'];
             }
 
-                
-            $match = Match::create($match_data);
+
+            $game = Game::create($game_data);
             $return = new \StdClass();
             $return->status = true;
-            $return->id = $match->id;
+            $return->id = $game->id;
             return $return;
-        }else{
+        } else {
             return $res;
         }
     }
 
-    public function addGoverment($match_id, $user_id)
+    public function addGoverment($game_id, $user_id)
     {
-        $match = Match::findOrFail($match_id);
-        $match->goverment_id = $user_id;
-        $match->save();
+        $game = Game::findOrFail($game_id);
+        $game->goverment_id = $user_id;
+        $game->save();
         return true;
     }
 
-    public function addCeo($match_id, $user_id, $company_name, $avatar)
+    public function addCeo($game_id, $user_id, $company_name, $avatar)
     {
-        $match = Match::findOrFail($match_id);
-        if($match->ceos()->count() >= $match->players){
+        $game = Game::findOrFail($game_id);
+        if ($game->ceos()->count() >= $game->players) {
             throw new \Exception("No hay slots disponibles en esta partida");
         }
-        $match->ceos()->attach($user_id, [
+        $game->ceos()->attach($user_id, [
             'company_name' => $company_name,
             'avatar' => $avatar,
         ]);
-        if ($match->ceos()->count() == $match->players) {
-            $match->status_id = 2;
-            $match->save();
-            ProcessStage::dispatch($match);
+        if ($game->ceos()->count() == $game->players) {
+            $game->status_id = 2;
+            $game->save();
+            ProcessStage::dispatch($game);
         }
         return true;
     }
 
-    public function getGovermentParameters($match_id, $stage)
+    public function getGovermentParameters($game_id, $stage)
     {
-        $match = Match::findOrFail($match_id);
-        if(isset($match->goverment_parameters['stage_'.$stage])){
-            return $match->goverment_parameters['stage_' . $stage];
-        }else{
+        $game = Game::findOrFail($game_id);
+        if (isset($game->goverment_parameters['stage_' . $stage])) {
+            return $game->goverment_parameters['stage_' . $stage];
+        } else {
             return [];
         }
     }
 
-    public function setGovermentParameters($match_id, $goverment_parameters)
-    {   
-        $match = Match::findOrFail($match_id);
-        $schema = $this->getGovermentVariables($match_id);
+    public function setGovermentParameters($game_id, $goverment_parameters)
+    {
+        $game = Game::findOrFail($game_id);
+        $schema = $this->getGovermentVariables($game_id);
         $res = $this->validateJsonData($schema, $goverment_parameters);
 
-        if($res->status === true){
-            $goverment_parameters = $match->goverment_parameters;
-            $goverment_parameters['stage_' . $match->current_stage] = $res->parameters;
+        if ($res->status === true) {
+            $goverment_parameters = $game->goverment_parameters;
+            $goverment_parameters['stage_' . $game->current_stage] = $res->parameters;
 
-            $match->update([
+            $game->update([
                 'goverment_parameters' => $goverment_parameters
             ]);
-            $this->processMatch($match_id);
-            $return = new \StdClass();
-            $return->status = true;
-            return $return;
-        }else{
-            return $res;
-        }
-    }
-
-    public function setCeoParameters($match_id, $ceo_parameters, $user_id)
-    {
-        $match = Match::findOrFail($match_id);
-        $user = $match->ceos()->where('user_id', $user_id)->first();
-        $pivot = $user->pivot;
-
-        if(!$match->isActive()){
-            $return = new \StdClass();
-            $return->errors = 'inactive_match';
-            $return->status = false;
-            return $return;
-        }
-
-        if($pivot->bankrupt == true){
-            $return = new \StdClass();
-            $return->errors = 'company_bankrupt';
-            $return->status = false;
-            return $return;
-        }
-
-        if($pivot->dismissed == true){
-            $return = new \StdClass();
-            $return->errors = 'ceo_dismissed';
-            $return->status = false;
-            return $return;
-        }
-
-
-        $schema = $this->getCeoVariables($match_id, $user_id);
-        
-        $res = $this->validateJsonData($schema, $ceo_parameters, $match, $user);
-
-        if ($res->status === true) {
-            $ceo_parameters = $pivot->ceo_parameters;
-            $ceo_parameters['stage_' . $match->current_stage] = $res->parameters;
-
-            $pivot->update([
-                'ceo_parameters' => $ceo_parameters
-            ]);
-            $this->processMatch($match_id);
+            $this->processGame($game_id);
             $return = new \StdClass();
             $return->status = true;
             return $return;
@@ -354,76 +308,137 @@ class Sherpa
         }
     }
 
-    public function getCeoParameters($match_id, $stage, $user_id)
+    public function setCeoParameters($game_id, $ceo_parameters, $user_id)
     {
-        $match = Match::findOrFail($match_id);
-        $user = $match->ceos()->where('user_id', $user_id)->first();
+        $game = Game::findOrFail($game_id);
+        $user = $game->ceos()->where('user_id', $user_id)->first();
         $pivot = $user->pivot;
 
-        if(isset($pivot->ceo_parameters['stage_'.$stage])){
+        if (!$game->isActive()) {
+            $return = new \StdClass();
+            $return->errors = 'inactive_game';
+            $return->status = false;
+            return $return;
+        }
+
+        if ($pivot->bankrupt == true) {
+            $return = new \StdClass();
+            $return->errors = 'company_bankrupt';
+            $return->status = false;
+            return $return;
+        }
+
+        if ($pivot->dismissed == true) {
+            $return = new \StdClass();
+            $return->errors = 'ceo_dismissed';
+            $return->status = false;
+            return $return;
+        }
+
+
+        $schema = $this->getCeoVariables($game_id, $user_id);
+
+        $res = $this->validateJsonData($schema, $ceo_parameters, $game, $user);
+
+        if ($res->status === true) {
+            $ceo_parameters = $pivot->ceo_parameters;
+            $ceo_parameters['stage_' . $game->current_stage] = $res->parameters;
+
+            $pivot->update([
+                'ceo_parameters' => $ceo_parameters
+            ]);
+            $this->processGame($game_id);
+            $return = new \StdClass();
+            $return->status = true;
+            return $return;
+        } else {
+            return $res;
+        }
+    }
+
+    public function getCeoParameters($game_id, $stage, $user_id)
+    {
+        $game = Game::findOrFail($game_id);
+        $user = $game->ceos()->where('user_id', $user_id)->first();
+        $pivot = $user->pivot;
+
+        if (isset($pivot->ceo_parameters['stage_' . $stage])) {
             return $pivot->ceo_parameters['stage_' . $stage];
-        }else{
+        } else {
             return [];
         }
     }
 
-    public function getMatch($match_id){
-        $match = Match::findOrFail($match_id);
-        return $match;
+    public function getGame($game_id)
+    {
+        $game = Game::findOrFail($game_id);
+        return $game;
     }
 
-    public function getMatchRanking($match_id, $stage){
+    public function getGameRanking($game_id, $stage)
+    {
 
-        $match = Match::findOrFail($match_id);
-        if($stage >= $match->current_stage && !$match->isCompleted()){
+        $game = Game::findOrFail($game_id);
+        if ($stage >= $game->current_stage && !$game->isCompleted()) {
             return [];
         }
-        
-        $ceos = $match->ceos()->orderBy('match_user.results->stage_' . $stage . '->company_ranking')->get();
+
+        $ceos = $game->ceos()->orderBy('game_user.results->stage_' . $stage . '->company_ranking')->get();
         $ranking = [];
-        foreach($ceos as $c){
+        foreach ($ceos as $c) {
             $ranking[] = [
                 'user_id' => $c->id,
                 'company_name' => $c->pivot->company_name,
-                'position' => $c->pivot->results['stage_' . $stage ]['company_ranking']
+                'position' => $c->pivot->results['stage_' . $stage]['company_ranking']
             ];
         }
         return $ranking;
-        
     }
 
-    public function deleteMatch($match_id){
-        $match = Match::findOrFail($match_id);
-        $match->ceos()->detach();
-        $match->delete();
+    public function deleteGame($game_id)
+    {
+        $game = Game::findOrFail($game_id);
+        $game->ceos()->detach();
+        $game->delete();
+        return true;
+    }
+    
+    public function deleteCeo($game_id, $user_id)
+    {
+        $ceo = GameUser::where([ ['match_id', $game_id], ['user_id', $user_id]])->first();
+        if (null === $ceo) {
+            return false;
+        }
+        $ceo->delete();
         return true;
     }
 
-    public function reprocessMatch($match_id, $stage){
-        $match = Match::findOrFail($match_id);
-        if(!$match->isActive() || (int)($match->current_stage) == 0){
+    public function reprocessGame($game_id, $stage)
+    {
+        $game = Game::findOrFail($game_id);
+        if (!$game->isActive() || (int)($game->current_stage) == 0) {
             return false;
         }
-        if(($match->current_stage -1) > $stage){
+        if (($game->current_stage - 1) > $stage) {
             $results = [];
-            for($i=0; $i<$stage; $i++){
-                $results[] = $match->results['stage_'. $i];
+            for ($i = 0; $i < $stage; $i++) {
+                $results[] = $game->results['stage_' . $i];
             }
-            $match->update([
+            $game->update([
                 'results' => $results
             ]);
         }
-        $match->current_stage = $stage;
-        $match->save();
-        if($stage > 0){
-            foreach($match->ceos as $ceo){
-                if(isset($ceo->pivot->results['stage_' . ($stage - 1)]['bankrupt']) && $ceo->pivot->results['stage_'. ($stage - 1)]['bankrupt'] == true){
+        $game->current_stage = $stage;
+        $game->save();
+        if ($stage > 0) {
+            foreach ($game->ceos as $ceo) {
+                if (isset($ceo->pivot->results['stage_' . ($stage - 1)]['bankrupt']) && $ceo->pivot->results['stage_' . ($stage - 1)]['bankrupt'] == true) {
                     $ceo->pivot->update([
                         'bankrupt' => false,
                     ]);
                     $ceo->save();
                 }
-                if(isset($ceo->pivot->results['stage_' . ($stage - 1)]['dismissed']) && $ceo->pivot->results['stage_'. ($stage - 1)]['dismissed'] == true){
+                if (isset($ceo->pivot->results['stage_' . ($stage - 1)]['dismissed']) && $ceo->pivot->results['stage_' . ($stage - 1)]['dismissed'] == true) {
                     $ceo->pivot->update([
                         'dismissed' => false,
                     ]);
@@ -431,44 +446,46 @@ class Sherpa
                 }
             }
         }
-        ProcessStage::dispatch($match);
+        ProcessStage::dispatch($game);
         return true;
     }
 
-    public function processMatch($match_id){
-        $match = Match::findOrFail($match_id);
-        if($match->hasAllCeoDecisions() && $match->hasGovermentDecisions()){
-            ProcessStage::dispatch($match);
+    public function processGame($game_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if ($game->hasAllCeoDecisions() && $game->hasGovermentDecisions()) {
+            ProcessStage::dispatch($game);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function forceProcessMatch($match_id){
-        
-        $match = Match::findOrFail($match_id);
-        if($match->hasGovermentDecisions()){
-            include(__DIR__ . '/Core/' . $match->version . '/functions.php');
-            foreach($match->ceos as $ceo){
-                if (!isset($ceo->pivot->ceo_parameters['stage_' . $match->current_stage])) {
+    public function forceProcessGame($game_id)
+    {
+
+        $game = Game::findOrFail($game_id);
+        if ($game->hasGovermentDecisions()) {
+            include(__DIR__ . '/Core/' . $game->version . '/functions.php');
+            foreach ($game->ceos as $ceo) {
+                if (!isset($ceo->pivot->ceo_parameters['stage_' . $game->current_stage])) {
                     if ($ceo->pivot->ceo_parameters) {
                         $ceo_parameters = $ceo->pivot->ceo_parameters;
                     } else {
                         $ceo_parameters = [];
                     }
 
-                    $ceo_parameters['stage_'. $match->current_stage] = forceStageCopyCeoDecisions($match, $ceo);
-                    $ceo_parameters['stage_' . $match->current_stage]['copy_force_stage'] = true;
+                    $ceo_parameters['stage_' . $game->current_stage] = forceStageCopyCeoDecisions($game, $ceo);
+                    $ceo_parameters['stage_' . $game->current_stage]['copy_force_stage'] = true;
 
                     $ceo->pivot->update([
                         'ceo_parameters' => $ceo_parameters
                     ]);
                 }
             }
-            ProcessStage::dispatch($match);
+            ProcessStage::dispatch($game);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -482,7 +499,7 @@ class Sherpa
     *   Valida estructura y datos ingresados contra el schema
     *
     */
-    private function validateJsonData($validate, $input, $match = null, $user = null)
+    private function validateJsonData($validate, $input, $game = null, $user = null)
     {
         $return = new \StdClass();
         $return->status = true;
@@ -490,15 +507,15 @@ class Sherpa
 
         foreach ($validate as $item => $definition) {
 
-            if(isset($definition['required']) && $definition['required']){
+            if (isset($definition['required']) && $definition['required']) {
                 if (!isset($input[$item]) || $input[$item] == '') {
                     $return->status = false;
                     $return->errors[$item] = 'required';
                 }
             }
-            
 
-            if (isset($definition['required_if'])){
+
+            if (isset($definition['required_if'])) {
 
                 $required_if_explode = explode(':', $definition['required_if']);
                 $required_if_field = $required_if_explode[0];
@@ -508,24 +525,22 @@ class Sherpa
                     if (!isset($input[$item]) || $input[$item] == '') {
                         $return->status = false;
                         $return->errors[$item] = 'required_if';
-                    }   
-
+                    }
                 }
+            }
 
-            } 
-
-            if ($definition['type'] == 'validation'){
+            if ($definition['type'] == 'validation') {
                 $function = substr($definition['function'], 0, strlen($definition['function']) - 2);
-                if(!$function($match, $user, $input)){
+                if (!$function($game, $user, $input)) {
                     $return->status = false;
                     $return->errors[$item] = $definition['function'];
                 }
-            } 
+            }
 
             if (isset($input[$item]) && $return->status == true) {
-                
+
                 $value = $input[$item];
-                
+
 
                 // Valida el tipo de dato
                 if ($definition['type'] == 'string') {
@@ -553,7 +568,7 @@ class Sherpa
                 } elseif ($definition['type'] == 'integer') {
 
                     $value = (int)($value);
-                    
+
                     if (!is_int($value)) {
                         $return->status = false;
                         $return->errors[$item] = 'integer';
@@ -572,29 +587,26 @@ class Sherpa
                             $return->errors[$item] = 'max';
                         }
                     }
-                } elseif ($definition['type'] == 'options'){
+                } elseif ($definition['type'] == 'options') {
 
                     if (isset($definition['options'])) {
-                        try{
+                        try {
                             if (!in_array($value, $definition['options'])) {
                                 $return->status = false;
                                 $return->errors[$item] = 'options';
                             }
-                        }catch(\Exception $e){
-
+                        } catch (\Exception $e) {
                         }
-                        
-                    }else{
+                    } else {
                         $return->status = false;
                         $return->errors[$item] = 'options no set';
                     }
-
                 }
 
                 // Reglas de validacion dinamica
-                if(isset($definition['rule'])){
+                if (isset($definition['rule'])) {
 
-                    foreach($definition['rule'] as $rule){
+                    foreach ($definition['rule'] as $rule) {
 
                         if ($rule[0] == 'self') {
                             $field1 = $item;
@@ -629,11 +641,9 @@ class Sherpa
                             $return->errors[$item] = 'rule invalid';
                         }
                     }
-                    
-
                 }
 
-                if($return->status == true){
+                if ($return->status == true) {
                     $return->parameters[$item] = $input[$item];
                 }
             }
@@ -642,21 +652,20 @@ class Sherpa
         return $return;
     }
 
-   
+
 
     /*
         Retorna el listado de archivos de un directorio
     */
     private function getDirectoryFiles($folder)
     {
-        $files = scandir(__DIR__ . '/Core/'. $folder, SCANDIR_SORT_DESCENDING);
+        $files = scandir(__DIR__ . '/Core/' . $folder, SCANDIR_SORT_DESCENDING);
         foreach ($files as $index => $f) {
             if ($f == '.' || $f == '..') {
                 unset($files[$index]);
             }
         }
         return $files;
-
     }
 
     /*
@@ -671,20 +680,19 @@ class Sherpa
         $schema = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/schema.json'), true);
 
 
-        $schema['match_parameters']['scenario']['options'] = collect($this->getDirectoryFiles($version . '/scenarios'))->map(function ($str){
+        $schema['game_parameters']['scenario']['options'] = collect($this->getDirectoryFiles($version . '/scenarios'))->map(function ($str) {
             return str_replace('.json', '', $str);
         })->toArray();
 
-        $schema['match_parameters']['country']['options'] = collect($this->getDirectoryFiles($version . '/countries'))->map(function ($str){
+        $schema['game_parameters']['country']['options'] = collect($this->getDirectoryFiles($version . '/countries'))->map(function ($str) {
             return str_replace('.json', '', $str);
         })->toArray();
 
-        $schema['match_parameters']['industry']['options'] = collect($this->getDirectoryFiles($version . '/industries'))->map(function ($str){
+        $schema['game_parameters']['industry']['options'] = collect($this->getDirectoryFiles($version . '/industries'))->map(function ($str) {
             return str_replace('.json', '', $str);
         })->toArray();
 
-        
+
         return $schema;
     }
-
 }

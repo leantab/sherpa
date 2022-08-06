@@ -4,7 +4,7 @@ namespace CompanyHike\Sherpa\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class MatchUser extends Pivot
+class GameUser extends Pivot
 {
   protected $casts = [
     'ceo_parameters' => 'array',

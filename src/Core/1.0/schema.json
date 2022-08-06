@@ -78,7 +78,13 @@
     "accounting_period": {
       "required_if": "type:country,custom",
       "type": "options",
-      "options": [1,2,3,4,6]
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ]
     },
     "positive_random_events": {
       "required_if": "type:country,custom",
@@ -97,8 +103,12 @@
       "min": 10,
       "max": 75,
       "rule": [
-          ["self", "<=", "risk_limit_max"]
+        [
+          "self",
+          "<=",
+          "risk_limit_max"
         ]
+      ]
     },
     "risk_limit_max": {
       "required_if": "type:country,custom",
@@ -106,8 +116,12 @@
       "min": 10,
       "max": 75,
       "rule": [
-          ["self", ">=", "risk_limit_min"]
+        [
+          "self",
+          ">=",
+          "risk_limit_min"
         ]
+      ]
     },
     "initial_eq": {
       "required_if": "type:country,custom",
@@ -122,7 +136,7 @@
         "goverment_side_liberal",
         "goverment_side_moderate",
         "goverment_side_invertentionist",
-        "goverment_side_custom"
+        "custom"
       ]
     },
     "profit_tax": {
@@ -170,11 +184,15 @@
       "required_if": "goverment_side:custom",
       "type": "integer",
       "rule": [
-        ["self", "<=", "interest_rate"]
+        [
+          "self",
+          "<=",
+          "interest_rate"
+        ]
       ]
     }
   },
-  "goverment_parameters" : {
+  "goverment_parameters": {
     "added_demand_variation": {
       "required_if_match": "type:country,custom",
       "type": "integer",
@@ -191,7 +209,11 @@
       "required_if_match": "type:country,custom",
       "type": "integer",
       "rule": [
-        ["self", "<", "interest_rate"]
+        [
+          "self",
+          "<",
+          "interest_rate"
+        ]
       ]
     },
     "profit_tax": {
@@ -219,7 +241,7 @@
       "max": 5
     }
   },
-  "ceo_parameters" : {
+  "ceo_parameters": {
     "price": {
       "required": true,
       "type": "integer",
@@ -314,6 +336,5 @@
       "min": "getMinCorpDebToPay()",
       "max": "getMaxCorpDebToPay()"
     }
-
   }
 }
