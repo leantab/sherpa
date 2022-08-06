@@ -1,2 +1,2 @@
 # sherpa
-Sherpa package for CompanyHike
+Sherpa package for CompanyHike project
