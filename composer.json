@@ -1,6 +1,6 @@
 {
     "name": "leantab/sherpa",
-    "description": ":package_description",
+    "description": "Sherpa package for CompanyHike project",
     "license": "MIT",
     "authors": [
         {
