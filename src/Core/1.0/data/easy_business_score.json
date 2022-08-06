@@ -1,0 +1,18 @@
+{
+  "easy_business_none": {
+    "min": 23,
+    "max": 66
+  },
+  "easy_business_medium_low": {
+    "min": 19,
+    "max": 58
+  },
+  "easy_business_medium_high": {
+    "min": 17,
+    "max": 48
+  },
+  "easy_business_high": {
+    "min": 0,
+    "max": 10
+  }
+}

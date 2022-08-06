@@ -1,0 +1,12 @@
+{
+  "goverment_side_liberal": {
+    "profit_tax": 3,
+    "vat_tax": 2,
+    "labor_tax": 2,
+    "easy_business_score": "easy_business_high",
+    "compensation_cost": 2,
+    "interest_rate": 2,
+    "financial_cost": 2
+  }
+  
+}

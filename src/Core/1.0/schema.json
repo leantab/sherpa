@@ -1,0 +1,319 @@
+{
+  "version": "1.0",
+  "match_parameters": {
+    "name": {
+      "required": true,
+      "type": "string",
+      "min_length": 3,
+      "max_length": 500
+    },
+    "players": {
+      "required": true,
+      "type": "integer",
+      "min": 4,
+      "max": 16
+    },
+    "proficiency_rate": {
+      "required": true,
+      "type": "options",
+      "options": [
+        "proficiency_trainee",
+        "proficiency_junior",
+        "proficiency_semi_senior",
+        "proficiency_senior",
+        "proficiency_big_company_ceo"
+      ]
+    },
+    "industry": {
+      "required": true,
+      "type": "options",
+      "options": null
+    },
+    "type": {
+      "required": true,
+      "type": "options",
+      "options": [
+        "scenario",
+        "country",
+        "custom"
+      ]
+    },
+    "scenario": {
+      "required_if": "type:scenario",
+      "type": "options",
+      "options": null
+    },
+    "country": {
+      "required_if": "type:country",
+      "type": "options",
+      "options": null
+    },
+    "stages": {
+      "required_if": "type:country,custom",
+      "type": "integer",
+      "min": 4,
+      "max": 8
+    },
+    "country_income_level": {
+      "required_if": "type:custom",
+      "type": "options",
+      "options": [
+        "country_income_low_income",
+        "country_income_lower_middle_income",
+        "country_income_upper_middle_income",
+        "country_income_high_income"
+      ]
+    },
+    "industry_status": {
+      "required_if": "type:country,custom",
+      "type": "options",
+      "options": [
+        "industry_status_war_prices",
+        "industry_status_demanding_customers",
+        "industry_status_constant_development",
+        "industry_status_faithful_clients",
+        "random"
+      ]
+    },
+    "accounting_period": {
+      "required_if": "type:country,custom",
+      "type": "options",
+      "options": [1,2,3,4,6]
+    },
+    "positive_random_events": {
+      "required_if": "type:country,custom",
+      "type": "options",
+      "options": [
+        "positive_events_none",
+        "positive_events_few",
+        "positive_events_medium",
+        "positive_events_full",
+        "random"
+      ]
+    },
+    "risk_limit_min": {
+      "required_if": "type:country,custom",
+      "type": "integer",
+      "min": 10,
+      "max": 75,
+      "rule": [
+          ["self", "<=", "risk_limit_max"]
+        ]
+    },
+    "risk_limit_max": {
+      "required_if": "type:country,custom",
+      "type": "integer",
+      "min": 10,
+      "max": 75,
+      "rule": [
+          ["self", ">=", "risk_limit_min"]
+        ]
+    },
+    "initial_eq": {
+      "required_if": "type:country,custom",
+      "type": "integer",
+      "min": -10,
+      "max": 10
+    },
+    "goverment_side": {
+      "required_if": "type:custom",
+      "type": "options",
+      "options": [
+        "goverment_side_liberal",
+        "goverment_side_moderate",
+        "goverment_side_invertentionist",
+        "goverment_side_custom"
+      ]
+    },
+    "profit_tax": {
+      "required_if": "goverment_side:custom",
+      "type": "integer",
+      "min": 0,
+      "max": 45
+    },
+    "vat_tax": {
+      "required_if": "goverment_side:custom",
+      "type": "integer",
+      "min": 0,
+      "max": 28
+    },
+    "labor_tax": {
+      "required_if": "goverment_side:custom",
+      "type": "integer",
+      "min": 0,
+      "max": 15
+    },
+    "easy_business_score": {
+      "required_if": "goverment_side:custom",
+      "type": "options",
+      "options": [
+        "easy_business_none",
+        "easy_business_medium_low",
+        "easy_business_medium_high",
+        "easy_business_high",
+        "random"
+      ]
+    },
+    "compensation_cost": {
+      "required_if": "goverment_side:custom",
+      "type": "integer",
+      "min": 1,
+      "max": 5
+    },
+    "interest_rate": {
+      "required_if": "goverment_side:custom",
+      "type": "integer",
+      "min": 3,
+      "max": 30
+    },
+    "financial_cost": {
+      "required_if": "goverment_side:custom",
+      "type": "integer",
+      "rule": [
+        ["self", "<=", "interest_rate"]
+      ]
+    }
+  },
+  "goverment_parameters" : {
+    "added_demand_variation": {
+      "required_if_match": "type:country,custom",
+      "type": "integer",
+      "min": -10,
+      "max": 10
+    },
+    "interest_rate": {
+      "required_if_match": "type:country,custom",
+      "type": "integer",
+      "min": 3,
+      "max": 30
+    },
+    "financial_cost": {
+      "required_if_match": "type:country,custom",
+      "type": "integer",
+      "rule": [
+        ["self", "<", "interest_rate"]
+      ]
+    },
+    "profit_tax": {
+      "required_if_match": "goverment_side:custom",
+      "type": "integer",
+      "min": 0,
+      "max": 40
+    },
+    "vat_tax": {
+      "required_if_match": "goverment_side:custom",
+      "type": "integer",
+      "min": 0,
+      "max": 28
+    },
+    "labor_tax": {
+      "required_if_match": "goverment_side:custom",
+      "type": "integer",
+      "min": 0,
+      "max": 15
+    },
+    "compensation_cost": {
+      "required_if_match": "goverment_side:custom",
+      "type": "integer",
+      "min": 1,
+      "max": 5
+    }
+  },
+  "ceo_parameters" : {
+    "price": {
+      "required": true,
+      "type": "integer",
+      "min": "getMinPrice()",
+      "max": "getMaxPrice()"
+    },
+    "production": {
+      "required": true,
+      "type": "integer",
+      "min": 10,
+      "max": 100
+    },
+    "recycle": {
+      "required": true,
+      "type": "options",
+      "options": [
+        "recycle_global_west_standards",
+        "recycle_latin_american_standards",
+        "recycle_asia_standards",
+        "recycle_sub_saharian_standards"
+      ]
+    },
+    "quality_control": {
+      "required": true,
+      "type": "options",
+      "options": [
+        "qc_start_up",
+        "qc_large_enterprise",
+        "qc_global_company"
+      ]
+    },
+    "safety": {
+      "required": true,
+      "type": "options",
+      "options": [
+        "safety_1",
+        "safety_2",
+        "safety_3"
+      ]
+    },
+    "total_funds": {
+      "type": "validation",
+      "function": "checkTotalFunds()",
+      "comment": "mkt + survey + design + ibk + capital_inv + corp_debt <= total_funds",
+      "description": "expenses cannot exceed total_funds"
+    },
+    "total_debts": {
+      "type": "validation",
+      "function": "checkDebtsFunds()",
+      "comment": "capital_inv > 0 && getMaxCorpDebToPay() > 0 && corp_debt_topay < getMaxCorpDebToPay",
+      "description": "must pay getMaxCorpDebToPay in order to invest capital_inv"
+    },
+    "mkt": {
+      "required": true,
+      "type": "integer",
+      "min": 0,
+      "max": "getTotalFunds()"
+    },
+    "survey": {
+      "required": true,
+      "type": "integer",
+      "min": 0,
+      "max": "getTotalFunds()"
+    },
+    "design": {
+      "required": true,
+      "type": "integer",
+      "min": 0,
+      "max": "getTotalFunds()"
+    },
+    "ibk": {
+      "required": true,
+      "type": "integer",
+      "min": 0,
+      "max": "getTotalFunds()"
+    },
+    "capital_inv": {
+      "required": true,
+      "type": "integer",
+      "min": 0,
+      "max": "getMaxCapitalInv()"
+    },
+    "corp_debt": {
+      "required": true,
+      "type": "integer",
+      "min": 0,
+      "max": "getMaxCorpDebt()"
+    },
+    "corp_debt_topay": {
+      "required": true,
+      "type": "integer",
+      "min": "getMinCorpDebToPay()",
+      "max": "getMaxCorpDebToPay()"
+    }
+
+  }
+}

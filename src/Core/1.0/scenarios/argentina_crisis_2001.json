@@ -1,0 +1,57 @@
+{
+  "match_parameters": {
+    "stages" : 4,
+    "country_income_level" : "country_income_low_income",
+    "industry_status" : "industry_status_demanding_customers",
+    "accounting_period": 6,
+    "positive_random_events": "positive_events_medium",
+    "risk_limit_min": 10,
+    "risk_limit_max": 75,
+    "initial_eq" : 1,
+    "profit_tax": 3,
+    "vat_tax" : 2,
+    "labor_tax" : 2,
+    "easy_business_score": "easy_business_high",
+    "compensation_cost": 2,
+    "interest_rate": 10,
+    "financial_cost": 2
+  },
+  "goverment_parameters" : {
+    "stage_1" : {
+      "added_demand_variation" : 0,
+      "interest_rate" : 4,
+      "financial_cost" : 2,
+      "profit_tax" : 40,
+      "vat_tax" : 5,
+      "labor_tax" : 5,
+      "compensation_cost" : 1
+    },
+    "stage_2" : {
+      "added_demand_variation" : 1,
+      "interest_rate" : 5,
+      "financial_cost" : 3,
+      "profit_tax" : 20,
+      "vat_tax" : 4,
+      "labor_tax" : 6,
+      "compensation_cost" : 3
+    },
+    "stage_3" : {
+      "added_demand_variation" : -1,
+      "interest_rate" : 6,
+      "financial_cost" : 3,
+      "profit_tax" : 20,
+      "vat_tax" : 6,
+      "labor_tax" : 6,
+      "compensation_cost" : 4
+    },
+    "stage_4" : {
+      "added_demand_variation" : -1,
+      "interest_rate" : 6,
+      "financial_cost" : 3,
+      "profit_tax" : 20,
+      "vat_tax" : 6,
+      "labor_tax" : 6,
+      "compensation_cost" : 4
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "match_parameters":{
+    "country_income_level": "country_income_low_income",
+    "salary": 318,
+    "loan_ratio": 0.016,
+    "profit_tax": 3,
+    "vat_tax": 2,
+    "labor_tax": 2,
+    "easy_business_score": "easy_business_high",
+    "compensation_cost": 2,
+    "interest_rate": 2,
+    "financial_cost": 2
+  }
+}

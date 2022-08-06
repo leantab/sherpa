@@ -1,0 +1,18 @@
+{
+  "industry_status_war_prices" : {
+    "id_sensibility_leverage" : 0.75,
+    "price_sensibility_leverage" : 0.75
+  },
+  "industry_status_demanding_customers" : {
+    "id_sensibility_leverage" : 0.80,
+    "price_sensibility_leverage" : 0.80
+  },
+  "industry_status_constant_development" : {
+    "id_sensibility_leverage" : 0.90,
+    "price_sensibility_leverage" : 0.90
+  },
+  "industry_status_faithful_clients" : {
+    "id_sensibility_leverage" : 1.25,
+    "price_sensibility_leverage" : 1.25
+  }
+}
