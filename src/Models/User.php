@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
 
+  protected $guarded = [];
+  protected $table = 'users';
+  protected $primaryKey = 'id';
+  protected $hidden = ['password'];
+
   public function goverment_games()
   {
     return $this->hasMany('Leantab\Sherpa\Models\Game', 'goverment_id');
