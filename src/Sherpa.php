@@ -405,11 +405,8 @@ class Sherpa
     
     public function deleteCeo($game_id, $user_id)
     {
-        $ceo = GameUser::where([ ['match_id', $game_id], ['user_id', $user_id]])->first();
-        if (null === $ceo) {
-            return false;
-        }
-        $ceo->delete();
+        $game = Game::findOrFail($game_id);
+        $game->ceos()->detach($user_id);
         return true;
     }
 

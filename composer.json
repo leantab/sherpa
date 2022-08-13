@@ -19,21 +19,21 @@
     },
     "autoload": {
         "psr-4": {
-            "leantab\\Sherpa\\": "src/"
+            "Leantab\\Sherpa\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "leantab\\Sherpa\\Tests\\": "tests"
+            "Leantab\\Sherpa\\Tests\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "leantab\\Sherpa\\SherpaServiceProvider"
+                "Leantab\\Sherpa\\SherpaServiceProvider"
             ],
             "aliases": {
-                "Sherpa2": "leantab\\Sherpa\\Facades\\Sherpa"
+                "Sherpa2": "Leantab\\Sherpa\\Facades\\Sherpa"
             }
         }
     }
