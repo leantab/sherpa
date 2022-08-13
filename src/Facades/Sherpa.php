@@ -23,10 +23,11 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Leantab\Sherpa\Sherpa setCeoParameters()
  * @method static \Leantab\Sherpa\Sherpa getGame()
  * @method static \Leantab\Sherpa\Sherpa getGameRanking()
- * @method static \Leantab\Sherpa\Sherpa deleteCeo()
- * @method static \Leantab\Sherpa\Sherpa reprocessGame()
- * @method static \Leantab\Sherpa\Sherpa processGame()
- * @method static \Leantab\Sherpa\Sherpa forceProcessGame()
+ * @method static \Leantab\Sherpa\Sherpa deleteGame($game_id)
+ * @method static \Leantab\Sherpa\Sherpa deleteCeo($game_id, $user_id)
+ * @method static \Leantab\Sherpa\Sherpa reprocessGame($game_id, $stage)
+ * @method static \Leantab\Sherpa\Sherpa processGame($game_id)
+ * @method static \Leantab\Sherpa\Sherpa forceProcessGame($game_id)
  */
 class Sherpa extends Facade
 {
