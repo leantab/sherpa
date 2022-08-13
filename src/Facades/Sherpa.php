@@ -1,6 +1,6 @@
 <?php
 
-namespace CompanyHike\Sherpa\Facades;
+namespace Leantab\Sherpa\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

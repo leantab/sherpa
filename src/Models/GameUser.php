@@ -1,6 +1,6 @@
 <?php
 
-namespace CompanyHike\Sherpa\Models;
+namespace Leantab\Sherpa\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 

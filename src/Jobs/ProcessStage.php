@@ -1,14 +1,14 @@
 <?php
 
-namespace CompanyHike\Sherpa\Jobs;
+namespace Leantab\Sherpa\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use CompanyHike\Sherpa\Models\Game;
-use CompanyHike\Sherpa\Events\StageProcessed;
+use Leantab\Sherpa\Models\Game;
+use Leantab\Sherpa\Events\StageProcessed;
 
 use Log;
 use DB;
@@ -35,7 +35,7 @@ class ProcessStage implements ShouldQueue
             exit;
         }
 
-        $this->core = new \CompanyHike\Sherpa\Core($game);
+        $this->core = new \Leantab\Sherpa\Core($game);
 
         $this->core->process();
     }

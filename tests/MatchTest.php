@@ -1,6 +1,6 @@
 <?php
 
-namespace CompanyHike\Sherpa\Tests;
+namespace Leantab\Sherpa\Tests;
 
 use PHPUnit\Framework\TestCase;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace CompanyHike\Sherpa;
+namespace Leantab\Sherpa;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -13,8 +13,8 @@ class SherpaServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'companyhike');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'companyhike');
+        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'Sherpa');
+        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'Sherpa');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
@@ -63,17 +63,17 @@ class SherpaServiceProvider extends ServiceProvider
 
         // Publishing the views.
         /*$this->publishes([
-            __DIR__.'/../resources/views' => base_path('resources/views/vendor/companyhike'),
+            __DIR__.'/../resources/views' => base_path('resources/views/vendor/Leantab'),
         ], 'sherpa.views');*/
 
         // Publishing assets.
         /*$this->publishes([
-            __DIR__.'/../resources/assets' => public_path('vendor/companyhike'),
+            __DIR__.'/../resources/assets' => public_path('vendor/Leantab'),
         ], 'sherpa.views');*/
 
         // Publishing the translation files.
         /*$this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/companyhike'),
+            __DIR__.'/../resources/lang' => resource_path('lang/vendor/Leantab'),
         ], 'sherpa.views');*/
 
         // Registering package commands.

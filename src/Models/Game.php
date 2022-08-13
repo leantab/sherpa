@@ -1,6 +1,6 @@
 <?php
 
-namespace CompanyHike\Sherpa\Models;
+namespace Leantab\Sherpa\Models;
 
 use Arr;
 
@@ -29,7 +29,7 @@ class Game extends Model
 
     public function ceos()
     {
-        return $this->belongsToMany('CompanyHike\Sherpa\Models\User')->using('\CompanyHike\Sherpa\Models\GameUser')->withPivot(['company_name', 'avatar', 'bankrupt', 'dismissed', 'ceo_parameters', 'results', 'created_at']);
+        return $this->belongsToMany('Leantab\Sherpa\Models\User')->using('\Leantab\Sherpa\Models\GameUser')->withPivot(['company_name', 'avatar', 'bankrupt', 'dismissed', 'ceo_parameters', 'results', 'created_at']);
     }
 
     public function getPlayersAttribute()

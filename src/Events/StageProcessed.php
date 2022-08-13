@@ -1,10 +1,10 @@
 <?php
 
-namespace CompanyHike\Sherpa\Events;
+namespace Leantab\Sherpa\Events;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
-use CompanyHike\Sherpa\Models\Game;
+use Leantab\Sherpa\Models\Game;
 
 class StageProcessed
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace CompanyHike\Sherpa;
+namespace Leantab\Sherpa;
 
-use CompanyHike\Sherpa\Models\Game;
+use Leantab\Sherpa\Models\Game;
 use Exception;
 
 class Core

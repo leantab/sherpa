@@ -1,6 +1,6 @@
 <?php
 
-namespace CompanyHike\Sherpa;
+namespace Leantab\Sherpa;
 
 class Tips
 {
