@@ -33,7 +33,7 @@
                 "leantab\\Sherpa\\SherpaServiceProvider"
             ],
             "aliases": {
-                "Sherpa": "leantab\\Sherpa\\Facades\\Sherpa"
+                "Sherpa2": "leantab\\Sherpa\\Facades\\Sherpa"
             }
         }
     }
