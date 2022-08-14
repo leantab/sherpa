@@ -160,7 +160,7 @@ class Sherpa
     }
 
 
-    public function getGamees($user_id, $segment_id)
+    public function getGames($user_id, $segment_id)
     {
         $gamees = [];
         $user = User::findOrFail($user_id);
@@ -275,6 +275,19 @@ class Sherpa
         }
         return true;
     }
+    
+    public function addSimpleCeo($game_id, $user_id, $company_name, $avatar)
+    {
+        $game = Game::findOrFail($game_id);
+        if ($game->ceos()->count() >= $game->players) {
+            throw new \Exception("No hay slots disponibles en esta partida");
+        }
+        $game->ceos()->attach($user_id, [
+            'company_name' => $company_name,
+            'avatar' => $avatar,
+        ]);
+        return true;
+    }
 
     public function getGovermentParameters($game_id, $stage)
     {
@@ -369,7 +382,7 @@ class Sherpa
         }
     }
 
-    public function getGame($game_id)
+    public function getGame(int $game_id): ?Game
     {
         $game = Game::findOrFail($game_id);
         return $game;
