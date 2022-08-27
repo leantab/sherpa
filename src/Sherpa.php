@@ -181,7 +181,7 @@ class Sherpa
                 'active' => ($item->status_id == 2) ? true : false
             ];
         }
-        $ceos = $user->ceo_gamees()->where('segment_id', $segment_id)->latest()->get();
+        $ceos = $user->ceo_games()->where('segment_id', $segment_id)->latest()->get();
         foreach ($ceos as $item) {
             $gamees[] = [
                 'player_type' => 'ceo',
