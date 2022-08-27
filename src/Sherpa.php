@@ -164,7 +164,7 @@ class Sherpa
     {
         $gamees = [];
         $user = User::findOrFail($user_id);
-        $govs = $user->goverment_gamees()->where('segment_id', $segment_id)->latest()->get();
+        $govs = $user->goverment_games()->where('segment_id', $segment_id)->latest()->get();
 
         foreach ($govs as $item) {
             $gamees[] = [

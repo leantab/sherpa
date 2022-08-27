@@ -13,7 +13,7 @@ class User extends Model
     protected $primaryKey = 'id';
     protected $hidden = ['password'];
 
-    public function goverment_gamees()
+    public function goverment_games()
     {
         return $this->hasMany('Leantab\Sherpa\Models\Game', 'goverment_id');
     }
