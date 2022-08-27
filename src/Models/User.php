@@ -8,18 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
 
-  protected $guarded = [];
-  protected $table = 'users';
-  protected $primaryKey = 'id';
-  protected $hidden = ['password'];
+    protected $guarded = [];
+    protected $table = 'users';
+    protected $primaryKey = 'id';
+    protected $hidden = ['password'];
 
-  public function goverment_gamees()
-  {
-    return $this->hasMany('Leantab\Sherpa\Models\Game', 'goverment_id');
-  }
+    public function goverment_gamees()
+    {
+        return $this->hasMany('Leantab\Sherpa\Models\Game', 'goverment_id');
+    }
 
-  public function ceo_games()
-  {
-    return $this->belongsToMany('Leantab\Sherpa\Models\Game')->using('\Leantab\Sherpa\Models\GameUser')->withPivot(['company_name', 'avatar', 'bankrupt', 'dismissed', 'ceo_parameters', 'results', 'created_at']);
-  }
+    public function ceo_games()
+    {
+        return $this->belongsToMany('Leantab\Sherpa\Models\Game')
+            ->using('\Leantab\Sherpa\Models\GameUser')
+            ->withPivot(['company_name', 'avatar', 'bankrupt', 'dismissed', 'ceo_parameters', 'results', 'created_at']);
+    }
 }
