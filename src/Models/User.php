@@ -15,12 +15,12 @@ class User extends Model
 
     public function goverment_games()
     {
-        return $this->hasMany('Leantab\Sherpa\Models\Game', 'goverment_id');
+        return $this->hasMany(Game::class, 'goverment_id');
     }
 
     public function ceo_games()
     {
-        return $this->belongsToMany('Leantab\Sherpa\Models\Game')
+        return $this->belongsToMany(Game::class, 'match_user', 'user_id', 'match_id')
             ->using('\Leantab\Sherpa\Models\GameUser')
             ->withPivot(['company_name', 'avatar', 'bankrupt', 'dismissed', 'ceo_parameters', 'results', 'created_at']);
     }
