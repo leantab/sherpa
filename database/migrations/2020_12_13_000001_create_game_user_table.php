@@ -18,6 +18,7 @@ class CreateGameUserTable extends Migration
       $table->boolean('dismissed')->default(false);
       $table->json('ceo_parameters')->nullable();
       $table->json('results')->nullable();
+      $table->boolean('is_funded')->default(false);
       $table->timestamps();
     });
   }
