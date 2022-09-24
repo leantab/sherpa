@@ -11,12 +11,12 @@ use Illuminate\Support\Collection;
  * Facade for the Sherpa service.
  *
  * @method static getVersions()
- * @method static getSchema()
- * @method static getVariables()
- * @method static getGovermentVariables()
- * @method static getCeoVariables()
- * @method static industry()
- * @method static Collection|Games[] getGames($user_id, $segment_id)
+ * @method static array getSchema()
+ * @method static array getVariables()
+ * @method static array getGovermentVariables()
+ * @method static array getCeoVariables()
+ * @method static bool industry()
+ * @method static array|Games[] getGames($user_id, $segment_id)
  * @method static Game createGame($version, $game_parameters, $creator_id, $segment_id)
  * @method static addGoverment($game_id, $user_id)
  * @method static addCeo($game_id, $user_id, $company_name, $avatar)

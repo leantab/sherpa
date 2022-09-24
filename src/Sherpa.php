@@ -37,7 +37,7 @@ class Sherpa
     *   Retorna el schema json de la version seleccionada (o la ultima version si no se especifica ninguna)
     *
     */
-    public function getSchema($version = 'current')
+    public function getSchema($version = 'current'): array
     {
         if ($version == 'current') {
             $versions = $this->getVersions();
@@ -73,7 +73,7 @@ class Sherpa
     *   Retorna el schema json de variables de gobierno para la partida indicada
     *
     */
-    public function getGovermentVariables($game_id)
+    public function getGovermentVariables($game_id): array
     {
         $game = Game::findOrFail($game_id);
         $schema = $this->getSchema($game->version);
@@ -144,7 +144,7 @@ class Sherpa
         return $ceo_parameters;
     }
 
-    public function industry($game, $var)
+    public function industry($game, $var): bool
     {
         try {
             $industry = $game->game_parameters['industry'];
@@ -160,7 +160,7 @@ class Sherpa
     }
 
 
-    public function getGames($user_id, $segment_id)
+    public function getGames($user_id, $segment_id): array
     {
         $gamees = [];
         $user = User::findOrFail($user_id);
@@ -701,11 +701,13 @@ class Sherpa
         Retorn el schema parseado (agrega los items dinamicos)
     */
 
-    private function parseSchema($version)
+    private function parseSchema($version): array
     {
         if (!file_exists(__DIR__ . '/Core/' . $version . '/schema.json')) {
             return false;
         }
+
+        /** @var array $schema */
         $schema = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/schema.json'), true);
 
 
