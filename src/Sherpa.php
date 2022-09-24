@@ -258,17 +258,36 @@ class Sherpa
         return true;
     }
 
-    public function addCeo($game_id, $user_id, $company_name, $avatar)
+    public function addCeo($game_id, $user_id, $company_name, $avatar, $is_funded = false)
     {
         $game = Game::findOrFail($game_id);
         if ($game->ceos()->count() >= $game->players) {
             throw new \Exception("No hay slots disponibles en esta partida");
         }
-        $game->ceos()->attach($user_id, [
-            'company_name' => $company_name,
-            'avatar' => $avatar,
-        ]);
-        if ($game->ceos()->count() == $game->players) {
+
+        if ($is_funded) {
+            $game->ceos()->attach($user_id, [
+                'company_name' => $company_name,
+                'avatar' => $avatar,
+                'is_funded' => true
+            ]);
+        }else{
+            $game->ceos()->attach($user_id, [
+                'company_name' => $company_name,
+                'avatar' => $avatar,
+                'is_funded' => false
+            ]);
+        }
+
+        //check if all ceos are funded
+        $funded = 0;
+        foreach ($game->ceos as $ceo) {
+            if ($ceo->pivot->is_funded) {
+                $funded++;
+            }
+        }
+
+        if ($funded == $game->players) {
             $game->status_id = 2;
             $game->save();
             ProcessStage::dispatch($game);
