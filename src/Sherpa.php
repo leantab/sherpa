@@ -49,9 +49,7 @@ class Sherpa
     }
 
     /*
-    *
     *   Retorna el schema json de la version seleccionada (o la ultima version si no se especifica ninguna)
-    *
     */
     public function getVariables($version = 'current')
     {
@@ -69,9 +67,7 @@ class Sherpa
     }
 
     /*
-    *
     *   Retorna el schema json de variables de gobierno para la partida indicada
-    *
     */
     public function getGovermentVariables($game_id): array
     {
