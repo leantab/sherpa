@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class GameUser extends Pivot
 {
-  protected $table = "match_user";
+  protected $table = "game_user";
 
   protected $foreignKey = ["match_id", "user_id"];
 

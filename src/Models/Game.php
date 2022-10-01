@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Game extends Model
 {
 
-    protected $table = 'matches';
+    protected $table = 'games';
 
     protected $guarded = [];
 
