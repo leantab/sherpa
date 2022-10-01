@@ -706,16 +706,15 @@ class Sherpa
         /** @var array $schema */
         $schema = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/schema.json'), true);
 
-
-        $schema['game_parameters']['scenario']['options'] = collect($this->getDirectoryFiles($version . '/scenarios'))->map(function ($str) {
+        $schema['match_parameters']['scenario']['options'] = collect($this->getDirectoryFiles($version . '/scenarios'))->map(function ($str) {
             return str_replace('.json', '', $str);
         })->toArray();
 
-        $schema['game_parameters']['country']['options'] = collect($this->getDirectoryFiles($version . '/countries'))->map(function ($str) {
+        $schema['match_parameters']['country']['options'] = collect($this->getDirectoryFiles($version . '/countries'))->map(function ($str) {
             return str_replace('.json', '', $str);
         })->toArray();
 
-        $schema['game_parameters']['industry']['options'] = collect($this->getDirectoryFiles($version . '/industries'))->map(function ($str) {
+        $schema['match_parameters']['industry']['options'] = collect($this->getDirectoryFiles($version . '/industries'))->map(function ($str) {
             return str_replace('.json', '', $str);
         })->toArray();
 
