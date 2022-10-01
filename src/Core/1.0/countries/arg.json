@@ -1,5 +1,5 @@
 {
-  "match_parameters":{
+  "game_parameters":{
     "country_income_level": "country_income_low_income",
     "salary": 318,
     "loan_ratio": 0.016,

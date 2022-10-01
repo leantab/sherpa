@@ -1,5 +1,5 @@
 {
-  "match_parameters": {
+  "game_parameters": {
     "stages" : 4,
     "country_income_level" : "country_income_low_income",
     "industry_status" : "industry_status_demanding_customers",
