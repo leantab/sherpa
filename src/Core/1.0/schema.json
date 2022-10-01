@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "match_parameters": {
+  "game_parameters": {
     "name": {
       "required": true,
       "type": "string",

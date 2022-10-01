@@ -283,7 +283,7 @@ class Sherpa
             }
         }
 
-        if ($funded == $game->players) {
+        if ($funded === $game->players) {
             $game->status_id = 2;
             $game->save();
             ProcessStage::dispatch($game);
@@ -706,15 +706,15 @@ class Sherpa
         /** @var array $schema */
         $schema = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/schema.json'), true);
 
-        $schema['match_parameters']['scenario']['options'] = collect($this->getDirectoryFiles($version . '/scenarios'))->map(function ($str) {
+        $schema['game_parameters']['scenario']['options'] = collect($this->getDirectoryFiles($version . '/scenarios'))->map(function ($str) {
             return str_replace('.json', '', $str);
         })->toArray();
 
-        $schema['match_parameters']['country']['options'] = collect($this->getDirectoryFiles($version . '/countries'))->map(function ($str) {
+        $schema['game_parameters']['country']['options'] = collect($this->getDirectoryFiles($version . '/countries'))->map(function ($str) {
             return str_replace('.json', '', $str);
         })->toArray();
 
-        $schema['match_parameters']['industry']['options'] = collect($this->getDirectoryFiles($version . '/industries'))->map(function ($str) {
+        $schema['game_parameters']['industry']['options'] = collect($this->getDirectoryFiles($version . '/industries'))->map(function ($str) {
             return str_replace('.json', '', $str);
         })->toArray();
 
