@@ -8,7 +8,7 @@ class GameUser extends Pivot
 {
   protected $table = "game_user";
 
-  protected $foreignKey = ["match_id", "user_id"];
+  protected $foreignKey = ["game_id", "user_id"];
 
   protected $guarded = [];
 

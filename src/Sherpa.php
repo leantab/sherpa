@@ -261,17 +261,18 @@ class Sherpa
             throw new \Exception("No hay slots disponibles en esta partida");
         }
 
-        if ($is_funded) {
+        // Update the existing game_user data with the incoming parameters, or create new ceo
+        $game_user = $game->ceos()->where('user_id', $user_id)->first();
+        if ($game_user) {
+            $game_user->company_name = $company_name;
+            $game_user->avatar = $avatar;
+            $game_user->is_funded = $is_funded;
+            $game_user->save();
+        } else {
             $game->ceos()->attach($user_id, [
                 'company_name' => $company_name,
                 'avatar' => $avatar,
-                'is_funded' => true
-            ]);
-        }else{
-            $game->ceos()->attach($user_id, [
-                'company_name' => $company_name,
-                'avatar' => $avatar,
-                'is_funded' => false
+                'is_funded' => $is_funded
             ]);
         }
 
@@ -300,6 +301,7 @@ class Sherpa
         $game->ceos()->attach($user_id, [
             'company_name' => $company_name,
             'avatar' => $avatar,
+            'is_funded' => false
         ]);
         return true;
     }
