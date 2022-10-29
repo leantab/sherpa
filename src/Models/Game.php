@@ -29,7 +29,7 @@ class Game extends Model
 
     public function ceos()
     {
-        return $this->belongsToMany(User::class, 'match_user', 'match_id', 'user_id')
+        return $this->belongsToMany(User::class, 'game_user', 'match_id', 'user_id')
             ->using('\Leantab\Sherpa\Models\GameUser')
             ->withPivot(['company_name', 'avatar', 'bankrupt', 'dismissed', 'ceo_parameters', 'results', 'created_at']);
     }
