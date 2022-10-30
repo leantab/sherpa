@@ -262,7 +262,7 @@ class Sherpa
         }
 
         // Update the existing game_user data with the incoming parameters, or create new ceo
-        $game_user = $game->ceos()->where('user_id', $user_id)->first();
+        $game_user = GameUser::where([['game_id', $game_id], ['user_id', $user_id]])->first();
         if ($game_user) {
             $game_user->company_name = $company_name;
             $game_user->avatar = $avatar;
