@@ -71,7 +71,7 @@ class Core
         $this->global['ppe_industry'] += $this->company[$ceo->id]['ppe'];
 
         if ($this->global['reference_cost'] < 1000) {
-          $this->company[$ceo->id]['worker_productivity'] = log($this->global['reference_cost'] / 3);
+          $this->company[$ceo->id]['worker_productivity'] = round(60 / log($this->global['reference_cost'] / 3), 2 );
         } else {
           $this->company[$ceo->id]['worker_productivity'] = round((40 / log($this->global['reference_cost'])) - ($this->global['reference_cost'] / 1500), 2);
         }

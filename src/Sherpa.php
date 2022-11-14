@@ -257,9 +257,6 @@ class Sherpa
     public function addCeo($game_id, $user_id, $company_name, $avatar, $is_funded = false)
     {
         $game = Game::findOrFail($game_id);
-        if ($game->ceos()->count() >= $game->players) {
-            throw new \Exception("No hay slots disponibles en esta partida");
-        }
 
         // Update the existing game_user data with the incoming parameters, or create new ceo
         $game_user = GameUser::where([['game_id', $game_id], ['user_id', $user_id]])->first();
@@ -269,6 +266,10 @@ class Sherpa
             $game_user->is_funded = $is_funded;
             $game_user->save();
         } else {
+            if ($game->ceos()->count() >= $game->players) {
+                throw new \Exception("No hay slots disponibles en esta partida");
+            }
+            
             $game->ceos()->attach($user_id, [
                 'company_name' => $company_name,
                 'avatar' => $avatar,
@@ -298,6 +299,7 @@ class Sherpa
         if ($game->ceos()->count() >= $game->players) {
             throw new \Exception("No hay slots disponibles en esta partida");
         }
+        
         $game->ceos()->attach($user_id, [
             'company_name' => $company_name,
             'avatar' => $avatar,
