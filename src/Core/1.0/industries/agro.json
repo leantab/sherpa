@@ -1,0 +1,10 @@
+{
+  "ppe_t0" : 1000000,
+  "depreciation_rate" : 32,
+  "reference_cost" : 1500,
+  "id_sensibility" : 60,
+  "price_sensibility" : 250,
+  "p_id" : 40,
+  "p_price": 40,
+  "p_mkt" : 20
+}

@@ -260,14 +260,14 @@ class Sherpa
 
         // Update the existing game_user data with the incoming parameters, or create new ceo
         $game_user = GameUser::where([['game_id', $game_id], ['user_id', $user_id]])->first();
-        if ($game_user) {
+        if (null !== $game_user) {
             $game_user->company_name = $company_name;
             $game_user->avatar = $avatar;
-            $game_user->is_funded = $is_funded;
+            $game_user->is_funded = true;
             $game_user->save();
         } else {
             if ($game->ceos()->count() >= $game->players) {
-                throw new \Exception("No hay slots disponibles en esta partida");
+                throw new \Exception("No hay Lugares disponibles en esta partida");
             }
             
             $game->ceos()->attach($user_id, [
