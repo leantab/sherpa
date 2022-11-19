@@ -82,25 +82,33 @@ class Core
         if ($this->stage == 0) {
           $this->company[$ceo->id]['risk_score'] = $this->risk_score_t0;
         } else {
-          $this->company[$ceo->id]['risk_score'] = log($this->ceo[$ceo->id]['recycle_value'] * $this->ceo[$ceo->id]['quality_control_value'] * $this->ceo[$ceo->id]['safety_value']);;
+          $this->company[$ceo->id]['risk_score'] = log($this->ceo[$ceo->id]['recycle_value'] * $this->ceo[$ceo->id]['quality_control_value'] * $this->ceo[$ceo->id]['safety_value']);
         }
-        $this->company[$ceo->id]['risk_level'] = round(min($this->game->game_parameters['risk_limit_max'] / 100, max(1 - $this->company[$ceo->id]['risk_score'] / 3.58, $this->game->game_parameters['risk_limit_min'] / 100)), 2);
+        $this->company[$ceo->id]['risk_level'] = round(min(
+            $this->game->game_parameters['risk_limit_max'] / 100,
+            max(
+              1 - $this->company[$ceo->id]['risk_score'] / 3.3,
+              $this->game->game_parameters['risk_limit_min'] / 100
+            )
+          ), 2);
 
         if ($this->stage == 0) {
           $this->company[$ceo->id]['event_prob'] = 0;
         } else {
+          //{[(risk_slope^(2*production)) / (1+2*production)-1)] *risk_level } / 132
           $this->company[$ceo->id]['event_prob'] = (pow($this->global['risk_slope'], (2 * ($this->company[$ceo->id]['production'] / 100))) / ((1 + 2 * ($this->company[$ceo->id]['production'] / 100)))  * $this->company[$ceo->id]['risk_level'] / 132) * 100;
         }
 
         if ($ceo->pivot->bankrupt || $ceo->pivot->dismissed) {
           $this->company[$ceo->id]['cbu'] = 1;
         } else {
+          //2,15 * (reference_cost * (6^7) / (ppe_t * production)*(1-event_prob/2))
           $this->company[$ceo->id]['cbu'] = round(2.15 * (($this->global['reference_cost'] * pow(6, 7) / ($this->company[$ceo->id]['ppe'] * ($this->company[$ceo->id]['production'] / 100)) * (1 - ($this->company[$ceo->id]['event_prob'] / 100) / 2))));
         }
         $this->global['cbu_sum'] += $this->company[$ceo->id]['cbu'];
         $this->company[$ceo->id]['max_u'] = round($this->company[$ceo->id]['ppe'] / $this->global['reference_cost']);
         $this->global['max_u_industry'] += $this->company[$ceo->id]['max_u'];
-        $this->company[$ceo->id]['u_prod'] = max(round(($this->company[$ceo->id]['production'] / 100) * $this->company[$ceo->id]['max_u']), 1);
+        $this->company[$ceo->id]['u_prod'] = round(($this->company[$ceo->id]['production'] / 100) * $this->company[$ceo->id]['max_u']);
         $this->company[$ceo->id]['output'] = $this->company[$ceo->id]['cbu'] * $this->company[$ceo->id]['u_prod'];
         // En el turno cero completo las decisiones simuladas de los CEO 
         if ($this->stage == 0) {
