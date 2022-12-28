@@ -27,7 +27,11 @@
     "industry": {
       "required": true,
       "type": "options",
-      "options": null
+      "options": [
+        "agro",
+        "cars",
+        "phones"
+      ]
     },
     "type": {
       "required": true,
@@ -72,6 +76,16 @@
         "industry_status_demanding_customers",
         "industry_status_constant_development",
         "industry_status_faithful_clients",
+        "random"
+      ]
+    },
+    "company_type": {
+      "required": true,
+      "type": "options",
+      "options": [
+        "company_type_start_up",
+        "company_type_pyme",
+        "company_type_corporate",
         "random"
       ]
     },
