@@ -2,9 +2,9 @@
   "country_income_low_income" : {
     "pms_min" : 0.133,
     "pms_max" : 0.251,
-    "loan_ratio_min" : 0,
-    "loan_ratio_max" : 0.01,
-    "salary_min" : 0,
+    "loan_ratio_min" : 0.001,
+    "loan_ratio_max" : 0.010,
+    "salary_min" : 1,
     "salary_max" : 69
   },
   "country_income_lower_middle_income" : {

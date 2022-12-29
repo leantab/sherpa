@@ -1,9 +1,7 @@
 {
-  "ppe_t0" : 1000000,
-  "depreciation_rate" : 23,
-  "reference_cost" : 350,
-  "id_sensibility" : 80,
-  "price_sensibility" : 200,
+  "depreciation_rate" : 25,
+  "reference_cost" : 100,
+  "alfa" : 0.45,
   "p_id" : 40,
   "p_price": 10,
   "p_mkt" : 50
