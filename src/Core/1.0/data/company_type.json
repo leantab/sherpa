@@ -1,0 +1,14 @@
+{
+  "company_type_start_up" : {
+    "ppe_t0" : 528814
+  },
+  "company_type_pyme" : {
+    "ppe_t0" : 771902
+  },
+  "company_type_corporate" : {
+    "ppe_t0" : 1190201
+  },
+  "company_type_random" : {
+    "ppe_t0" : 635029
+  }
+}
