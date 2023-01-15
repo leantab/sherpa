@@ -564,13 +564,25 @@ class Core
 
         // country_income_level
         $vars_income_level = json_decode(file_get_contents(__DIR__ . '/data/countries_income_level.json'), true);
+        
+        $income_level = $this->game->game_parameters['country_income_level'];
+        
         // Salary y loan_ratio no se calculan en modo pais
         if ($this->game->game_parameters['type'] != 'country') {
-            $game_parameters['salary'] = rand($vars_income_level[$this->game->game_parameters['country_income_level']]['salary_min'], $vars_income_level[$this->game->game_parameters['country_income_level']]['salary_max']);
-            $game_parameters['loan_ratio'] = rand($vars_income_level[$this->game->game_parameters['country_income_level']]['loan_ratio_min'] * 1000, $vars_income_level[$this->game->game_parameters['country_income_level']]['loan_ratio_max'] * 1000) / 1000;
+            $game_parameters['salary'] = rand(
+                $vars_income_level[$income_level]['salary_min'],
+                $vars_income_level[$income_level]['salary_max']
+            );
+            $game_parameters['loan_ratio'] = rand(
+                $vars_income_level[$income_level]['loan_ratio_min'] * 1000,
+                $vars_income_level[$income_level]['loan_ratio_max'] * 1000
+            ) / 1000;
         }
 
-        $game_parameters['pms'] = rand($vars_income_level[$this->game->game_parameters['country_income_level']]['pms_min'] * 1000, $vars_income_level[$this->game->game_parameters['country_income_level']]['pms_max'] * 1000) / 1000;
+        $game_parameters['pms'] = rand(
+            $vars_income_level[$income_level]['pms_min'] * 1000,
+            $vars_income_level[$income_level]['pms_max'] * 1000
+        ) / 1000;
 
         $vars_easy_business_score = json_decode(file_get_contents(__DIR__ . '/data/easy_business_score.json'), true);
         $game_parameters['easy_business_score_tax'] = rand($vars_easy_business_score[$this->game->game_parameters['easy_business_score']]['min'] * 100, $vars_easy_business_score[$this->game->game_parameters['easy_business_score']]['max'] * 100) / 100;
@@ -678,9 +690,23 @@ class Core
 
         $industry_status = $this->game->game_parameters['industry_status'];
         $status_vars = json_decode(file_get_contents(__DIR__ . '/data/industry_statuses.json'), true);
+        
+        $vars['id_sensibility'] = rand(
+            $status_vars[$industry_status]['id_sensibility']['min'],
+            $status_vars[$industry_status]['id_sensibility']['max'],
+        );
+        $vars['price_sensibility'] = rand(
+            $status_vars[$industry_status]['price_sensibility']['min'],
+            $status_vars[$industry_status]['price_sensibility']['max'],
+        );
 
-        $vars['id_sensibility'] = $vars['id_sensibility'] * $status_vars[$industry_status]['id_sensibility_leverage'];
-        $vars['price_sensibility'] = $vars['price_sensibility'] * $status_vars[$industry_status]['price_sensibility_leverage'];
+        $company_type = $this->game->game_parameters['company_type'];
+        $company_vars = json_decode(file_get_contents(__DIR__ . '/data/company_type.json'), true);
+
+        $vars['ppe_t0'] = rand(
+            $company_vars[$company_type]['ppe_t0']['min'],
+            $company_vars[$company_type]['ppe_t0']['max'],
+        );
 
         return $vars;
     }
