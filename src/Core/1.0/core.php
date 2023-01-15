@@ -7,9 +7,12 @@ use Exception;
 
 class Core
 {
-
-    public $game;
+    public $ceo;
+    public Game $game;
     public $stage;
+    public $global;
+    public $industry;
+    public $company;
     public $production_t0;
     public $random_ibk_t0;
     public $random_mkt_t0;
