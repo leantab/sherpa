@@ -274,7 +274,11 @@ class Core
             foreach ($this->game->ceos as $ceo) {
                 $this->company[$ceo->id]['active_mkt_share'] = $this->company[$ceo->id]['active_mkt'] / $this->global['active_mkt_industry'];
                 $this->company[$ceo->id]['delta_mkt_share'] = $this->company[$ceo->id]['active_mkt_share'] - $this->company[$ceo->id]['share_target'];
-                $this->company[$ceo->id]['mkt_index'] = max(log(($this->industry['p_mkt'] / $this->game->game_parameters['players']) + ($this->industry['p_mkt'] * $this->company[$ceo->id]['delta_mkt_share'])), 0);
+                //MAX(LN((pMKT/n_players) + pMKT * delta_share_mkt); 0)
+                $this->company[$ceo->id]['mkt_index'] = max(
+                    log(($this->industry['p_mkt'] / $this->game->game_parameters['players']) + ($this->industry['p_mkt'] * $this->company[$ceo->id]['delta_mkt_share'])),
+                    0
+                );
                 $this->global['mkt_index_industry'] += $this->company[$ceo->id]['mkt_index'];
             }
 
@@ -298,7 +302,7 @@ class Core
                 $this->global['real_added_demand'] = $this->game->game_parameters['initial_eq'];
             } else {
                 $this->global['delta_interest_rate'] = $this->global['interest_rate'] - $this->game->results['stage_' . ($this->stage - 1)]['interest_rate'];
-
+                //added_demand (t-1) * (1+Δda) * (1- (Δi * pms))
                 $this->global['added_demand'] = $this->game->results['stage_' . ($this->stage - 1)]['added_demand'] * (1 + $this->game->goverment_parameters['stage_' . $this->stage]['added_demand_variation'] / 100) * (1 - ($this->global['delta_interest_rate'] / 100 * $this->global['pms']));
 
                 $this->global['real_added_demand'] = (($this->global['added_demand'] / $this->game->results['stage_' . ($this->stage - 1)]['added_demand']) - 1) * 100;
@@ -314,17 +318,19 @@ class Core
             $this->global['sold_u_industry'] = 0;
             $this->global['total_revenue_industry'] = 0;
             foreach ($this->game->ceos as $ceo) {
+                //MAX(0, total_points_player / total_points_industry * u_dem_industry)
                 $this->company[$ceo->id]['demand_u'] = max(round($this->company[$ceo->id]['total_points_player'] / $this->global['total_points_industry'] * $this->global['u_dem_industry']), 0);
                 $this->company[$ceo->id]['offer_surplus'] = $this->company[$ceo->id]['u_prod'] - $this->company[$ceo->id]['demand_u'];
                 $this->company[$ceo->id]['sold_u'] = round(min($this->company[$ceo->id]['demand_u'], $this->company[$ceo->id]['offered_u']));
-                $this->company[$ceo->id]['unrealized_sales'] = ($this->company[$ceo->id]['demand_u'] - $this->company[$ceo->id]['sold_u']) * $this->ceo[$ceo->id]['price'];
                 $this->global['sold_u_industry'] += $this->company[$ceo->id]['sold_u'];
+                $this->company[$ceo->id]['unrealized_sales'] = ($this->company[$ceo->id]['demand_u'] - $this->company[$ceo->id]['sold_u']) * $this->ceo[$ceo->id]['price'];
                 $this->company[$ceo->id]['total_revenue'] = $this->company[$ceo->id]['sold_u'] * $this->ceo[$ceo->id]['price'];
-                $this->company[$ceo->id]['achieved_target'] = ($this->company[$ceo->id]['total_revenue'] / $this->company[$ceo->id]['target']) * 100;
                 $this->global['total_revenue_industry'] += $this->company[$ceo->id]['total_revenue'];
+                $this->company[$ceo->id]['achieved_target'] = ($this->company[$ceo->id]['total_revenue'] / $this->company[$ceo->id]['target']) * 100;
                 $this->company[$ceo->id]['cost_sold_goods'] = $this->company[$ceo->id]['sold_u'] * $this->company[$ceo->id]['cbu'];
                 $this->company[$ceo->id]['gross_profit'] = $this->company[$ceo->id]['total_revenue'] - $this->company[$ceo->id]['cost_sold_goods'];
-                $this->company[$ceo->id]['demand_surplus'] = (($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['offered_u']) - 1) * 100;
+                //abs [((demand_u / offered_u) - 1)] * 100
+                $this->company[$ceo->id]['demand_surplus'] = abs((($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['offered_u']) - 1) * 100);
             }
 
             $this->global['revenue_employees'] = $this->global['total_revenue_industry'] / $this->global['employees_industry'];
