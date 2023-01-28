@@ -155,7 +155,7 @@ class Core
 
                 $this->company[$ceo->id]['offered_u'] = round($this->company[$ceo->id]['current_stock'] + $this->company[$ceo->id]['u_prod']);
                 $this->company[$ceo->id]['vpe'] = $this->company[$ceo->id]['cbu'] * $this->company[$ceo->id]['worker_productivity'];
-                // $this->company[$ceo->id]['max_w'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'] * log(10);
+                $this->company[$ceo->id]['max_w'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'] * log(10);
                 $this->company[$ceo->id]['max_e'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'];
                 $this->company[$ceo->id]['employees'] = $this->company[$ceo->id]['production'] * $this->company[$ceo->id]['max_e'];
 
@@ -262,7 +262,8 @@ class Core
                 if ($this->stage == 0) {
                     $this->company[$ceo->id]['active_mkt'] = $this->company[$ceo->id]['mkt'];
                 } else {
-                    $this->company[$ceo->id]['active_mkt'] = $this->company[$ceo->id]['mkt'] + $ceo->pivot->results['stage_' . ($this->stage - 1)]['mkt'] * 0.25 + $this->game->results['stage_' . ($this->stage - 1)]['active_mkt_industry'] * 0.1;
+                    //mkt + mkt(t-1)*0,25 + active_mkt_ind(t-1)*0,1
+                    $this->company[$ceo->id]['active_mkt'] = $this->company[$ceo->id]['mkt'] + ($ceo->pivot->results['stage_' . ($this->stage - 1)]['mkt'] * 0.25) + ($this->game->results['stage_' . ($this->stage - 1)]['active_mkt_industry'] * 0.1);
                 }
 
                 $this->global['active_mkt_industry'] += $this->company[$ceo->id]['active_mkt'];
