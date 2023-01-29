@@ -339,15 +339,16 @@ class Core
 
             // loop 10
             $this->global['final_stock_industry'] = 0;
-            $this->global['inventories_industry'] = 0;
+            $this->global['inventories_sum'] = 0;
 
             foreach ($this->game->ceos as $ceo) {
                 $this->company[$ceo->id]['market_share'] = ($this->company[$ceo->id]['sold_u'] / $this->global['sold_u_industry']) * 100;
+                //Hirschman_index=(Σmarket_share^2(n)/ 2500) * 100             
                 $this->global['hirschman_index'] += pow($this->company[$ceo->id]['market_share'], 2);
-                $this->company[$ceo->id]['final_stock'] = ($this->company[$ceo->id]['offer_surplus'] + $this->company[$ceo->id]['current_stock'] < 0) ? 0 : round($this->company[$ceo->id]['offer_surplus'] + $this->company[$ceo->id]['current_stock']);
+                $this->company[$ceo->id]['final_stock'] = max(round($this->company[$ceo->id]['offer_surplus'] + $this->company[$ceo->id]['current_stock']), 0);
                 $this->global['final_stock_industry'] += $this->company[$ceo->id]['final_stock'];
                 $this->company[$ceo->id]['inventories'] = $this->company[$ceo->id]['final_stock'] * $this->company[$ceo->id]['cbu'];
-                $this->global['inventories_industry'] += $this->company[$ceo->id]['inventories'];
+                $this->global['inventories_sum'] += $this->company[$ceo->id]['inventories'];
 
                 $this->company[$ceo->id]['loan_ratio'] = $this->game->game_parameters['loan_ratio'];
                 if ($this->stage == 0) {
@@ -356,6 +357,8 @@ class Core
                     $this->company[$ceo->id]['top_loan'] = $this->company[$ceo->id]['loan_ratio'] * ($this->game->results['stage_0']['total_revenue_industry'] / $this->game->game_parameters['players']);
                 }
             }
+
+            $this->global['inventories_industry'] = $this->global['average_cbu'] / $this->global['final_stock_industry'];
 
             // loop 11
             $this->global['taxes_sum'] = 0;
