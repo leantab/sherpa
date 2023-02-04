@@ -374,7 +374,6 @@ class Core
 
                 if ($this->stage == 0) {
                     $this->company[$ceo->id]['opening_cash'] = $this->game->game_parameters['opening_cash_ratio'] * $this->company[$ceo->id]['ppe'];
-
                     $this->company[$ceo->id]['inventory_change'] = $this->company[$ceo->id]['inventories'] * -1;
 
                     // EVENTO RANDOM
