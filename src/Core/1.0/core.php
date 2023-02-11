@@ -9,6 +9,7 @@ class Core
 {
     public $ceo;
     public Game $game;
+    public $num_ceos;
     public $stage;
     public $global;
     public $industry;
@@ -30,6 +31,7 @@ class Core
         $this->stage = (int)($this->game->current_stage);
         $this->global = [];
         $this->company = [];
+        $this->num_ceos = $this->game->ceos->count();
 
         if ($this->stage == 0) {
             $this->init_t0();
@@ -185,10 +187,10 @@ class Core
                 $this->company[$ceo->id]['target'] = $this->company[$ceo->id]['offered_u'] * $this->ceo[$ceo->id]['price'];
             } // end foreach
 
-            $this->global['average_production'] = $this->global['production_sum'] / $this->game->ceos->count();
-            $this->global['average_cbu'] = $this->global['cbu_sum'] / $this->game->ceos->count();
+            $this->global['average_production'] = $this->global['production_sum'] / $this->num_ceos;
+            $this->global['average_cbu'] = $this->global['cbu_sum'] / $this->num_ceos;
 
-            $this->global['average_price'] = $this->global['price_sum'] / $this->game->ceos->count();
+            $this->global['average_price'] = $this->global['price_sum'] / $this->num_ceos;
 
             if ($this->stage == 0) {
                 $this->global['sd'] = $this->global['average_price'] / 2;
@@ -416,7 +418,7 @@ class Core
                     $this->company[$ceo->id]['inventory_change'] = $ceo->pivot->results['stage_' . ($this->stage - 1)]['inventories'] - $this->company[$ceo->id]['inventories'];
                 }
 
-                //REVISAR CON CIRO
+                //MULTIPLICA POR TURNO + 1
                 if ($this->stage == 0) {
                     $this->company[$ceo->id]['subsidy'] = ($this->company[$ceo->id]['delta_employees'] < 0) ? $this->company[$ceo->id]['delta_employees'] * $this->game->game_parameters['compensation_cost'] * $this->game->game_parameters['salary'] * $this->stage : $this->company[$ceo->id]['delta_employees'] * $this->game->game_parameters['compensation_cost'] * $this->game->game_parameters['salary'];
                 } else {
@@ -514,12 +516,12 @@ class Core
                 $this->company[$ceo->id]['fix_assets_indebtedness'] = ($this->company[$ceo->id]['liabilities'] <= 0) ? 0 : round($this->company[$ceo->id]['liabilities'] / $this->company[$ceo->id]['fix_assets'], 2);
 
                 if ($this->stage == 0) {
-                    $this->company[$ceo->id]['demand_change'] = 1;
-                    $this->company[$ceo->id]['demand_elasticity'] = 1;
+                    $this->company[$ceo->id]['demand_change'] = $this->company[$ceo->id]['demand_u'];
+                    $this->company[$ceo->id]['demand_elasticity'] = 'N/A';
                 } else {
                     $this->company[$ceo->id]['demand_change'] = round($this->company[$ceo->id]['demand_u'] - $ceo->pivot->results['stage_' . ($this->stage - 1)]['demand_u']);
                     if ($this->company[$ceo->id]['price_change'] == 0 || $this->company[$ceo->id]['demand_change'] == 0) {
-                        $this->company[$ceo->id]['demand_elasticity'] = 1;
+                        $this->company[$ceo->id]['demand_elasticity'] = 0.5;
                     } else {
                         $this->company[$ceo->id]['demand_elasticity'] = abs(round(($this->company[$ceo->id]['demand_change'] / $ceo->pivot->results['stage_' . ($this->stage - 1)]['demand_u']) / ($this->company[$ceo->id]['price_change'] / $ceo->pivot->results['stage_' . ($this->stage - 1)]['price']), 2));
                     }
@@ -541,26 +543,40 @@ class Core
                     $this->company[$ceo->id]['sales_net_profitability'] = 0;
                 }
 
-
                 $this->company[$ceo->id]['roe'] = round(($this->company[$ceo->id]['un'] / $this->company[$ceo->id]['equity']) * 100, 2);
-                $this->company[$ceo->id]['roa'] = round(($this->company[$ceo->id]['ebit'] / $this->company[$ceo->id]['equity']) * 100, 2);
+                $this->company[$ceo->id]['roa'] = round(($this->company[$ceo->id]['ebit'] / $this->company[$ceo->id]['total_assets']) * 100, 2);
+                
                 if ($this->ceo[$ceo->id]['production'] > 0) {
-                    $this->company[$ceo->id]['event_prob_min'] = ((pow($this->global['risk_slope'], (2 * $this->ceo[$ceo->id]['production'])) / ((1 + 2 * $this->ceo[$ceo->id]['production']) - 1)) * $this->game->game_parameters['risk_limit_min']) / 132;
-                    $this->company[$ceo->id]['risk_free_output'] = 2.15 * (($this->global['reference_cost'] * pow(6, 7) / ($this->company[$ceo->id]['ppe'] * ($this->company[$ceo->id]['production'] / 100)) * (1 - ($this->company[$ceo->id]['event_prob'] / 100) / 2))) * $this->company[$ceo->id]['production'];
+                    //{[(risk_slope ^ (2*production)) / (1 + 2*production)-1)] * risk_limit_min } / 132
+                    $this->company[$ceo->id]['event_prob_min'] = (
+                        (pow($this->global['risk_slope'], (2 * ($this->ceo[$ceo->id]['production'] / 100)))
+                        / ((1 + 2 * ($this->ceo[$ceo->id]['production'] / 100)) - 1)) 
+                        * $this->game->game_parameters['risk_limit_min']
+                    ) / 132;
+                    //(reference_cost * (8^7) / (ppe_t * production)*(1-event_prob_min/2))) * production
+                    $this->company[$ceo->id]['risk_free_output'] = (
+                        ($this->global['reference_cost'] * pow(8, 7) 
+                        / ($this->company[$ceo->id]['ppe'] * ($this->company[$ceo->id]['production'] / 100)) 
+                        * (1 - ($this->company[$ceo->id]['event_prob'] / 100) / 2))
+                    ) * ($this->company[$ceo->id]['production'] / 100);
                 } else {
                     $this->company[$ceo->id]['event_prob_min'] = 0;
                     $this->company[$ceo->id]['risk_free_output'] = 0;
                 }
+
                 $this->company[$ceo->id]['risk_cost'] = $this->company[$ceo->id]['risk_free_output'] - $this->company[$ceo->id]['output'];
+
                 if ($this->stage == 0) {
                     $this->company[$ceo->id]['growth_rate'] = 0;
                 } else {
-                    $this->company[$ceo->id]['growth_rate'] = (($this->company[$ceo->id]['earnings'] / $ceo->pivot->results['stage_0']['earnings']) - 1) * 100;
+                    $this->company[$ceo->id]['growth_rate'] = (
+                        ($this->company[$ceo->id]['earnings'] / $ceo->pivot->results['stage_0']['earnings']) - 1
+                    ) * 100;
                 }
             }
 
-            $this->global['average_total_cost'] = $this->global['total_cost_sum'] / $this->game->ceos->count();
-            $this->global['average_payed_taxes'] = -1 * ($this->global['taxes_sum'] / $this->game->ceos->count());
+            $this->global['average_total_cost'] = $this->global['total_cost_sum'] / $this->num_ceos;
+            $this->global['average_payed_taxes'] = -1 * ($this->global['taxes_sum'] / $this->num_ceos);
 
             sort($arr_earnings, SORT_NUMERIC);
             $arr_earnings = array_reverse($arr_earnings);
