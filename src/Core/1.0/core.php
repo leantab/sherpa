@@ -248,6 +248,7 @@ class Core
             $arr_corrected_prices = [];
             foreach ($this->game->ceos as $ceo) {
                 $this->company[$ceo->id]['final_id_points'] = $this->company[$ceo->id]['id_index'] / $this->global['id_index_industry'] * $this->industry['p_id'];
+                $this->global['final_id_poinst_sum'] += $this->company[$ceo->id]['final_id_points'];
 
                 $this->company[$ceo->id]['corrected_price'] = max(0.5, log($this->ceo[$ceo->id]['price'] / $this->industry['price_sensibility']));
                 $arr_corrected_prices[] = $this->company[$ceo->id]['corrected_price'];
@@ -297,6 +298,8 @@ class Core
             $this->global['total_points_industry'] = 0;
             foreach ($this->game->ceos as $ceo) {
                 $this->company[$ceo->id]['final_mkt_points'] = $this->company[$ceo->id]['mkt_index'] / $this->global['mkt_index_industry'] * $this->industry['p_mkt'];
+                $this->global['final_mkt_poinst_sum'] += $this->company[$ceo->id]['final_mkt_points'];
+                
                 if (!$ceo->pivot->bankrupt && !$ceo->pivot->dismissed) {
                     $this->company[$ceo->id]['total_points_player'] = $this->company[$ceo->id]['final_price_points'] + $this->company[$ceo->id]['final_id_points'] + $this->company[$ceo->id]['final_mkt_points'];
                 } else {
@@ -623,12 +626,10 @@ class Core
             }
 
             // loop 13
-            foreach ($this->game->ceos as $ceo) {
-                $this->company[$ceo->id]['price_checkpoint'] = ($this->company[$ceo->id]['final_price_points'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
-                $this->company[$ceo->id]['id_checkpoint'] = ($this->company[$ceo->id]['final_price_points'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
-                $this->company[$ceo->id]['mkt_checkpoint'] = ($this->company[$ceo->id]['final_price_points'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
-                $this->company[$ceo->id]['equity_checkpoint'] = ($this->company[$ceo->id]['final_price_points'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
-            }
+                $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
+                $this->global['id_checkpoint'] = ($this->global['final_id_points_sum'] == $this->industry['pID']) ? 'OK' : 'ERROR';
+                $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['pMKT']) ? 'OK' : 'ERROR';
+                $this->global['equity_checkpoint'] = ($this->global['final_price_points'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
 
 
             // CALCULO DE TIPS (solo se muestran a partir del turno 2)
