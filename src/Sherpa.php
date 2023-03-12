@@ -37,7 +37,7 @@ class Sherpa
     *   Retorna el schema json de la version seleccionada (o la ultima version si no se especifica ninguna)
     *
     */
-    public function getSchema($version = 'current'): array
+    public function getSchema(string $version = 'current'): array
     {
         if ($version == 'current') {
             $versions = $this->getVersions();
@@ -248,7 +248,8 @@ class Sherpa
 
     public function createTestGameScenario()
     {
-        $schema = $this->getSchema(1.0);
+        $schema = $this->getSchema('1.0');
+
         $params = [
             'name' => 'Test Game ' . rand(1, 1000),
             'type' => 'scenario',
@@ -264,7 +265,7 @@ class Sherpa
         $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/1.0/scenarios/argentina_crisis_2001.json'), true);
 
         $game_data = [
-            'version' => 1.0,
+            'version' => '1.0',
             'status_id' => 1,
             'segment_id' => 1,
             'game_parameters' => $res->parameters,
@@ -750,7 +751,7 @@ class Sherpa
         Retorn el schema parseado (agrega los items dinamicos)
     */
 
-    private function parseSchema($version): array
+    private function parseSchema(string $version): array
     {
         if (!file_exists(__DIR__ . '/Core/' . $version . '/schema.json')) {
             return false;
