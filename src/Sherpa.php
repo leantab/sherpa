@@ -250,17 +250,15 @@ class Sherpa
     {
         $schema = $this->getSchema('1.0');
 
-        $params = [
-            'name' => 'Test Game ' . rand(1, 1000),
-            'type' => 'scenario',
-            'players' => 4,
-            'industry' => 'cars',
-            'stages' => 6,
-            'scenario' => 'argentina_crisis_2001',
-            'proficiency_rate' => 'proficiency_junior'
-        ];
-        
-        $res = $this->validateJsonData($schema['game_parameters'], json_encode($params));
+        $schema['game_parameters']['name'] = 'Test Game ' . rand(1, 1000);
+        $schema['game_parameters']['type'] = 'scenario';
+        $schema['game_parameters']['players'] = 4;
+        $schema['game_parameters']['industry'] = 'cars';
+        $schema['game_parameters']['stages'] = 6;
+        $schema['game_parameters']['scenario'] = 'argentina_crisis_2001';
+        $schema['game_parameters']['proficiency_rate'] = 'proficiency_junior';
+
+        $geme_params = $schema['game_parameters'];
 
         $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/1.0/scenarios/argentina_crisis_2001.json'), true);
 
@@ -268,7 +266,7 @@ class Sherpa
             'version' => '1.0',
             'status_id' => 1,
             'segment_id' => 1,
-            'game_parameters' => $params,
+            'game_parameters' => $geme_params,
             'creator_id' => 1
         ];
 
