@@ -246,6 +246,55 @@ class Sherpa
         }
     }
 
+    public function createTestGameScenario()
+    {
+        $schema = $this->getSchema(1.0);
+        $params = [
+            'name' => 'Test Game ' . rand(1, 1000),
+            'type' => 'scenario',
+            'players' => 4,
+            'industry' => 'cars',
+            'stages' => 6,
+            'scenario' => 'argentina_crisis_2001',
+            'proficiency_rate' => 'proficiency_junior'
+        ];
+        
+        $res = $this->validateJsonData($schema['game_parameters'], $params);
+
+        $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/1.0/scenarios/argentina_crisis_2001.json'), true);
+
+        $game_data = [
+            'version' => 1.0,
+            'status_id' => 1,
+            'segment_id' => 1,
+            'game_parameters' => $res->parameters,
+            'creator_id' => 1
+        ];
+
+        if ($res->parameters['type'] == 'scenario') {
+            $game_data['goverment_parameters'] = $scenarioGameParameters['goverment_parameters'];
+        }
+
+
+        $game = Game::create($game_data);
+
+        $this->addSimpleCeo($game->id, 1, 'Test Company 1', 1, true);
+        $this->addCeo($game->id, 1, 'Test Company 1', 1, true);
+        $this->addSimpleCeo($game->id, 2, 'Test Company 2', 2, true);
+        $this->addCeo($game->id, 2, 'Test Company 2', 2, true);
+        $this->addSimpleCeo($game->id, 3, 'Test Company 3', 3, true);
+        $this->addCeo($game->id, 3, 'Test Company 3', 3, true);
+        $this->addSimpleCeo($game->id, 4, 'Test Company 4', 4, true);
+        $this->addCeo($game->id, 4, 'Test Company 4', 4, true);
+
+        ProcessStage::dispatch($game);
+
+        $return = new \StdClass();
+        $return->status = true;
+        $return->id = $game->id;
+        return $return;
+    }
+
     public function addGoverment($game_id, $user_id)
     {
         $game = Game::findOrFail($game_id);
