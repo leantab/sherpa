@@ -259,7 +259,7 @@ class Sherpa
             'proficiency_rate' => 'proficiency_junior'
         ];
         
-        $res = $this->validateJsonData($schema['game_parameters'], $params);
+        $res = $this->validateJsonData($schema['game_parameters'], json_encode($params));
 
         $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/1.0/scenarios/argentina_crisis_2001.json'), true);
 
