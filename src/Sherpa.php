@@ -268,7 +268,7 @@ class Sherpa
             'version' => '1.0',
             'status_id' => 1,
             'segment_id' => 1,
-            'game_parameters' => $res->parameters,
+            'game_parameters' => $params,
             'creator_id' => 1
         ];
 
@@ -575,18 +575,18 @@ class Sherpa
     *   Valida estructura y datos ingresados contra el schema
     *
     */
-    private function validateJsonData($validate, $input, $game = null, $user = null)
+    private function validateJsonData($gameParams, $input, $game = null, $user = null)
     {
         $return = new \StdClass();
         $return->status = true;
         $return->parameters = [];
 
-        foreach ($validate as $item => $definition) {
+        foreach ($gameParams as $param => $definition) {
 
             if (isset($definition['required']) && $definition['required']) {
-                if (!isset($input[$item]) || $input[$item] == '') {
+                if (!isset($input[$param]) || $input[$param] == '') {
                     $return->status = false;
-                    $return->errors[$item] = 'required';
+                    $return->errors[$param] = 'required';
                 }
             }
 
@@ -598,9 +598,9 @@ class Sherpa
                 $required_if_values = explode(',', $required_if_explode[1]);
 
                 if (isset($input[$required_if_field]) && in_array($input[$required_if_field], $required_if_values)) {
-                    if (!isset($input[$item]) || $input[$item] == '') {
+                    if (!isset($input[$param]) || $input[$param] == '') {
                         $return->status = false;
-                        $return->errors[$item] = 'required_if';
+                        $return->errors[$param] = 'required_if';
                     }
                 }
             }
@@ -609,13 +609,13 @@ class Sherpa
                 $function = substr($definition['function'], 0, strlen($definition['function']) - 2);
                 if (!$function($game, $user, $input)) {
                     $return->status = false;
-                    $return->errors[$item] = $definition['function'];
+                    $return->errors[$param] = $definition['function'];
                 }
             }
 
-            if (isset($input[$item]) && $return->status == true) {
+            if (isset($input[$param]) && $return->status == true) {
 
-                $value = $input[$item];
+                $value = $input[$param];
 
 
                 // Valida el tipo de dato
@@ -624,21 +624,21 @@ class Sherpa
                     if (isset($definition['min_length'])) {
                         if (strlen($value) < $definition['min_length']) {
                             $return->status = false;
-                            $return->errors[$item] = 'min_length';
+                            $return->errors[$param] = 'min_length';
                         }
                     }
 
                     if (isset($definition['max_length'])) {
                         if (strlen($value) > $definition['max_length']) {
                             $return->status = false;
-                            $return->errors[$item] = 'max_length';
+                            $return->errors[$param] = 'max_length';
                         }
                     }
 
                     if (isset($definition['options'])) {
                         if (!in_array($value, $definition['options'])) {
                             $return->status = false;
-                            $return->errors[$item] = 'options';
+                            $return->errors[$param] = 'options';
                         }
                     }
                 } elseif ($definition['type'] == 'integer') {
@@ -647,20 +647,20 @@ class Sherpa
 
                     if (!is_int($value)) {
                         $return->status = false;
-                        $return->errors[$item] = 'integer';
+                        $return->errors[$param] = 'integer';
                     }
 
                     if (isset($definition['min'])) {
                         if ($value < $definition['min']) {
                             $return->status = false;
-                            $return->errors[$item] = 'min';
+                            $return->errors[$param] = 'min';
                         }
                     }
 
                     if (isset($definition['max'])) {
                         if ($value > $definition['max']) {
                             $return->status = false;
-                            $return->errors[$item] = 'max';
+                            $return->errors[$param] = 'max';
                         }
                     }
                 } elseif ($definition['type'] == 'options') {
@@ -669,13 +669,13 @@ class Sherpa
                         try {
                             if (!in_array($value, $definition['options'])) {
                                 $return->status = false;
-                                $return->errors[$item] = 'options';
+                                $return->errors[$param] = 'options';
                             }
                         } catch (\Exception $e) {
                         }
                     } else {
                         $return->status = false;
-                        $return->errors[$item] = 'options no set';
+                        $return->errors[$param] = 'options no set';
                     }
                 }
 
@@ -685,13 +685,13 @@ class Sherpa
                     foreach ($definition['rule'] as $rule) {
 
                         if ($rule[0] == 'self') {
-                            $field1 = $item;
+                            $field1 = $param;
                         } else {
                             $field1 = $rule[0];
                         }
 
                         if ($rule[2] == 'self') {
-                            $field2 = $item;
+                            $field2 = $param;
                         } else {
                             $field2 = $rule[2];
                         }
@@ -714,13 +714,13 @@ class Sherpa
 
                         if (!$rule_valid) {
                             $return->status = false;
-                            $return->errors[$item] = 'rule invalid';
+                            $return->errors[$param] = 'rule invalid';
                         }
                     }
                 }
 
                 if ($return->status == true) {
-                    $return->parameters[$item] = $input[$item];
+                    $return->parameters[$param] = $input[$param];
                 }
             }
         }
