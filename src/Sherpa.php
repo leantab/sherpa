@@ -272,10 +272,7 @@ class Sherpa
             'creator_id' => 1
         ];
 
-        if ($res->parameters['type'] == 'scenario') {
-            $game_data['goverment_parameters'] = $scenarioGameParameters['goverment_parameters'];
-        }
-
+        $game_data['goverment_parameters'] = $scenarioGameParameters['goverment_parameters'];
 
         $game = Game::create($game_data);
 
