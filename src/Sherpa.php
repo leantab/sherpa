@@ -246,9 +246,9 @@ class Sherpa
         }
     }
 
-    public function createTestGameScenario()
+    public function createTestGameScenario($version)
     {
-        $schema = $this->getSchema('1.0');
+        $schema = $this->getSchema($version);
 
         $schema['game_parameters']['name'] = 'Test Game ' . rand(1, 1000);
         $schema['game_parameters']['type'] = 'scenario';
@@ -263,7 +263,7 @@ class Sherpa
         $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/1.0/scenarios/argentina_crisis_2001.json'), true);
 
         $game_data = [
-            'version' => '1.0',
+            'version' => $version,
             'status_id' => 1,
             'segment_id' => 1,
             'game_parameters' => $geme_params,
