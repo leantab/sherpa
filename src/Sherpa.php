@@ -257,11 +257,14 @@ class Sherpa
         $schema['game_parameters']['stages'] = 6;
         $schema['game_parameters']['scenario'] = 'argentina_crisis_2001';
         $schema['game_parameters']['proficiency_rate'] = 'proficiency_junior';
-        $schema['game_parameters']['country_income_level'] = 'country_income_upper_middle_income';
 
         $geme_params = $schema['game_parameters'];
 
-        $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/1.0/scenarios/argentina_crisis_2001.json'), true);
+        $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/'.$version.'/scenarios/argentina_crisis_2001.json'), true);
+
+        foreach ($scenarioGameParameters['game_apameters'] as $key => $value) {
+            $game_parameters[$key] = $value;
+        }
 
         $game_data = [
             'version' => $version,
