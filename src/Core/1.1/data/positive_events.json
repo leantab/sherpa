@@ -1,0 +1,28 @@
+{
+  "events": [
+    {
+      "title" : "event_best_design_award_title",
+      "description" : "event_best_design_award_description",
+      "leverage" : 50,
+      "labels" : [
+        "id"
+      ]
+    },
+    {
+      "title" : "event_campaign_viral_title",
+      "description" : "event_campaign_viral_description",
+      "leverage" : 50,
+      "labels" : [
+        "mkt"
+      ]
+    },
+    {
+      "title" : "event_goverment_subsidy_title",
+      "description" : "event_goverment_subsidy_description",
+      "leverage" : 20,
+      "labels" : [
+        "ibk"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "industry_status_war_prices" : {
+    "id_sensibility" : {
+      "min" : 80,
+      "max" : 100
+    },
+    "price_sensibility" : {
+      "min" : 200,
+      "max" : 250
+    }
+  },
+  "industry_status_demanding_customers" : {
+    "id_sensibility" : {
+      "min" : 20,
+      "max" : 40
+    },
+    "price_sensibility" : {
+      "min" : 200,
+      "max" : 250
+    }
+  },
+  "industry_status_constant_development" : {
+    "id_sensibility" : {
+      "min" : 20,
+      "max" : 30
+    },
+    "price_sensibility" : {
+      "min" : 100,
+      "max" : 150
+    }
+  },
+  "industry_status_faithful_clients" : {
+    "id_sensibility" : {
+      "min" : 80,
+      "max" : 100
+    },
+    "price_sensibility" : {
+      "min" : 50,
+      "max" : 70
+    }
+  }
+}

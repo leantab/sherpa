@@ -1,0 +1,8 @@
+{
+  "depreciation_rate" : 35,
+  "reference_cost" : 1500,
+  "alfa" : 0.55,
+  "p_id" : 40,
+  "p_price": 40,
+  "p_mkt" : 20
+}

@@ -1,0 +1,21 @@
+{
+  "events": [
+    {
+      "title" : "event_deposit_fire_title",
+      "description" : "event_deposit_fire_description",
+      "impact_cbv" : 50,
+      "labels" : [
+        "safety"
+      ]
+    },
+    {
+      "title" : "event_strike_title",
+      "description" : "event_strike_description",
+      "impact_cbv" : 20,
+      "labels" : [
+        "quality_control",
+        "recycle"
+      ]
+    }
+  ]
+}
