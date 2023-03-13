@@ -71,6 +71,7 @@ class Core
 
             $arr_price = [];
             $arr_risk_scores = [];
+            $this->global['output_sum'] = 0;
             // Loop 1
             foreach ($this->game->ceos as $ceo) {
                 if ($this->stage == 0) {
@@ -664,7 +665,6 @@ class Core
         $vars_income_level = json_decode(file_get_contents(__DIR__ . '/data/countries_income_level.json'), true);
         
         $income_level = $this->game->game_parameters['country_income_level'];
-        Log::debug($income_level);
         
         // Salary y loan_ratio no se calculan en modo pais
         if ($this->game->game_parameters['type'] != 'country') {
