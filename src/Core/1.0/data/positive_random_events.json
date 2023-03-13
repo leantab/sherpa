@@ -1,0 +1,10 @@
+{
+  "positive_random_events_none": 0,
+  "positive_random_events_few": 25,
+  "positive_random_events_medium": 50,
+  "positive_random_events_full": 75,
+  "positive_random_events_random": {
+    "min": 1,
+    "max": 75
+  }
+}

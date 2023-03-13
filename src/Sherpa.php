@@ -311,15 +311,16 @@ class Sherpa
             $game_user->is_funded = true;
             $game_user->save();
         } else {
-            if ($game->ceos()->count() >= $game->players) {
-                throw new \Exception("No hay Lugares disponibles en esta partida");
-            }
+            // if ($game->ceos()->count() >= $game->players) {
+            //     throw new \Exception("No hay Lugares disponibles en esta partida");
+            // }
             
-            $game->ceos()->attach($user_id, [
-                'company_name' => $company_name,
-                'avatar' => $avatar,
-                'is_funded' => $is_funded
-            ]);
+            // $game->ceos()->attach($user_id, [
+            //     'company_name' => $company_name,
+            //     'avatar' => $avatar,
+            //     'is_funded' => $is_funded
+            // ]);
+            return false;
         }
 
         //check if all ceos are funded
@@ -442,7 +443,7 @@ class Sherpa
         if (isset($pivot->ceo_parameters['stage_' . $stage])) {
             return $pivot->ceo_parameters['stage_' . $stage];
         } else {
-            return [];
+            return ['no se encontró la información'];
         }
     }
 

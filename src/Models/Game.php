@@ -6,6 +6,17 @@ use Arr;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Game
+ * @package Leantab\Sherpa\Models
+ * @property int $id
+ * @property int $goverment_id
+ * @property int $status_id
+ * @property int $current_stage
+ * @property array $game_parameters
+ * @property array $goverment_parameters
+ * @property array $results
+ */
 class Game extends Model
 {
 

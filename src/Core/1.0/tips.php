@@ -25,6 +25,7 @@ class Tips
     foreach ($available_tips as $tip) {
       $this->$tip();
     }
+    
     return $this->selected_tips;
   }
 
