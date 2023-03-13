@@ -257,6 +257,7 @@ class Sherpa
         $schema['game_parameters']['stages'] = 6;
         $schema['game_parameters']['scenario'] = 'argentina_crisis_2001';
         $schema['game_parameters']['proficiency_rate'] = 'proficiency_junior';
+        $schema['game_parameters']['country_income_level'] = 'country_income_upper_middle_income';
 
         $geme_params = $schema['game_parameters'];
 
