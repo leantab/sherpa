@@ -270,6 +270,7 @@ class Core
 
             // loop 6
             $this->global['active_mkt_industry'] = 0;
+            $this->global['final_price_points_sum'] = 0;
             foreach ($this->game->ceos as $ceo) {
 
                 $this->company[$ceo->id]['final_price_points'] = $this->company[$ceo->id]['price_index_user'] / $this->global['price_index_industry'] * $this->industry['p_price'];
