@@ -179,7 +179,10 @@ class Core
                     $this->company[$ceo->id]['delta_employees'] = $this->company[$ceo->id]['employees'] - $ceo->pivot->results['stage_' . ($this->stage - 1)]['employees'];
                     $this->company[$ceo->id]['ibk'] = $this->ceo[$ceo->id]['ibk'];
                     $this->company[$ceo->id]['id'] = $this->ceo[$ceo->id]['id'];
-                    if ($this->stage < 3) {
+                    
+                    if ($this->stage === 0) {
+                        $this->company[$ceo->id]['active_id'] = $this->company[$ceo->id]['id'] / 2;
+                    } elseif ($this->stage >= 1 && $this->stage < 3) {
                         $this->company[$ceo->id]['active_id'] = max(0, $this->company[$ceo->id]['id'] * 0.5 + $ceo->pivot->results['stage_' . ($this->stage - 1)]['active_id']);
                     } else {
                         // MAX(id*0,5 + active_id_(t-1) - 0.5*active_id_(t-3) ; 0)

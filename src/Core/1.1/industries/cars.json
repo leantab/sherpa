@@ -1,7 +1,7 @@
 {
   "depreciation_rate" : 15,
-  "reference_cost" : 0.40,
-  "alfa" : 100,
+  "reference_cost" : 4000,
+  "alfa" : 0.4,
   "p_id" : 30,
   "p_price": 30,
   "p_mkt" : 40
