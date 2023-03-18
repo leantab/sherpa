@@ -646,6 +646,7 @@ class Core
         } catch (\Exception $e) {
             dump($this->global);
             dump($this->company);
+            dump($this->industry);
             dump($e->getMessage());
             dd($e->getTraceAsString());
         }
