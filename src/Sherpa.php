@@ -299,6 +299,49 @@ class Sherpa
         return $game;
     }
 
+    public function processNextStepTest($game_id)
+    {
+        $game = Game::findOrFail($game_id);
+        $game->status_id = 2;
+        $game->save();
+
+        foreach ($game->ceos as $ceo) {
+            $this->generateRandomDesitions($game_id, $ceo->pivot->user_id);
+        }
+
+        ProcessStage::dispatch($game);
+
+        return $game;
+    }
+
+    public function generateRandomDesitions($game_id, $user_id)
+    {
+        $game = Game::findOrFail($game);
+        $ceo = $game->ceos()->where('user_id', $user_id)->first();
+
+        $schema = $this->getCeoVariables($game_id, $user_id);
+        
+        $desitions = [];
+        foreach ($schema as $key => $value) {
+            if ($value['type'] == 'select') {
+                $desitions[$key] = $value['options'][array_rand($value['options'])];
+            } elseif ($value['type'] == 'integer') {
+                if ($key == 'corp_debt' || $key == 'ibk' || $key == 'capital_inv') {
+                    $desitions[$key] = $value['max'] * 0.12;
+                }
+                if ($key == 'desing' || $key == 'survey' || $key == 'mkt') {
+                    $desitions[$key] = $value['max'] * 0.2;
+                }
+                $desitions[$key] = rand($value['min'], $value['max']);
+            }
+        }
+
+        $ceoParameters = $ceo->pivot->ceo_parameters;
+        $ceoParameters['stage_' . $game->current_stage] = $desitions;;
+        $ceo->pivot->ceo_parameters = $ceoParameters;
+        $ceo->pivot->save();
+    }
+
     public function addGoverment($game_id, $user_id)
     {
         $game = Game::findOrFail($game_id);
