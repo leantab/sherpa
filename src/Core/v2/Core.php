@@ -378,7 +378,7 @@ class Core
                 }
             }
 
-            $this->global['inventories_industry'] = $this->global['average_cbu'] / $this->global['final_stock_industry'];
+            $this->global['inventories_industry'] = ($this->global['final_stock_industry'] == 0) ? '-' : $this->global['average_cbu'] / $this->global['final_stock_industry'];
             $this->global['hirschman_index'] = ($this->global['hirschman_sum'] / 2500) * 100;
 
             // loop 11
