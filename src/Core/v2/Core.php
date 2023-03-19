@@ -286,6 +286,10 @@ class Core
                 $this->global['active_mkt_industry'] += $this->company[$ceo->id]['active_mkt'];
             }
 
+            if ($this->global['active_mkt_industry'] === 0) {
+                $this->global['active_mkt_industry'] = 1;
+            }
+
             $this->global['mkt_index_industry'] = 0;
             // loop 7
             foreach ($this->game->ceos as $ceo) {
@@ -520,7 +524,7 @@ class Core
                 $this->company[$ceo->id]['net_assets'] = $this->company[$ceo->id]['total_assets'] - $this->company[$ceo->id]['financial_debt'];
                 
                 $this->company[$ceo->id]['non_current_liabilities'] = $this->company[$ceo->id]['financial_debt'];
-                $this->company[$ceo->id]['current_liabilities'] = 0;
+                $this->company[$ceo->id]['current_liabilities'] = 1;
                 $this->company[$ceo->id]['liabilities'] = $this->company[$ceo->id]['non_current_liabilities'] + $this->company[$ceo->id]['current_liabilities'];
 
                 $this->company[$ceo->id]['current_liquity'] = $this->company[$ceo->id]['current_assets'] / $this->company[$ceo->id]['current_liabilities'];
