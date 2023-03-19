@@ -24,8 +24,6 @@ class ProcessStage implements ShouldQueue
     {
         $this->version = $game->version;
 
-        // include(__DIR__ . '/../Core/' . $this->version . '/Core.php');
-        include(__DIR__ . '/../Core/' . $this->version . '/Tips.php');
         include(__DIR__ . '/../Core/' . $this->version . '/functions.php');
 
         if (!$game->hasAllCeoDecisions() && $game->current_stage > 0) {
@@ -37,14 +35,11 @@ class ProcessStage implements ShouldQueue
             exit;
         }
 
-        // $this->core = new \Leantab\Sherpa\Core($game);
         if ($this->version == 'v1') {
             $this->core = new \Leantab\Sherpa\Core\v1\Core($game);
         }elseif ($this->version == 'v2') {
             $this->core = new \Leantab\Sherpa\Core\v2\Core($game);
         }
-
-        // $this->core->process();
     }
 
     public function handle()
