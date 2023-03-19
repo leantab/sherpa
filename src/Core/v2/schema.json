@@ -298,7 +298,7 @@
     },
     "total_funds": {
       "type": "float",
-      "value": "getTotalFunds()",
+      "value": "getTotalFunds()"
     },
     "total_funds_check": {
       "type": "validation",
