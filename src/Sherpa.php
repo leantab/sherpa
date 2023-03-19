@@ -123,6 +123,10 @@ class Sherpa
                 $function = substr($field['min'], 0, strlen($field['min']) - 2);
                 $field['min'] = $function($game, $user);
             }
+            if (isset($field['value']) && is_string($field['value'])) {
+                $function = substr($field['value'], 0, strlen($field['value']) - 2);
+                $field['value'] = $function($game, $user);
+            }
 
             if (isset($field['required_if_game'])) {
                 $explode = explode(':', $field['required_if_game']);
@@ -292,10 +296,7 @@ class Sherpa
 
         ProcessStage::dispatch($game);
 
-        $return = new \StdClass();
-        $return->status = true;
-        $return->id = $game->id;
-        return $return;
+        return $game;
     }
 
     public function addGoverment($game_id, $user_id)

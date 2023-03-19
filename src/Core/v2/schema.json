@@ -297,12 +297,16 @@
       ]
     },
     "total_funds": {
+      "type": "float",
+      "value": "getTotalFunds()",
+    },
+    "total_funds_check": {
       "type": "validation",
       "function": "checkTotalFunds()",
       "comment": "mkt + survey + design + ibk + capital_inv + corp_debt <= total_funds",
       "description": "expenses cannot exceed total_funds"
     },
-    "total_debts": {
+    "total_debts_check": {
       "type": "validation",
       "function": "checkDebtsFunds()",
       "comment": "capital_inv > 0 && getMaxCorpDebToPay() > 0 && corp_debt_topay < getMaxCorpDebToPay",

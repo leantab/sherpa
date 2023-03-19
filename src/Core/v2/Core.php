@@ -286,7 +286,7 @@ class Core
                 $this->global['active_mkt_industry'] += $this->company[$ceo->id]['active_mkt'];
             }
 
-            if ($this->global['active_mkt_industry'] === 0) {
+            if ($this->global['active_mkt_industry'] == 0) {
                 $this->global['active_mkt_industry'] = 1;
             }
 
