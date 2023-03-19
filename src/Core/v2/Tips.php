@@ -1,6 +1,6 @@
 <?php
 
-namespace Leantab\Sherpa;
+namespace Leantab\Sherpa\Core\v2;
 
 class Tips
 {
@@ -25,6 +25,7 @@ class Tips
     foreach ($available_tips as $tip) {
       $this->$tip();
     }
+    
     return $this->selected_tips;
   }
 

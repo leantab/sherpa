@@ -1,6 +1,6 @@
 <?php
 
-namespace Leantab\Sherpa;
+namespace Leantab\Sherpa\Core\v1;
 
 use Leantab\Sherpa\Models\Game;
 use Exception;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Leantab\Sherpa;
+namespace Leantab\Sherpa\Core\v2;
 
 use Leantab\Sherpa\Models\Game;
 use Exception;
@@ -40,7 +40,7 @@ class Core
         $this->ceo = $this->getCeoParameters();
     }
 
-    public function process()
+    public function process(): void
     {
 
         try {
@@ -59,9 +59,9 @@ class Core
             $this->global['ppe_industry'] = 0;
             $this->global['hirschman_index'] = 0;
 
-            $this->global['final_price_poinst_sum'] = 0;
-            $this->global['final_id_poinst_sum'] = 0;
-            $this->global['final_mkt_poinst_sum'] = 0;
+            $this->global['final_price_points_sum'] = 0;
+            $this->global['final_id_points_sum'] = 0;
+            $this->global['final_mkt_points_sum'] = 0;
 
             if ($this->stage == 0) {
                 $this->global['interest_rate'] = $this->game->game_parameters['interest_rate'];
@@ -252,7 +252,7 @@ class Core
             $arr_corrected_prices = [];
             foreach ($this->game->ceos as $ceo) {
                 $this->company[$ceo->id]['final_id_points'] = $this->company[$ceo->id]['id_index'] / $this->global['id_index_industry'] * $this->industry['p_id'];
-                $this->global['final_id_poinst_sum'] += $this->company[$ceo->id]['final_id_points'];
+                $this->global['final_id_points_sum'] += $this->company[$ceo->id]['final_id_points'];
 
                 $this->company[$ceo->id]['corrected_price'] = max(0.5, log($this->ceo[$ceo->id]['price'] / $this->industry['price_sensibility']));
                 $arr_corrected_prices[] = $this->company[$ceo->id]['corrected_price'];
@@ -303,7 +303,7 @@ class Core
             $this->global['total_points_industry'] = 0;
             foreach ($this->game->ceos as $ceo) {
                 $this->company[$ceo->id]['final_mkt_points'] = $this->company[$ceo->id]['mkt_index'] / $this->global['mkt_index_industry'] * $this->industry['p_mkt'];
-                $this->global['final_mkt_poinst_sum'] += $this->company[$ceo->id]['final_mkt_points'];
+                $this->global['final_mkt_points_sum'] += $this->company[$ceo->id]['final_mkt_points'];
                 
                 if (!$ceo->pivot->bankrupt && !$ceo->pivot->dismissed) {
                     $this->company[$ceo->id]['total_points_player'] = $this->company[$ceo->id]['final_price_points'] + $this->company[$ceo->id]['final_id_points'] + $this->company[$ceo->id]['final_mkt_points'];
@@ -634,7 +634,7 @@ class Core
             $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
             $this->global['id_checkpoint'] = ($this->global['final_id_points_sum'] == $this->industry['pID']) ? 'OK' : 'ERROR';
             $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['pMKT']) ? 'OK' : 'ERROR';
-            $this->global['equity_checkpoint'] = ($this->global['final_price_points'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
+            $this->global['equity_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
 
 
             // CALCULO DE TIPS (solo se muestran a partir del turno 2)
@@ -661,7 +661,7 @@ class Core
     /********************************************************************/
     /********************************************************************/
 
-    private function init_t0()
+    private function init_t0(): void
     {
         // Calcula variables random de creacion de partida
         $game_parameters = $this->game->game_parameters;
@@ -719,7 +719,7 @@ class Core
         $this->random_new_debt_t0 = rand(-20, 20);
     }
 
-    private function getRandomEvent($labels)
+    private function getRandomEvent($labels): array
     {
         $events = json_decode(file_get_contents(__DIR__ . '/data/events.json'), true);
         $selectable_events = [];
@@ -738,7 +738,7 @@ class Core
         return $selectable_events[0];
     }
 
-    public function getCeoParameters()
+    public function getCeoParameters(): array
     {
         $params = [];
         if ($this->stage == 0) {
@@ -787,7 +787,7 @@ class Core
         return $params;
     }
 
-    public function getIndustryParameters()
+    public function getIndustryParameters(): array
     {
         $industry = $this->game->game_parameters['industry'];
         $vars = json_decode(file_get_contents(__DIR__ . '/industries/' . $industry . '.json'), true);

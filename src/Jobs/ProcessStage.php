@@ -18,13 +18,15 @@ class ProcessStage implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $core;
+    public $version;
 
     public function __construct(Game $game)
     {
+        $this->version = $game->version;
 
-        include(__DIR__ . '/../Core/' . $game->version . '/core.php');
-        include(__DIR__ . '/../Core/' . $game->version . '/functions.php');
-        include(__DIR__ . '/../Core/' . $game->version . '/tips.php');
+        include(__DIR__ . '/../Core/' . $this->version . '/Core.php');
+        include(__DIR__ . '/../Core/' . $this->version . '/functions.php');
+        include(__DIR__ . '/../Core/' . $this->version . '/Tips.php');
 
         if (!$game->hasAllCeoDecisions() && $game->current_stage > 0) {
             Log::error('[Sherpa->ProcessStage] - Error: No estan definidas las decisiones de los CEO');
@@ -35,9 +37,14 @@ class ProcessStage implements ShouldQueue
             exit;
         }
 
-        $this->core = new \Leantab\Sherpa\Core($game);
+        // $this->core = new \Leantab\Sherpa\Core($game);
+        if ($this->version == 'v1') {
+            $this->core = new \Leantab\Sherpa\Core\v1\Core($game);
+        }elseif ($this->version == 'v2') {
+            $this->core = new \Leantab\Sherpa\Core\v2\Core($game);
+        }
 
-        $this->core->process();
+        // $this->core->process();
     }
 
     public function handle()

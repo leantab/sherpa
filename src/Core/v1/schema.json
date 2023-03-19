@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "v1",
   "game_parameters": {
     "name": {
       "required": true,
