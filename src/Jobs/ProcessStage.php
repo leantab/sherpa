@@ -24,9 +24,9 @@ class ProcessStage implements ShouldQueue
     {
         $this->version = $game->version;
 
-        include(__DIR__ . '/../Core/' . $this->version . '/Core.php');
-        include(__DIR__ . '/../Core/' . $this->version . '/functions.php');
+        // include(__DIR__ . '/../Core/' . $this->version . '/Core.php');
         include(__DIR__ . '/../Core/' . $this->version . '/Tips.php');
+        include(__DIR__ . '/../Core/' . $this->version . '/functions.php');
 
         if (!$game->hasAllCeoDecisions() && $game->current_stage > 0) {
             Log::error('[Sherpa->ProcessStage] - Error: No estan definidas las decisiones de los CEO');
