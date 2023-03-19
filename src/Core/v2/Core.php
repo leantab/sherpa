@@ -635,10 +635,10 @@ class Core
             }
 
             // loop 13
-            $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
-            $this->global['id_checkpoint'] = ($this->global['final_id_points_sum'] == $this->industry['pID']) ? 'OK' : 'ERROR';
-            $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['pMKT']) ? 'OK' : 'ERROR';
-            $this->global['equity_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['pPrice']) ? 'OK' : 'ERROR';
+            $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
+            $this->global['id_checkpoint'] = ($this->global['final_id_points_sum'] == $this->industry['p_id']) ? 'OK' : 'ERROR';
+            $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['p_mkt']) ? 'OK' : 'ERROR';
+            $this->global['equity_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
 
 
             // CALCULO DE TIPS (solo se muestran a partir del turno 2)
