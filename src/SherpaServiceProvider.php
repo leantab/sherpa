@@ -58,7 +58,7 @@ class SherpaServiceProvider extends ServiceProvider
     {
         // Publishing the configuration file.
         $this->publishes([
-            __DIR__.'/../config/sherpa.php' => config_path('sherpa2.php'),
+            __DIR__.'/../config/sherpa.php' => config_path('sherpa.php'),
         ], 'sherpa.config');
 
         // Publishing the views.

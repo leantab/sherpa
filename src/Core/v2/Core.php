@@ -120,7 +120,7 @@ class Core
                         (
                             ($this->global['reference_cost'] * pow(8, 7) ) / 
                             ($this->company[$ceo->id]['ppe'] * ($this->company[$ceo->id]['production'] / 100)) * (1 - ($this->company[$ceo->id]['event_prob'] / 100) / 2)
-                        ), 3
+                        ), 2
                     );
                 }
 
@@ -129,11 +129,11 @@ class Core
                 //worker_productivity * ((ppe_t ^ alfa))
                 $this->company[$ceo->id]['max_u'] = round(
                     $this->company[$ceo->id]['worker_productivity'] * pow($this->company[$ceo->id]['ppe'], $this->industry['alfa']),
-                    2
+                    0
                 );
                 $this->global['max_u_industry'] += $this->company[$ceo->id]['max_u'];
 
-                $this->company[$ceo->id]['u_prod'] = round(($this->company[$ceo->id]['production'] / 100) * $this->company[$ceo->id]['max_u']);
+                $this->company[$ceo->id]['u_prod'] = round(($this->company[$ceo->id]['production'] / 100) * $this->company[$ceo->id]['max_u'], 0);
                 $this->company[$ceo->id]['output'] = $this->company[$ceo->id]['cbu'] * $this->company[$ceo->id]['u_prod'];
                 $this->global['output_sum'] += $this->company[$ceo->id]['output'];
 
@@ -342,9 +342,9 @@ class Core
             $this->global['total_revenue_industry'] = 0;
             foreach ($this->game->ceos as $ceo) {
                 //MAX(0, total_points_player / total_points_industry * u_dem_industry)
-                $this->company[$ceo->id]['demand_u'] = max(round($this->company[$ceo->id]['total_points_player'] / $this->global['total_points_industry'] * $this->global['u_dem_industry']), 0);
+                $this->company[$ceo->id]['demand_u'] = max(round($this->company[$ceo->id]['total_points_player'] / $this->global['total_points_industry'] * $this->global['u_dem_industry'], 0), 0);
                 $this->company[$ceo->id]['offer_surplus'] = $this->company[$ceo->id]['u_prod'] - $this->company[$ceo->id]['demand_u'];
-                $this->company[$ceo->id]['sold_u'] = round(min($this->company[$ceo->id]['demand_u'], $this->company[$ceo->id]['offered_u']));
+                $this->company[$ceo->id]['sold_u'] = round(min($this->company[$ceo->id]['demand_u'], $this->company[$ceo->id]['offered_u']), 0);
                 $this->global['sold_u_industry'] += $this->company[$ceo->id]['sold_u'];
                 $this->company[$ceo->id]['unrealized_sales'] = ($this->company[$ceo->id]['demand_u'] - $this->company[$ceo->id]['sold_u']) * $this->ceo[$ceo->id]['price'];
                 $this->company[$ceo->id]['total_revenue'] = $this->company[$ceo->id]['sold_u'] * $this->ceo[$ceo->id]['price'];
@@ -441,7 +441,9 @@ class Core
                     }
 
                     //REVISAR ESTO CON CIRO
-                    $this->company[$ceo->id]['new_debt'] = $this->ceo[$ceo->id]['corp_debt'] - $this->ceo[$ceo->id]['capital_inv'] - $this->ceo[$ceo->id]['corp_debt_topay'];
+                    $this->company[$ceo->id]['new_debt'] = $this->ceo[$ceo->id]['corp_debt'] 
+                        - $this->ceo[$ceo->id]['capital_inv'] 
+                        - $this->ceo[$ceo->id]['corp_debt_topay'];
                     $this->company[$ceo->id]['financial_debt'] = max(0, $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_debt'] - $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_inv'] + $this->company[$ceo->id]['new_debt']);
                     $this->company[$ceo->id]['inventory_change'] = $ceo->pivot->results['stage_' . ($this->stage - 1)]['inventories'] - $this->company[$ceo->id]['inventories'];
                 }
@@ -453,10 +455,24 @@ class Core
                     $this->company[$ceo->id]['subsidy'] = ($this->company[$ceo->id]['delta_employees'] < 0) ? $this->company[$ceo->id]['delta_employees'] * $this->game->goverment_parameters['stage_' . $this->stage]['compensation_cost'] * $this->game->game_parameters['salary'] * $this->stage : $this->company[$ceo->id]['delta_employees'] * $this->game->goverment_parameters['stage_' . $this->stage]['compensation_cost'] * $this->game->game_parameters['salary'];
                 }
 
+                if ($this->stage == 0) {
+                    $this->company[$ceo->id]['financial_inv'] = ($this->company[$ceo->id]['financial_debt'] < 0) ? -1 * $this->company[$ceo->id]['financial_debt'] : 0;
+                } else {
+                    $this->company[$ceo->id]['financial_inv'] = -1 * min(0, $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_debt'] - $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_inv'] + $this->company[$ceo->id]['new_debt']);
+                }
+
                 //-financial_debt * SI (financial_debt>0; interest_rate; interest_rate - financial_cost) / (12/accounting_period)
-                $this->company[$ceo->id]['financial_result_multiplier'] = ($this->company[$ceo->id]['financial_debt'] > 0) ? ($this->global['interest_rate'] / 100) : ($this->global['interest_rate'] - $this->game->game_parameters['financial_cost']) / 100;
+                $this->company[$ceo->id]['financial_result_multiplier'] = ($this->company[$ceo->id]['financial_debt'] > 0) 
+                    ? ($this->global['interest_rate'] / 100) 
+                    : ($this->global['interest_rate'] - $this->game->game_parameters['financial_cost']) / 100;
                 $neg_finacial_debt = -1 * $this->company[$ceo->id]['financial_debt'];
-                $this->company[$ceo->id]['financial_result'] = $neg_finacial_debt * $this->company[$ceo->id]['financial_result_multiplier'] / $this->global['annual_rounds'];
+                
+                //SI(financial_debt>0,-1*financial_debt*interest_rate, financial_inv*(interest_rate-financial_cost))/(12/accounting_period)
+                if ($this->company[$ceo->id]['financial_debt'] > 0) {
+                    $this->company[$ceo->id]['financial_result'] = $neg_finacial_debt * $this->global['interest_rate'] / 100;
+                } else {
+                    $this->company[$ceo->id]['financial_result'] = $this->company[$ceo->id]['financial_inv'] * (($this->global['interest_rate'] - $this->game->game_parameters['financial_cost']) / 100) / $this->global['annual_rounds'];
+                }
 
                 //output + salaries_expense + mkt + id + depreciation + event_cost - financial_result - subsidy
                 $this->company[$ceo->id]['total_cost'] = $this->company[$ceo->id]['output'] 
@@ -510,12 +526,6 @@ class Core
                     - $this->company[$ceo->id]['capex'] 
                     + $this->company[$ceo->id]['inventory_change'] 
                     + $this->company[$ceo->id]['new_debt'];
-
-                if ($this->stage == 0) {
-                    $this->company[$ceo->id]['financial_inv'] = ($this->company[$ceo->id]['financial_debt'] < 0) ? -1 * $this->company[$ceo->id]['financial_debt'] : 0;
-                } else {
-                    $this->company[$ceo->id]['financial_inv'] = -1 * min(0, $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_debt'] - $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_inv'] + $this->company[$ceo->id]['new_debt']);
-                }
 
                 $this->company[$ceo->id]['current_assets'] = $this->company[$ceo->id]['final_cash'] + $this->company[$ceo->id]['financial_inv'] + $this->company[$ceo->id]['inventories'];
                 $this->company[$ceo->id]['non_current_assets'] = $this->company[$ceo->id]['ppe_next'];
