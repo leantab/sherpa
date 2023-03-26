@@ -342,6 +342,11 @@ class Sherpa
         $ceo->pivot->save();
     }
 
+    public function getVariablesTypes()
+    {
+        return file_get_contents(__DIR__ . '/Core/v2/variables.json');
+    }
+
     public function addGoverment($game_id, $user_id)
     {
         $game = Game::findOrFail($game_id);
