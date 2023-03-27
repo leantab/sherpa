@@ -256,22 +256,36 @@ class Sherpa
 
         $schema['game_parameters']['name'] = 'Test Game ' . rand(1, 1000);
         $schema['game_parameters']['type'] = 'scenario';
-        $schema['game_parameters']['players'] = 4;
+        $schema['game_parameters']['players'] = 8;
         $schema['game_parameters']['industry'] = 'cars';
-        $schema['game_parameters']['stages'] = 6;
         $schema['game_parameters']['scenario'] = 'argentina_crisis_2001';
-        $schema['game_parameters']['proficiency_rate'] = 'proficiency_junior';
+        $schema['game_parameters']['proficiency_rate'] = 'proficiency_senior';
         $schema['game_parameters']['company_type'] = 'company_type_corporate';
         $schema['game_parameters']['goverment_side'] = 'goverment_side_liberal';
         $schema['game_parameters']['country'] = 'arg';
+        $schema['game_parameters']["stages"] = 6;
+        $schema['game_parameters']["country_income_level"] = "country_income_low_income";
+        $schema['game_parameters']["industry_status"] = "industry_status_constant_development";
+        $schema['game_parameters']["accounting_period"] = 6;
+        $schema['game_parameters']["positive_random_events"] = "positive_events_few";
+        $schema['game_parameters']["risk_limit_min"] = 20;
+        $schema['game_parameters']["risk_limit_max"] = 80;
+        $schema['game_parameters']["initial_eq"]  = -4;
+        $schema['game_parameters']["profit_tax"] = 39;
+        $schema['game_parameters']["vat_tax"] = 14;
+        $schema['game_parameters']["labor_tax"] = 2;
+        $schema['game_parameters']["easy_business_score"] = "easy_business_high";
+        $schema['game_parameters']["compensation_cost"] = 5;
+        $schema['game_parameters']["interest_rate"] = 7;
+        $schema['game_parameters']["financial_cost"] = 3;
 
         $geme_params = $schema['game_parameters'];
 
         $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/'.$version.'/scenarios/argentina_crisis_2001.json'), true);
 
-        foreach ($scenarioGameParameters['game_parameters'] as $key => $value) {
-            $geme_params[$key] = $value;
-        }
+        //foreach ($scenarioGameParameters['game_parameters'] as $key => $value) {
+            //$geme_params[$key] = $value;
+        //}
 
         $game_data = [
             'version' => $version,
