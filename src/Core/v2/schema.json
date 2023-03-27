@@ -176,10 +176,10 @@
       "type": "options",
       "options": [
         "easy_business_none",
-        "easy_business_medium_low",
-        "easy_business_medium_high",
-        "easy_business_high",
-        "random"
+        "easy_business_few",
+        "easy_business_medium",
+        "easy_business_full",
+        "easy_business_random"
       ]
     },
     "compensation_cost": {

@@ -22,15 +22,15 @@
   },
   "proficiency_senior": {
     "out_zone": 65,
-    "opening_cash_min": 30,
+    "opening_cash_min": 20,
     "opening_cash_max": 40,
     "price_t0_min": 3.01,
     "price_t0_max": 3.51
   },
   "proficiency_big_company_ceo": {
     "out_zone": 75,
-    "opening_cash_min": 20,
-    "opening_cash_max": 30,
+    "opening_cash_min": 10,
+    "opening_cash_max": 20,
     "price_t0_min": 2.01,
     "price_t0_max": 3.01
   }

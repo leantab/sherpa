@@ -166,7 +166,7 @@ class Core
                 $this->company[$ceo->id]['vpe'] = $this->company[$ceo->id]['cbu'] * $this->company[$ceo->id]['worker_productivity'];
                 $this->company[$ceo->id]['max_w'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'] * log(10);
                 $this->company[$ceo->id]['max_e'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'];
-                $this->company[$ceo->id]['employees'] = $this->company[$ceo->id]['production'] * $this->company[$ceo->id]['max_e'];
+                $this->company[$ceo->id]['employees'] = ($this->company[$ceo->id]['production'] / 100) * $this->company[$ceo->id]['max_e'];
 
                 if ($this->stage == 0) {
                     $this->company[$ceo->id]['price_change'] = $this->company[$ceo->id]['price'];
@@ -503,11 +503,11 @@ class Core
                     $this->company[$ceo->id]['profit_tax_amount'] = ($this->company[$ceo->id]['uai'] <= 0) ? 0 : $this->company[$ceo->id]['uai'] * ($this->game->game_parameters['profit_tax'] / 100);
                     $this->company[$ceo->id]['vat_tax_amount'] = ($this->company[$ceo->id]['uai'] <= 0) ? 0 : ($this->company[$ceo->id]['total_revenue'] - $this->company[$ceo->id]['total_cost']) * ($this->game->game_parameters['vat_tax'] / 100);
                 } else {
-                    $this->company[$ceo->id]['profit_tax_amount'] = ($this->company[$ceo->id]['uai'] <= 0) ? 0 : ($this->company[$ceo->id]['uai'] * -1) * ($this->game->goverment_parameters['stage_' . $this->stage]['profit_tax'] / 100);
+                    $this->company[$ceo->id]['profit_tax_amount'] = ($this->company[$ceo->id]['uai'] <= 0) ? 0 : ($this->company[$ceo->id]['uai']) * ($this->game->goverment_parameters['stage_' . $this->stage]['profit_tax'] / 100);
                     $this->company[$ceo->id]['vat_tax_amount'] = ($this->company[$ceo->id]['uai'] <= 0) ? 0 : - ($this->company[$ceo->id]['total_revenue'] - $this->company[$ceo->id]['total_cost']) * ($this->game->goverment_parameters['stage_' . $this->stage]['vat_tax'] / 100);
                 }
 
-                $this->company[$ceo->id]['other_tax_amount'] = ($this->company[$ceo->id]['uai'] <= 0) ? 0 : ($this->company[$ceo->id]['uai']*-1) * ($this->game->game_parameters['easy_business_score_tax'] / 100) * ($this->company[$ceo->id]['market_share'] / 100);
+                $this->company[$ceo->id]['other_tax_amount'] = ($this->company[$ceo->id]['uai'] <= 0) ? 0 : ($this->company[$ceo->id]['uai']) * ($this->game->game_parameters['easy_business_score_tax'] / 100) * ($this->company[$ceo->id]['market_share'] / 100);
                 $this->company[$ceo->id]['labour_tax'] = 1; // TODO
                 $this->company[$ceo->id]['taxes'] = $this->company[$ceo->id]['profit_tax_amount'] + $this->company[$ceo->id]['vat_tax_amount'] + $this->company[$ceo->id]['labour_tax'] + $this->company[$ceo->id]['other_tax_amount'];
                 $this->global['taxes_sum'] += $this->company[$ceo->id]['taxes'];
@@ -714,9 +714,9 @@ class Core
             $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['opening_cash_max']
         ) / 100;
         $game_parameters['price_t0_leverage'] = rand(
-            $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['price_t0_min'],
-            $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['price_t0_max']
-        ) / 100;
+            $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['price_t0_min'] * 100,
+            $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['price_t0_max'] * 100
+        ) / 100 ;
 
         $this->game->update([
             'game_parameters' => $game_parameters
