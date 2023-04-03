@@ -714,9 +714,9 @@ class Core
             $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['opening_cash_max']
         ) / 100;
         $game_parameters['price_t0_leverage'] = rand(
-            $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['price_t0_min'] * 100,
-            $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['price_t0_max'] * 100
-        ) / 100 ;
+            $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['price_t0_min'],
+            $vars_proficiency_rate[$this->game->game_parameters['proficiency_rate']]['price_t0_max']
+        ) / 100;
 
         $this->game->update([
             'game_parameters' => $game_parameters
@@ -724,9 +724,9 @@ class Core
         $this->game->save();
 
         $this->production_t0 = rand(60, 90);
-        $this->random_ibk_t0 = rand(0, 15);
-        $this->random_mkt_t0 = rand(0, 15);
-        $this->risk_score_t0 = rand(0, 33) / 10;
+        $this->random_ibk_t0 = rand(1, 15);
+        $this->random_mkt_t0 = rand(1, 15);
+        $this->risk_score_t0 = rand(1, 33) / 10;
         $this->random_id_t0 = rand(1, 10);
 
         // variable temporal para calcular el porcentaje para el calculo de new debt en T0 
