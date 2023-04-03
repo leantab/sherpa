@@ -274,7 +274,7 @@ class Sherpa
         $schema['game_parameters']["profit_tax"] = 39;
         $schema['game_parameters']["vat_tax"] = 14;
         $schema['game_parameters']["labor_tax"] = 2;
-        $schema['game_parameters']["easy_business_score"] = "easy_business_high";
+        $schema['game_parameters']["easy_business_score"] = "easy_business_full";
         $schema['game_parameters']["compensation_cost"] = 5;
         $schema['game_parameters']["interest_rate"] = 7;
         $schema['game_parameters']["financial_cost"] = 3;
