@@ -328,9 +328,9 @@ class Sherpa
         return $game;
     }
 
-    public function generateRandomDesitions($game_id, $user_id)
+    public function generateRandomDesitions(int $game_id, int $user_id)
     {
-        $game = Game::findOrFail($game);
+        $game = Game::findOrFail($game_id);
         $ceo = $game->ceos()->where('user_id', $user_id)->first();
 
         $schema = $this->getCeoVariables($game_id, $user_id);
@@ -341,10 +341,10 @@ class Sherpa
                 $desitions[$key] = $value['options'][array_rand($value['options'])];
             } elseif ($value['type'] == 'integer') {
                 if ($key == 'corp_debt' || $key == 'ibk' || $key == 'capital_inv') {
-                    $desitions[$key] = $value['max'] * 0.12;
+                    $desitions[$key] = $value['max'] * (0.13 - ($user_id / 100) );
                 }
                 if ($key == 'desing' || $key == 'survey' || $key == 'mkt') {
-                    $desitions[$key] = $value['max'] * 0.2;
+                    $desitions[$key] = round($value['max'] * (0.22 - ($user_id / 100) ) , 2);
                 }
                 $desitions[$key] = rand($value['min'], $value['max']);
             }

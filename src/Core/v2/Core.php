@@ -444,6 +444,8 @@ class Core
                     $this->company[$ceo->id]['new_debt'] = $this->ceo[$ceo->id]['corp_debt'] 
                         - $this->ceo[$ceo->id]['capital_inv'] 
                         - $this->ceo[$ceo->id]['corp_debt_topay'];
+                    
+                        //financial_debt	= MAX (0; financial_debt (t-1) - financial_inv (t-1)+ new_debt)
                     $this->company[$ceo->id]['financial_debt'] = max(0, $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_debt'] - $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_inv'] + $this->company[$ceo->id]['new_debt']);
                     $this->company[$ceo->id]['inventory_change'] = $ceo->pivot->results['stage_' . ($this->stage - 1)]['inventories'] - $this->company[$ceo->id]['inventories'];
                 }
@@ -730,6 +732,7 @@ class Core
         $this->random_id_t0 = rand(1, 10);
 
         // variable temporal para calcular el porcentaje para el calculo de new debt en T0 
+        //MIN(necesary_funds - opening_cash, top_loan)
         $this->random_new_debt_t0 = rand(-20, 20);
     }
 
