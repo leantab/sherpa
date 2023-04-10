@@ -284,6 +284,8 @@ class Core
                 }
 
                 $this->global['active_mkt_industry'] += $this->company[$ceo->id]['active_mkt'];
+
+                $this->company[$ceo->id]['active_investements'] = $this->company[$ceo->id]['active_id'] + $this->company[$ceo->id]['active_mkt'];
             }
 
             if ($this->global['active_mkt_industry'] == 0) {

@@ -263,7 +263,7 @@ class Sherpa
         $schema['game_parameters']['company_type'] = 'company_type_corporate';
         $schema['game_parameters']['goverment_side'] = 'goverment_side_liberal';
         $schema['game_parameters']['country'] = 'arg';
-        $schema['game_parameters']["stages"] = 6;
+        $schema['game_parameters']["stages"] = 4;
         $schema['game_parameters']["country_income_level"] = "country_income_low_income";
         $schema['game_parameters']["industry_status"] = "industry_status_constant_development";
         $schema['game_parameters']["accounting_period"] = 6;
@@ -299,14 +299,10 @@ class Sherpa
 
         $game = Game::create($game_data);
 
-        $this->addSimpleCeo($game->id, 1, 'Test Company 1', 1, true);
-        $this->addCeo($game->id, 1, 'Test Company 1', 1, true);
-        $this->addSimpleCeo($game->id, 2, 'Test Company 2', 2, true);
-        $this->addCeo($game->id, 2, 'Test Company 2', 2, true);
-        $this->addSimpleCeo($game->id, 3, 'Test Company 3', 3, true);
-        $this->addCeo($game->id, 3, 'Test Company 3', 3, true);
-        $this->addSimpleCeo($game->id, 4, 'Test Company 4', 4, true);
-        $this->addCeo($game->id, 4, 'Test Company 4', 4, true);
+        for ($i=1; $i <= $schema['game_parameters']['players']; $i++) { 
+            $this->addSimpleCeo($game->id, $i, 'Test Company '.$i, $i, true);
+            $this->addCeo($game->id, $i, 'Test Company '.$i, $i, true);
+        }        
 
         ProcessStage::dispatch($game);
 
