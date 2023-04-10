@@ -270,13 +270,13 @@ class Sherpa
         $schema['game_parameters']["positive_random_events"] = "positive_events_few";
         $schema['game_parameters']["risk_limit_min"] = 20;
         $schema['game_parameters']["risk_limit_max"] = 80;
-        $schema['game_parameters']["initial_eq"]  = -4;
-        $schema['game_parameters']["profit_tax"] = 39;
-        $schema['game_parameters']["vat_tax"] = 14;
+        $schema['game_parameters']["initial_eq"]  = rand(-10, 10);
+        $schema['game_parameters']["profit_tax"] = rand(1, 60);
+        $schema['game_parameters']["vat_tax"] = rand(1, 28);
         $schema['game_parameters']["labor_tax"] = 2;
         $schema['game_parameters']["easy_business_score"] = "easy_business_full";
-        $schema['game_parameters']["compensation_cost"] = 5;
-        $schema['game_parameters']["interest_rate"] = 7;
+        $schema['game_parameters']["compensation_cost"] = rand(1, 5);
+        $schema['game_parameters']["interest_rate"] = rand(1, 30);
         $schema['game_parameters']["financial_cost"] = 3;
 
         $geme_params = $schema['game_parameters'];

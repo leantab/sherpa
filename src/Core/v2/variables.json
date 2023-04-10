@@ -45,6 +45,7 @@
   "u_prod_industry" : "units",
   "active_id" : "money",
   "active_id_industry" : "money",
+  "active_investements" : "money",
   "pond_share_id" : "ratio",
   "id_index" : "number",
   "id_index_industry" : "number",

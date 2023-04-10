@@ -166,7 +166,7 @@ class Core
                 $this->company[$ceo->id]['vpe'] = $this->company[$ceo->id]['cbu'] * $this->company[$ceo->id]['worker_productivity'];
                 $this->company[$ceo->id]['max_w'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'] * log(10);
                 $this->company[$ceo->id]['max_e'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'];
-                $this->company[$ceo->id]['employees'] = ($this->company[$ceo->id]['production'] / 100) * $this->company[$ceo->id]['max_e'];
+                $this->company[$ceo->id]['employees'] = round($this->company[$ceo->id]['production'] / 100) * $this->company[$ceo->id]['max_e'];
 
                 if ($this->stage == 0) {
                     $this->company[$ceo->id]['price_change'] = $this->company[$ceo->id]['price'];
