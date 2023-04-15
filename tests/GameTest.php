@@ -4,10 +4,10 @@ namespace Leantab\Sherpa\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-class MatchTest extends TestCase
+class GameTest extends TestCase
 {
 
-  public function test_create_match(){
+  public function test_create_game(){
     return $this->assertTrue(true);
   }
 
