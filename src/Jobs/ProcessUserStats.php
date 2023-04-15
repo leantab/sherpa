@@ -8,11 +8,17 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Leantab\Sherpa\Models\Game;
-use Leantab\Sherpa\Events\StageProcessed;
+use Leantab\Sherpa\Models\User;
 
-class ProcessStage implements ShouldQueue
+class ProcessUserStats implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public function __construct(
+        public User $user,
+        public Game $game,
+    ) {
+    }
 
     /*	                    
         games	                n de partidas que completo el usuario	    COUNTIF(n,">0")
