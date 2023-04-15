@@ -210,9 +210,9 @@ class Core
             $this->global['average_price'] = $this->global['price_sum'] / $this->num_ceos;
 
             if ($this->stage == 0) {
-                $this->global['sd'] = $this->global['average_price'] / 2;
+                $this->global['sd_price'] = $this->global['average_price'] / 2;
             } else {
-                $this->global['sd'] = sd($arr_price);
+                $this->global['sd_price'] = sd($arr_price);
             }
 
             $this->global['output_industry'] = 0;
@@ -421,13 +421,11 @@ class Core
                     $this->company[$ceo->id]['opening_cash'] = $ceo->pivot->results['stage_' . ($this->stage - 1)]['final_cash'];
 
                     if ($this->company[$ceo->id]['event_prob'] > 0) {
-                        // EVENTO RANDOM
                         $this->company[$ceo->id]['top_limit'] = round($this->game->game_parameters['players'] / ($this->company[$ceo->id]['event_prob'] / 100));
                         $this->company[$ceo->id]['trigger'] = rand(1, $this->company[$ceo->id]['top_limit']);
-                        
                     } else {
-                        $this->company[$ceo->id]['top_limit'] = round($this->game->game_parameters['players'] / ($this->company[$ceo->id]['event_prob'] / 100));
-                        $this->company[$ceo->id]['trigger'] = false;
+                        $this->company[$ceo->id]['top_limit'] = 0;
+                        $this->company[$ceo->id]['trigger'] = 0;
                     }
 
                     if ($this->company[$ceo->id]['trigger'] <= $this->num_ceos) {
@@ -661,9 +659,10 @@ class Core
             // loop 13
             foreach ($this->game->ceos as $ceo) {
                 if ($this->stage == 0) {
-                    $this->company[$ceo->id]['min_funds'] = 0;
+                    $this->company[$ceo->id]['company_ranking_delta'] = 0;
                 } else {
-                    $this->company[$ceo->id]['min_funds']  = $ceo->pivot->results['stage_' . ($this->stage - 1)]['output'] / 2;
+                    // company_ranking(t-1) - company_ranking(t)
+                    $this->company[$ceo->id]['company_ranking_delta']  = $ceo->pivot->results['stage_' . ($this->stage - 1)]['company_ranking'] - $this->company[$ceo->id]['company_ranking'];
                 }
             }
 
