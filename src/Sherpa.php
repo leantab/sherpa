@@ -330,6 +330,10 @@ class Sherpa
         $ceo = $game->ceos()->where('user_id', $user_id)->first();
 
         $schema = $this->getCeoVariables($game_id, $user_id);
+
+        $randomFactor = rand(1, 5);
+        $financialRand = (14 - $randomFactor) / 100;
+        $marketingRand = (22 - $randomFactor) / 100;
         
         $desitions = [];
         foreach ($schema as $key => $value) {
@@ -337,12 +341,14 @@ class Sherpa
                 $desitions[$key] = $value['options'][array_rand($value['options'])];
             } elseif ($value['type'] == 'integer') {
                 if ($key == 'corp_debt' || $key == 'ibk' || $key == 'capital_inv') {
-                    $desitions[$key] = $value['max'] * (0.13 - ($user_id / 100) );
+                    $desitions[$key] = round($value['max'] * $financialRand);
+                } elseif ($key == 'desing' || $key == 'survey' || $key == 'mkt') {
+                    $desitions[$key] = round($value['max'] * $marketingRand );
+                } else {
+                    if (array_key_exists('min', $value) && array_key_exists('max', $value)) {
+                        $desitions[$key] = rand($value['min'], $value['max']);
+                    }
                 }
-                if ($key == 'desing' || $key == 'survey' || $key == 'mkt') {
-                    $desitions[$key] = round($value['max'] * (0.22 - ($user_id / 100) ) , 2);
-                }
-                $desitions[$key] = rand($value['min'], $value['max']);
             }
         }
 
