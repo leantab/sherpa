@@ -113,9 +113,9 @@ class ProcessStage implements ShouldQueue
                     game_index	            ln(2*games)	
                     historic_position_avg	average (company_ranking)	
                     sd_position	            sd (company_ranking)	
-                    cv_position	min(1;      (sd_position /  position_avg))	
+                    cv_position	            min(1;(sd_position / position_avg))
                     user_best_position	    MIN (company_ranking)	
-                    user_index	            (100/position_avg) * (1 - cv_position/2)	
+                    user_index	            (100 / position_avg) * (1 - cv_position/2)	
                     ranking_points	        user_index * game_index	
                     user_ranking	        JERARQUIA(ranking_points)	
                     user_avg_price	        promedio(price t, price t-1, price t-n)	
