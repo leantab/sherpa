@@ -51,6 +51,8 @@ class Core
             $this->global['reference_cost'] = $this->industry['reference_cost'];
             $this->global['annual_rounds'] = 12 / $this->game->game_parameters['accounting_period'];
 
+            $this->global['positive_random_events'] = $this->industry['positive_random_events'];
+
             $this->global['price_sum'] = 0;
             $this->global['production_sum'] = 0;
             $this->global['cbu_sum'] = 0;
@@ -68,6 +70,10 @@ class Core
             } else {
                 $this->global['interest_rate'] = $this->game->goverment_parameters['stage_' . $this->stage]['interest_rate'];
             }
+
+            $this->global['mkt_industry'] = 0;
+            $this->global['ibk_industry'] = 0;
+            $this->global['id_industry'] = 0;
 
             $arr_price = [];
             $arr_risk_scores = [];
@@ -196,6 +202,10 @@ class Core
                         $this->company[$ceo->id]['active_id'] = max(0, $this->company[$ceo->id]['id'] * 0.5 + $ceo->pivot->results['stage_' . ($this->stage - 1)]['active_id'] - 0.5 * $ceo->pivot->results['stage_' . ($this->stage -  3)]['active_id']);
                     }
                 }
+                
+                $this->global['mkt_industry'] += $this->company[$ceo->id]['mkt'];
+                $this->global['id_industry'] += $this->company[$ceo->id]['id'];
+                $this->global['ibk_industry'] += $this->company[$ceo->id]['ibk'];
 
                 $this->global['employees_industry'] += $this->company[$ceo->id]['employees'];
                 $this->company[$ceo->id]['salaries_expense'] = $this->game->game_parameters['salary'] * $this->company[$ceo->id]['employees'] * $this->game->game_parameters['accounting_period'];
@@ -224,6 +234,10 @@ class Core
 
             // Loop 2
             foreach ($this->game->ceos as $ceo) {
+                $this->company[$ceo->id]['ibk_industry'] = $this->global['ibk_industry'];
+                $this->company[$ceo->id]['id_industry'] = $this->global['id_industry'];
+                $this->company[$ceo->id]['mkt_industry'] = $this->global['mkt_industry'];
+
                 $this->company[$ceo->id]['risk_profile'] = ($this->company[$ceo->id]['risk_score'] / max($arr_risk_scores)) * 100;
 
                 $this->global['output_industry'] += $this->company[$ceo->id]['output'];
@@ -656,6 +670,37 @@ class Core
                 }
             }
 
+            $this->global['best_price'] = min($arr_price);
+            $this->global['industry_pipeline'] = round(($this->global['final_stock_industry'] / $this->global['u_dem_industry']) * 100);
+            
+            $this->global['positive_top_limit'] = round($this->num_ceos / ($this->global['positive_random_events'] / 100));
+            $this->global['positive_trigger'] = rand(1, $this->global['positive_top_limit']);
+
+            $ceos_array = $this->game->ceos->toArray();
+            if ($this->global['positive_trigger'] <= $this->num_ceos) {
+                $this->global['lucky_player'] = $ceos_array[$this->global['positive_trigger'] - 1]['id'];
+            } else {
+                $this->global['lucky_player'] = 'None';
+            }
+
+            $this->global['success_id'] = rand(1, 3);
+            if ($this->global['lucky_player'] == 'None') {
+                $this->global['strength'] = 1;
+            } else {
+                $this->global['strength'] = 1 + (rand(1, 200) / 100);
+            }
+
+            if ($this->global['success_id'] == 1) {
+                $this->global['decision_success'] = 'MKT';
+            } else if ($this->global['success_id'] == 2) {
+                $this->global['decision_success'] = 'I&d';
+            } else {
+                $this->global['decision_success'] = 'IBK';
+            }
+
+            $this->global['avg_sales'] = round($this->global['total_revenue_industry'] / $this->num_ceos);
+            $this->global['avg_total_cost'] = round($this->global['total_cost_industry'] / $this->num_ceos);
+
             // loop 13
             foreach ($this->game->ceos as $ceo) {
                 if ($this->stage == 0) {
@@ -664,6 +709,12 @@ class Core
                     // company_ranking(t-1) - company_ranking(t)
                     $this->company[$ceo->id]['company_ranking_delta']  = $ceo->pivot->results['stage_' . ($this->stage - 1)]['company_ranking'] - $this->company[$ceo->id]['company_ranking'];
                 }
+
+                $this->company[$ceo->id]['salaries_budget']  = round(($this->company[$ceo->id]['salaries_expenses'] / $this->company[$ceo->id]['total_revenue']) * 100);
+                $this->company[$ceo->id]['mkt_budget']  = round(($this->company[$ceo->id]['mkt'] / $this->company[$ceo->id]['total_revenue']) * 100);
+                $this->company[$ceo->id]['id_budget']  = round(($this->company[$ceo->id]['id'] / $this->company[$ceo->id]['total_revenue']) * 100);
+                
+                $this->company[$ceo->id]['corrected_demand']  = round(($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['active_investements']) * 100000);
             }
 
             $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
@@ -849,6 +900,18 @@ class Core
             $company_vars[$company_type]['ppe_t0']['min'],
             $company_vars[$company_type]['ppe_t0']['max'],
         );
+
+        $positive_random_events = $this->game->game_parameters['positive_random_events'];
+        // $positive_random_events
+        $pre_vars = json_decode(file_get_contents(__DIR__ . '/data/positive_random_events.json'), true);
+        if ($positive_random_events === 'positive_random_events_random') {
+            $vars['positive_random_events'] = rand(
+                $pre_vars[$positive_random_events]['min'],
+                $pre_vars[$positive_random_events]['max'],
+            );
+        }else {
+            $vars['positive_random_events'] = $pre_vars[$positive_random_events];
+        }
 
         return $vars;
     }
