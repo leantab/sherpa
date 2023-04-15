@@ -106,11 +106,18 @@ class Core
                 ), 2);
 
                 if ($this->stage == 0) {
-                    $this->company[$ceo->id]['event_prob'] = 0;
+                    $this->company[$ceo->id]['event_prob'] = 0.001;
                 } else {
-                    //{[(risk_slope^(2*production)) / (1+2*production)-1)] *risk_level } / 132
-                    $this->company[$ceo->id]['event_prob'] = (pow($this->global['risk_slope'], (2 * ($this->company[$ceo->id]['production'] / 100))) / ((1 + 2 * ($this->company[$ceo->id]['production'] / 100)))  * $this->company[$ceo->id]['risk_level'] / 132) * 100;
+                    //MAX(0.001%; {[(risk_slope^(2*production)) / (1+2*production)-1)] *risk_level } / 132)
+                    $this->company[$ceo->id]['event_prob'] = max(
+                        pow($this->global['risk_slope'], (2 * ($this->company[$ceo->id]['production'] / 100))) 
+                        / ((1 + 2 * ($this->company[$ceo->id]['production'] / 100)))  
+                        * $this->company[$ceo->id]['risk_level'] 
+                        / 132
+                        , 0.001);
                 }
+
+                $this->company[$ceo->id]['top_limit'] = round($this->num_ceos / $this->company[$ceo->id]['event_prob']);
 
                 if ($ceo->pivot->bankrupt || $ceo->pivot->dismissed) {
                     $this->company[$ceo->id]['cbu'] = 1;
@@ -272,6 +279,8 @@ class Core
             $this->global['active_mkt_industry'] = 0;
             $this->global['final_price_points_sum'] = 0;
             foreach ($this->game->ceos as $ceo) {
+                //average_price(t-1) * (1 + price_control)
+                // $this->company[$ceo->id]['limit_price'] =  ;
 
                 $this->company[$ceo->id]['final_price_points'] = $this->company[$ceo->id]['price_index_user'] / $this->global['price_index_industry'] * $this->industry['p_price'];
                 $this->global['final_price_points_sum'] += $this->company[$ceo->id]['final_price_points'];
@@ -417,6 +426,7 @@ class Core
                         $this->company[$ceo->id]['trigger'] = rand(1, $this->company[$ceo->id]['top_limit']);
                         
                     } else {
+                        $this->company[$ceo->id]['top_limit'] = round($this->game->game_parameters['players'] / ($this->company[$ceo->id]['event_prob'] / 100));
                         $this->company[$ceo->id]['trigger'] = false;
                     }
 
@@ -649,6 +659,14 @@ class Core
             }
 
             // loop 13
+            foreach ($this->game->ceos as $ceo) {
+                if ($this->stage == 0) {
+                    $this->company[$ceo->id]['min_funds'] = 0;
+                } else {
+                    $this->company[$ceo->id]['min_funds']  = $ceo->pivot->results['stage_' . ($this->stage - 1)]['output'] / 2;
+                }
+            }
+
             $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
             $this->global['id_checkpoint'] = ($this->global['final_id_points_sum'] == $this->industry['p_id']) ? 'OK' : 'ERROR';
             $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['p_mkt']) ? 'OK' : 'ERROR';
@@ -767,6 +785,8 @@ class Core
                     'recycle' => $this->recycle_t0,
                     'safety' => $this->safety_t0,
                     'quality_control' => $this->quality_control_t0,
+                    'survey' => 0,
+                    'design' => 0,
                 ];
             }
         } else {
