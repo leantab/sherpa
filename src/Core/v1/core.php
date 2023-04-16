@@ -20,6 +20,10 @@ class Core
   public $random_id_t0;
   public $random_new_debt_t0;
   public $new_debt_t0;
+  public $global;
+  public $company;
+  public $industry;
+  public $ceo;
 
   public function __construct(Game $game)
   {
