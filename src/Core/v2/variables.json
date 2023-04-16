@@ -187,6 +187,14 @@
   "avg_total_cost" : "money",
   "salaries_budget" : "money",
   "mkt_budget" : "money",
+  "mkt_industry" : "money",
+  "ibk_industry" : "money",
   "id_budget" : "money",
-  "corrected_demand" : "units"
+  "id_industry" : "money",
+  "corrected_demand" : "units",
+  "total_cost_industry" : "money",
+  "dry_liquity" : "money",
+  "earnings" : "money",
+  "max_e" : "units",
+  "status_company" : "text"
 }

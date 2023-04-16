@@ -662,11 +662,14 @@ class Core
                 $this->company[$ceo->id]['company_ranking'] = array_search($this->company[$ceo->id]['earnings'], $arr_earnings) + 1;
                 $this->company[$ceo->id]['total_funds_ratio'] = ($this->company[$ceo->id]['total_funds'] / max($arr_total_funds)) * 100;
 
+                $this->company[$ceo->id]['status_company'] = 'OK';
                 if (!$ceo->pivot->bankrupt && !$ceo->pivot->dismissed && $this->stage > 0) {
                     if ($this->company[$ceo->id]['total_funds_ratio'] < $this->game->game_parameters['out_zone']) {
                         $this->company[$ceo->id]['dismissed'] = true;
+                        $this->company[$ceo->id]['status_company'] = 'DISMISSED_CEO';
                     } else if ($this->company[$ceo->id]['total_funds'] < $this->company[$ceo->id]['min_funds']) {
                         $this->company[$ceo->id]['bankrupt'] = true;
+                        $this->company[$ceo->id]['status_company'] = 'BANKRUPT';
                     }
                 }
             }
@@ -710,6 +713,8 @@ class Core
                     // company_ranking(t-1) - company_ranking(t)
                     $this->company[$ceo->id]['company_ranking_delta']  = $ceo->pivot->results['stage_' . ($this->stage - 1)]['company_ranking'] - $this->company[$ceo->id]['company_ranking'];
                 }
+
+                $this->company[$ceo->id]['udr']  = round($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['active_investements']);
 
                 $this->company[$ceo->id]['salaries_budget']  = round(($this->company[$ceo->id]['salaries_expense'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 $this->company[$ceo->id]['mkt_budget']  = round(($this->company[$ceo->id]['mkt'] / $this->company[$ceo->id]['total_revenue']) * 100);
