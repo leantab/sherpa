@@ -642,6 +642,7 @@ class Core
                 }
             }
 
+            $this->global['total_cost_industry'] = $this->global['total_cost_sum'];
             $this->global['average_total_cost'] = $this->global['total_cost_sum'] / $this->num_ceos;
             $this->global['average_payed_taxes'] = -1 * ($this->global['taxes_sum'] / $this->num_ceos);
 
@@ -710,7 +711,7 @@ class Core
                     $this->company[$ceo->id]['company_ranking_delta']  = $ceo->pivot->results['stage_' . ($this->stage - 1)]['company_ranking'] - $this->company[$ceo->id]['company_ranking'];
                 }
 
-                $this->company[$ceo->id]['salaries_budget']  = round(($this->company[$ceo->id]['salaries_expenses'] / $this->company[$ceo->id]['total_revenue']) * 100);
+                $this->company[$ceo->id]['salaries_budget']  = round(($this->company[$ceo->id]['salaries_expense'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 $this->company[$ceo->id]['mkt_budget']  = round(($this->company[$ceo->id]['mkt'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 $this->company[$ceo->id]['id_budget']  = round(($this->company[$ceo->id]['id'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 
@@ -720,7 +721,7 @@ class Core
             $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
             $this->global['id_checkpoint'] = ($this->global['final_id_points_sum'] == $this->industry['p_id']) ? 'OK' : 'ERROR';
             $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['p_mkt']) ? 'OK' : 'ERROR';
-            $this->global['equity_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
+            // $this->global['equity_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
 
 
             // CALCULO DE TIPS (solo se muestran a partir del turno 2)

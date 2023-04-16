@@ -174,5 +174,19 @@
   "taxes_sum": "money",
   "achieved_target": "percentage",
   "opening_cash_ratio" : "ratio",
-  "line_credit" : "money"
+  "line_credit" : "money",
+  "best_price" : "money",
+  "industry_pipeline" : "number",
+  "positive_top_limit" : "number",
+  "positive_trigger" : "number",
+  "lucky_player" : "number",
+  "success_id" : "number",
+  "strength" : "number",
+  "decision_success" : "text",
+  "avg_sales" : "units",
+  "avg_total_cost" : "money",
+  "salaries_budget" : "money",
+  "mkt_budget" : "money",
+  "id_budget" : "money",
+  "corrected_demand" : "units"
 }

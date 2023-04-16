@@ -267,7 +267,7 @@ class Sherpa
         $schema['game_parameters']["country_income_level"] = "country_income_low_income";
         $schema['game_parameters']["industry_status"] = "industry_status_constant_development";
         $schema['game_parameters']["accounting_period"] = 6;
-        $schema['game_parameters']["positive_random_events"] = "positive_events_few";
+        $schema['game_parameters']["positive_random_events"] = "positive_random_events_few";
         $schema['game_parameters']["risk_limit_min"] = 20;
         $schema['game_parameters']["risk_limit_max"] = 80;
         $schema['game_parameters']["initial_eq"]  = rand(-10, 10);
