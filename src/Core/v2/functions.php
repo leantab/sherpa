@@ -18,7 +18,7 @@ if (!function_exists('sd')) {
 if (!function_exists('getMinPrice')) {
     function getMinPrice($game)
     {
-        $min_price =  -3 * $game->results['stage_' . ($game->current_stage - 1)]['sd'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
+        $min_price =  -3 * $game->results['stage_' . ($game->current_stage - 1)]['sd_price'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
         return ($min_price < 0) ? 10 : $min_price;
     }
 }
@@ -26,7 +26,7 @@ if (!function_exists('getMinPrice')) {
 if (!function_exists('getMaxPrice')) {
     function getMaxPrice($game)
     {
-        return 4 * $game->results['stage_' . ($game->current_stage - 1)]['sd'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
+        return 4 * $game->results['stage_' . ($game->current_stage - 1)]['sd_price'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
     }
 }
 
