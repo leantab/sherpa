@@ -23,7 +23,7 @@
   "worker_productivity" : "number",
   "offered_u" : "units",
   "max_w" : "number",
-  "employees" : "number",
+  "employees" : "units",
   "employees_industry" : "number",
   "revenue_employees" : "money",
   "sold_u_employees" : "units",
