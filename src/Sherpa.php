@@ -337,7 +337,7 @@ class Sherpa
         
         $desitions = [];
         foreach ($schema as $key => $value) {
-            if ($value['type'] == 'select') {
+            if ($value['type'] == 'options') {
                 $desitions[$key] = $value['options'][array_rand($value['options'])];
             } elseif ($value['type'] == 'integer') {
                 if ($key == 'corp_debt' || $key == 'ibk' || $key == 'capital_inv') {
