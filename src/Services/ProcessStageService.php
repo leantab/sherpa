@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Leantab\Sherpa\Services;
 
 use Leantab\Sherpa\Models\Game;
 use Leantab\Sherpa\Events\StageProcessed;

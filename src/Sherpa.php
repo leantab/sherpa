@@ -2,11 +2,11 @@
 
 namespace Leantab\Sherpa;
 
-use App\Services\ProcessStageService;
 use Leantab\Sherpa\Models\Game;
 use Leantab\Sherpa\Models\User;
 use Leantab\Sherpa\Models\GameUser;
 use Leantab\Sherpa\Jobs\ProcessStage;
+use Leantab\Sherpa\Services\ProcessStageService;
 
 class Sherpa
 {
