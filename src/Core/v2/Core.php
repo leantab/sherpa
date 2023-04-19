@@ -727,9 +727,9 @@ class Core
                 $this->company[$ceo->id]['corrected_demand']  = round(($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['active_investements']) * 100000);
             }
 
-            $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
-            $this->global['id_checkpoint'] = ($this->global['final_id_points_sum'] == $this->industry['p_id']) ? 'OK' : 'ERROR';
-            $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['p_mkt']) ? 'OK' : 'ERROR';
+            $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR' . (string) $this->global['final_price_points_sum'] . ' != ' . (string) $this->industry['p_price'];
+            $this->global['id_checkpoint'] = ($this->global['final_id_points_sum'] == $this->industry['p_id']) ? 'OK' : 'ERROR - '. (string) $this->global['final_id_points_sum'] . ' != ' . (string) $this->industry['p_id'];
+            $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['p_mkt']) ? 'OK' : 'ERROR' . (string) $this->global['final_mkt_points_sum'] . ' != ' . (string) $this->industry['p_mkt'];
             // $this->global['equity_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
 
 
