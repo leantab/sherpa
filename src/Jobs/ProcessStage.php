@@ -23,7 +23,8 @@ class ProcessStage implements ShouldQueue
 
     public function handle()
     {
-        new ProcessStageService($this->game);
+        $service = new ProcessStageService($this->game);
+        $service->processStage();
     }
 
 }

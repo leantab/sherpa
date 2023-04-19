@@ -34,7 +34,7 @@ class ProcessStageService
         }
     }
 
-    public function handle()
+    public function processStage()
     {
         try {
             $this->core->process();

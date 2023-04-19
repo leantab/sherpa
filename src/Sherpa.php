@@ -2,6 +2,7 @@
 
 namespace Leantab\Sherpa;
 
+use App\Services\ProcessStageService;
 use Leantab\Sherpa\Models\Game;
 use Leantab\Sherpa\Models\User;
 use Leantab\Sherpa\Models\GameUser;
@@ -304,7 +305,8 @@ class Sherpa
             $this->addCeo($game->id, $i, 'Test Company '.$i, $i, true);
         }        
 
-        ProcessStage::dispatch($game);
+        $service = new ProcessStageService($this->game);
+        $service->processStage();
 
         return $game;
     }
@@ -319,7 +321,8 @@ class Sherpa
             $this->generateRandomDesitions($game_id, $ceo->pivot->user_id);
         }
 
-        ProcessStage::dispatch($game);
+        $service = new ProcessStageService($game);
+        $service->processStage();
 
         return $game;
     }
