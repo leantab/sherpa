@@ -176,9 +176,9 @@ class Core
                 }
 
                 $this->company[$ceo->id]['offered_u'] = round($this->company[$ceo->id]['current_stock'] + $this->company[$ceo->id]['u_prod']);
-                $this->company[$ceo->id]['vpe'] = $this->company[$ceo->id]['cbu'] * $this->company[$ceo->id]['worker_productivity'];
-                $this->company[$ceo->id]['max_w'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'] * log(10);
-                $this->company[$ceo->id]['max_e'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'];
+                $this->company[$ceo->id]['vpe'] = round($this->company[$ceo->id]['cbu'] * $this->company[$ceo->id]['worker_productivity'], 2);
+                // $this->company[$ceo->id]['max_w'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'] * log(10);
+                $this->company[$ceo->id]['max_e'] = round($this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'], 2);
                 $this->company[$ceo->id]['employees'] = round(($this->company[$ceo->id]['production'] / 100) * $this->company[$ceo->id]['max_e']);
 
                 if ($this->stage == 0) {
@@ -476,9 +476,13 @@ class Core
 
                 //MULTIPLICA POR TURNO + 1
                 if ($this->stage == 0) {
-                    $this->company[$ceo->id]['subsidy'] = ($this->company[$ceo->id]['delta_employees'] < 0) ? $this->company[$ceo->id]['delta_employees'] * $this->game->game_parameters['compensation_cost'] * $this->game->game_parameters['salary'] * $this->stage : $this->company[$ceo->id]['delta_employees'] * $this->game->game_parameters['compensation_cost'] * $this->game->game_parameters['salary'];
+                    $this->company[$ceo->id]['subsidy'] = ($this->company[$ceo->id]['delta_employees'] < 0) 
+                        ? $this->company[$ceo->id]['delta_employees'] * $this->game->game_parameters['compensation_cost'] * $this->game->game_parameters['salary'] * $this->stage 
+                        : $this->company[$ceo->id]['delta_employees'] * $this->game->game_parameters['compensation_cost'] * $this->game->game_parameters['salary'];
                 } else {
-                    $this->company[$ceo->id]['subsidy'] = ($this->company[$ceo->id]['delta_employees'] < 0) ? $this->company[$ceo->id]['delta_employees'] * $this->game->goverment_parameters['stage_' . $this->stage]['compensation_cost'] * $this->game->game_parameters['salary'] * $this->stage : $this->company[$ceo->id]['delta_employees'] * $this->game->goverment_parameters['stage_' . $this->stage]['compensation_cost'] * $this->game->game_parameters['salary'];
+                    $this->company[$ceo->id]['subsidy'] = ($this->company[$ceo->id]['delta_employees'] < 0) 
+                        ? $this->company[$ceo->id]['delta_employees'] * $this->game->goverment_parameters['stage_' . $this->stage]['compensation_cost'] * $this->game->game_parameters['salary'] * $this->stage 
+                        : $this->company[$ceo->id]['delta_employees'] * $this->game->goverment_parameters['stage_' . $this->stage]['compensation_cost'] * $this->game->game_parameters['salary'];
                 }
 
                 if ($this->stage == 0) {
@@ -516,13 +520,13 @@ class Core
                 $this->company[$ceo->id]['margin_u'] = $this->ceo[$ceo->id]['price'] - $this->company[$ceo->id]['total_cost_u'];
                 
                 //gross_profit + subsidy - salaries_expense - mkt - id  - event_cost
-                $this->company[$ceo->id]['ebitda'] = $this->company[$ceo->id]['gross_profit']
+                $this->company[$ceo->id]['ebitda'] = round($this->company[$ceo->id]['gross_profit']
                     + $this->company[$ceo->id]['subsidy'] 
                     - $this->company[$ceo->id]['salaries_expense'] 
                     - $this->ceo[$ceo->id]['mkt'] 
                     - $this->ceo[$ceo->id]['id'] 
-                    - $this->company[$ceo->id]['event_cost'];
-                $this->company[$ceo->id]['ebit'] = $this->company[$ceo->id]['ebitda'] - $this->company[$ceo->id]['depreciation'];
+                    - $this->company[$ceo->id]['event_cost'], 2);
+                $this->company[$ceo->id]['ebit'] = round($this->company[$ceo->id]['ebitda'] - $this->company[$ceo->id]['depreciation'], 2);
                 $this->company[$ceo->id]['uai'] = $this->company[$ceo->id]['ebit'] + $this->company[$ceo->id]['financial_result'];
                 
                 if ($this->stage == 0) {

@@ -305,7 +305,7 @@ class Sherpa
             $this->addCeo($game->id, $i, 'Test Company '.$i, $i, true);
         }        
 
-        $service = new ProcessStageService($this->game);
+        $service = new ProcessStageService($game);
         $service->processStage();
 
         return $game;
@@ -356,7 +356,7 @@ class Sherpa
         }
 
         $ceoParameters = $ceo->pivot->ceo_parameters;
-        $ceoParameters['stage_' . $game->current_stage] = $desitions;;
+        $ceoParameters['stage_' . $game->current_stage] = $desitions;
         $ceo->pivot->ceo_parameters = $ceoParameters;
         $ceo->pivot->save();
     }
