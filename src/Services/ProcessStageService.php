@@ -20,11 +20,11 @@ class ProcessStageService
 
         if (!$game->hasAllCeoDecisions() && $game->current_stage > 0) {
             Log::error('[Sherpa->ProcessStage] - Error: No estan definidas las decisiones de los CEO');
-            exit;
+            dd('Not all CEO decisions are defined');
         }
         if (!$game->hasGovermentDecisions() && $game->current_stage > 0) {
             Log::error('[Sherpa->ProcessStage] - Error: No estan definidas las decisiones de Gobierno');
-            exit;
+            dd('Not all Goverment decisions are defined');
         }
 
         if ($this->version == 'v1') {
