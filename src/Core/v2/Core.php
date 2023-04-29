@@ -377,8 +377,8 @@ class Core
                 $this->company[$ceo->id]['achieved_target'] = ($this->company[$ceo->id]['total_revenue'] / $this->company[$ceo->id]['target']) * 100;
                 $this->company[$ceo->id]['cost_sold_goods'] = $this->company[$ceo->id]['sold_u'] * $this->company[$ceo->id]['cbu'];
                 $this->company[$ceo->id]['gross_profit'] = $this->company[$ceo->id]['total_revenue'] - $this->company[$ceo->id]['cost_sold_goods'];
-                //abs [((demand_u / offered_u) - 1)] * 100
-                $this->company[$ceo->id]['demand_surplus'] = abs((($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['offered_u']) - 1) * 100);
+                //{ 1- abs [((demand_u / offered_u) - 1)] } * 100
+                $this->company[$ceo->id]['demand_surplus'] = ((1 - abs(($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['offered_u']) - 1)) * 100);
             }
 
             $this->global['revenue_employees'] = $this->global['total_revenue_industry'] / $this->global['employees_industry'];
@@ -709,6 +709,7 @@ class Core
             $this->global['avg_sales'] = round($this->global['total_revenue_industry'] / $this->num_ceos);
             $this->global['avg_total_cost'] = round($this->global['total_cost_industry'] / $this->num_ceos);
 
+            
             // loop 13
             foreach ($this->game->ceos as $ceo) {
                 if ($this->stage == 0) {
@@ -717,14 +718,21 @@ class Core
                     // company_ranking(t-1) - company_ranking(t)
                     $this->company[$ceo->id]['company_ranking_delta']  = $ceo->pivot->results['stage_' . ($this->stage - 1)]['company_ranking'] - $this->company[$ceo->id]['company_ranking'];
                 }
-
-                $this->company[$ceo->id]['udr']  = round($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['active_investements']);
-
+                
+                $this->company[$ceo->id]['udr']  = round(($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['active_investements']) * 100000);
+                
                 $this->company[$ceo->id]['salaries_budget']  = round(($this->company[$ceo->id]['salaries_expense'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 $this->company[$ceo->id]['mkt_budget']  = round(($this->company[$ceo->id]['mkt'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 $this->company[$ceo->id]['id_budget']  = round(($this->company[$ceo->id]['id'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 
                 $this->company[$ceo->id]['corrected_demand']  = round(($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['active_investements']) * 100000);
+                
+                $this->company[$ceo->id]['global_leverage'] = round(($this->company[$ceo->id]['total_assets'] / $this->company[$ceo->id]['equity']), 2);
+                //(uai/equity) / (ebit/total_assets)
+                $this->company[$ceo->id]['financial_leverage'] = round(
+                    ($this->company[$ceo->id]['uai'] / $this->company[$ceo->id]['equity'])
+                    / ($this->company[$ceo->id]['ebit'] / $this->company[$ceo->id]['total_assets'])
+                    , 2);
             }
 
             $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR' . (string) $this->global['final_price_points_sum'] . ' != ' . (string) $this->industry['p_price'];
