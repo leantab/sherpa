@@ -58,6 +58,27 @@ if (!function_exists('getMaxCapitalInv')) {
     }
 }
 
+if (!function_exists('getFinalCash')) {
+    function getFinalCash($game, $ceo)
+    {
+        return $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['final_cash'];
+    }
+}
+
+if (!function_exists('getLineCredit')) {
+    function getLineCredit($game, $ceo)
+    {
+        return $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['line_credit'];
+    }
+}
+
+if (!function_exists('getFinancialDebt')) {
+    function getFinancialDebt($game, $ceo)
+    {
+        return $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['financial_debt'];
+    }
+}
+
 if (!function_exists('getTotalFunds')) {
     function getTotalFunds($game, $ceo)
     {

@@ -106,8 +106,9 @@ class Sherpa
     public function getCeoVariables($game_id, $user_id)
     {
         $game = Game::findOrFail($game_id);
-        $schema = $this->getSchema($game->version);
         $user = $game->ceos()->where('user_id', $user_id)->first();
+        
+        $schema = $this->getSchema($game->version);
 
         $ceo_parameters = [];
 

@@ -300,6 +300,18 @@
       "type": "float",
       "value": "getTotalFunds()"
     },
+    "final_cash": {
+      "type": "float",
+      "value": "getFinalCash()"
+    },
+    "line_credit": {
+      "type": "float",
+      "value": "getLineCredit()"
+    },
+    "financial_debt": { 
+      "type": "float",
+      "value": "getFinancialDebt()"
+    },
     "total_funds_check": {
       "type": "validation",
       "function": "checkTotalFunds()",
