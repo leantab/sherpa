@@ -16,6 +16,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property array $game_parameters
  * @property array $goverment_parameters
  * @property array $results
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \App\Models\User $goverment
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $ceos
+ * @method bool hasAllCeoDecisions()
+ * @method bool hasGovermentDecisions()
+ * @method bool isGoverment($user_id)
+ * @method bool isCeo($user_id)
+ * @method bool isActive()
+ * @method bool isCompleted()
+ * @method string getPlayerPosition($user_id)
  */
 class Game extends Model
 {

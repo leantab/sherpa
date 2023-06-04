@@ -379,25 +379,16 @@ class Sherpa
     {
         $game = Game::findOrFail($game_id);
 
-        // Update the existing game_user data with the incoming parameters, or create new ceo
+        // if there is not a ceo created, return false
         $game_user = GameUser::where([['game_id', $game_id], ['user_id', $user_id]])->first();
-        if (null !== $game_user) {
-            $game_user->company_name = $company_name;
-            $game_user->avatar = $avatar;
-            $game_user->is_funded = true;
-            $game_user->save();
-        } else {
-            // if ($game->ceos()->count() >= $game->players) {
-            //     throw new \Exception("No hay Lugares disponibles en esta partida");
-            // }
-            
-            // $game->ceos()->attach($user_id, [
-            //     'company_name' => $company_name,
-            //     'avatar' => $avatar,
-            //     'is_funded' => $is_funded
-            // ]);
+        if (null === $game_user) {
             return false;
         }
+        
+        $game_user->company_name = $company_name;
+        $game_user->avatar = $avatar;
+        $game_user->is_funded = true;
+        $game_user->save();
 
         //check if all ceos are funded
         $funded = 0;
@@ -464,7 +455,14 @@ class Sherpa
 
     public function setCeoParameters($game_id, $ceo_parameters, $user_id)
     {
-        $game = Game::findOrFail($game_id);
+        $game = Game::find($game_id);
+        if ($game === null) {
+            $return = new \StdClass();
+            $return->errors = 'game_not_found';
+            $return->status = false;
+            return $return;
+        }
+
         $user = $game->ceos()->where('user_id', $user_id)->first();
         $pivot = $user->pivot;
 
@@ -489,7 +487,6 @@ class Sherpa
             return $return;
         }
 
-
         $schema = $this->getCeoVariables($game_id, $user_id);
 
         $res = $this->validateJsonData($schema, $ceo_parameters, $game, $user);
@@ -501,6 +498,7 @@ class Sherpa
             $pivot->update([
                 'ceo_parameters' => $ceo_parameters
             ]);
+            
             $this->processGame($game_id);
             $return = new \StdClass();
             $return->status = true;

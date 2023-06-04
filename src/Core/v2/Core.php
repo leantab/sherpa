@@ -867,22 +867,20 @@ class Core
                     $params[$ceo->id]['capital_inv'] = 0;
                     $params[$ceo->id]['corp_debt'] = 0;
                     $params[$ceo->id]['corp_debt_topay'] = 0;
-                    $params[$ceo->id]['design'] = 0;
-                    $params[$ceo->id]['ibk'] = 0;
-                    $params[$ceo->id]['mkt'] = 0;
-
+                    $params[$ceo->id]['design'] = 1;
+                    $params[$ceo->id]['survey'] = 1;
+                    $params[$ceo->id]['ibk'] = 1;
+                    $params[$ceo->id]['mkt'] = 1;
 
                     $params[$ceo->id]['price'] = getMaxPrice($this->game);
 
-
-                    $params[$ceo->id]['production'] = 0;
+                    $params[$ceo->id]['production'] = 1;
                     $params[$ceo->id]['quality_control'] = 'qc_start_up';
                     $params[$ceo->id]['quality_control_value'] = 1;
                     $params[$ceo->id]['recycle'] = 'recycle_sub_saharian_standards';
                     $params[$ceo->id]['recycle_value'] = 1;
                     $params[$ceo->id]['safety'] = 'safety_1';
                     $params[$ceo->id]['safety_value'] = 1;
-                    $params[$ceo->id]['survey'] = 0;
                 } else {
                     $params[$ceo->id] = $ceo->pivot->ceo_parameters['stage_' . $this->stage];
                     $params[$ceo->id]['recycle_value'] = $recycle_vars[$params[$ceo->id]['recycle']];
