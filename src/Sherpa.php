@@ -458,7 +458,7 @@ class Sherpa
         $game = Game::find($game_id);
         if ($game === null) {
             $return = new \StdClass();
-            $return->errors = 'game_not_found';
+            $return->errors = 'game_not_found_in_sherpa';
             $return->status = false;
             return $return;
         }
@@ -653,6 +653,10 @@ class Sherpa
         $return = new \StdClass();
         $return->status = true;
         $return->parameters = [];
+
+        if ((bool) json_decode($input) === true) {
+            $input = json_decode($input, true);
+        }
 
         foreach ($gameParams as $param => $definition) {
 
