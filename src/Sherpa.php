@@ -2,10 +2,10 @@
 
 namespace Leantab\Sherpa;
 
-use Leantab\Sherpa\Models\Game;
-use Leantab\Sherpa\Models\User;
-use Leantab\Sherpa\Models\GameUser;
 use Leantab\Sherpa\Jobs\ProcessStage;
+use Leantab\Sherpa\Models\Game;
+use Leantab\Sherpa\Models\GameUser;
+use Leantab\Sherpa\Models\User;
 use Leantab\Sherpa\Services\ProcessStageService;
 
 class Sherpa
@@ -640,9 +640,12 @@ class Sherpa
     }
 
 
+    public function getGameResults(int $game_id): array
+    {
+        $game = Game::findOrFail($game_id);
+        return $game->results;
+    }
 
-
-    /* */
     /*
     *
     *   Valida estructura y datos ingresados contra el schema
@@ -693,7 +696,6 @@ class Sherpa
             if (isset($input[$param]) && $return->status == true) {
 
                 $value = $input[$param];
-
 
                 // Valida el tipo de dato
                 if ($definition['type'] == 'string') {
