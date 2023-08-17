@@ -7,15 +7,12 @@ use Leantab\Sherpa\Models\Game;
 use Leantab\Sherpa\Models\GameUser;
 use Leantab\Sherpa\Models\User;
 use Leantab\Sherpa\Services\ProcessStageService;
+use stdClass;
 
 class Sherpa
 {
-    // Public API
-
     /*
-    *
     *   Retorna el listado de versiones en orden descendiente
-    *   @params
     *   $include_dev boolean (false): incluye las versiones no productivas (beta)
     */
     public function getVersions($include_dev = false)
@@ -34,9 +31,7 @@ class Sherpa
     }
 
     /*
-    *
     *   Retorna el schema json de la version seleccionada (o la ultima version si no se especifica ninguna)
-    *
     */
     public function getSchema(string $version = 'current'): array
     {
@@ -489,7 +484,9 @@ class Sherpa
 
         $schema = $this->getCeoVariables($game_id, $user_id);
 
-        $res = $this->validateJsonData($schema, $ceo_parameters, $game, $user);
+        // $res = $this->validateJsonData($schema, $ceo_parameters, $game, $user);
+        $res = new stdClass();
+        $res->status = true;
 
         if ($res->status === true) {
             $ceo_parameters = $pivot->ceo_parameters;

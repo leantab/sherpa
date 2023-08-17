@@ -365,6 +365,7 @@ class Core
             // loop 9
             $this->global['sold_u_industry'] = 0;
             $this->global['total_revenue_industry'] = 0;
+            $this->global['sum_total_revenue'] = 0;
             foreach ($this->game->ceos as $ceo) {
                 //MAX(0, total_points_player / total_points_industry * u_dem_industry)
                 $this->company[$ceo->id]['demand_u'] = max(round($this->company[$ceo->id]['total_points_player'] / $this->global['total_points_industry'] * $this->global['u_dem_industry'], 0), 0);
@@ -374,6 +375,7 @@ class Core
                 $this->company[$ceo->id]['unrealized_sales'] = ($this->company[$ceo->id]['demand_u'] - $this->company[$ceo->id]['sold_u']) * $this->ceo[$ceo->id]['price'];
                 $this->company[$ceo->id]['total_revenue'] = $this->company[$ceo->id]['sold_u'] * $this->ceo[$ceo->id]['price'];
                 $this->global['total_revenue_industry'] += $this->company[$ceo->id]['total_revenue'];
+                $this->global['sum_total_revenue'] += $this->company[$ceo->id]['total_revenue'];
                 $this->company[$ceo->id]['achieved_target'] = ($this->company[$ceo->id]['total_revenue'] / $this->company[$ceo->id]['target']) * 100;
                 $this->company[$ceo->id]['cost_sold_goods'] = $this->company[$ceo->id]['sold_u'] * $this->company[$ceo->id]['cbu'];
                 $this->company[$ceo->id]['gross_profit'] = $this->company[$ceo->id]['total_revenue'] - $this->company[$ceo->id]['cost_sold_goods'];
