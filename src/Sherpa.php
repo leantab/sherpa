@@ -487,6 +487,7 @@ class Sherpa
         // $res = $this->validateJsonData($schema, $ceo_parameters, $game, $user);
         $res = new stdClass();
         $res->status = true;
+        $res->parameters = $ceo_parameters;
 
         if ($res->status === true) {
             $ceo_parameters = $pivot->ceo_parameters;
