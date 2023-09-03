@@ -720,10 +720,14 @@ class Core
                     // company_ranking(t-1) - company_ranking(t)
                     $this->company[$ceo->id]['company_ranking_delta']  = $ceo->pivot->results['stage_' . ($this->stage - 1)]['company_ranking'] - $this->company[$ceo->id]['company_ranking'];
                 }
+
+                if ($this->company[$ceo->id]['total_revenue'] == 0) {
+                    $this->company[$ceo->id]['total_revenue'] = 1;
+                }
                 
                 $this->company[$ceo->id]['udr']  = round(($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['active_investements']) * 100000);
                 
-                $this->company[$ceo->id]['salaries_budget']  = round(($this->company[$ceo->id]['salaries_expense'] / $this->company[$ceo->id]['total_revenue']) * 100);
+                $this->company[$ceo->id]['salaries_ budget']  = round(($this->company[$ceo->id]['salaries_expense'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 $this->company[$ceo->id]['mkt_budget']  = round(($this->company[$ceo->id]['mkt'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 $this->company[$ceo->id]['id_budget']  = round(($this->company[$ceo->id]['id'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 
