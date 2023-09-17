@@ -592,11 +592,13 @@ class Core
                     $this->company[$ceo->id]['demand_change'] = $this->company[$ceo->id]['demand_u'];
                     $this->company[$ceo->id]['demand_elasticity'] = 'N/A';
                 } else {
-                    $this->company[$ceo->id]['demand_change'] = round($this->company[$ceo->id]['demand_u'] - $ceo->pivot->results['stage_' . ($this->stage - 1)]['demand_u']);
-                    if ($this->company[$ceo->id]['price_change'] == 0 || $this->company[$ceo->id]['demand_change'] == 0) {
+                    $demand_u_t_ant = $ceo->pivot->results['stage_' . ($this->stage - 1)]['demand_u'] ?? 0;
+                    $price_t_ant = $ceo->pivot->results['stage_' . ($this->stage - 1)]['price'] ?? 0;
+                    $this->company[$ceo->id]['demand_change'] = round($this->company[$ceo->id]['demand_u'] - $demand_u_t_ant, 0);
+                    if ($this->company[$ceo->id]['price_change'] == 0 || $this->company[$ceo->id]['demand_change'] == 0 || $demand_u_t_ant == 0 || $price_t_ant == 0) {
                         $this->company[$ceo->id]['demand_elasticity'] = 0.5;
                     } else {
-                        $this->company[$ceo->id]['demand_elasticity'] = abs(round(($this->company[$ceo->id]['demand_change'] / $ceo->pivot->results['stage_' . ($this->stage - 1)]['demand_u']) / ($this->company[$ceo->id]['price_change'] / $ceo->pivot->results['stage_' . ($this->stage - 1)]['price']), 2));
+                        $this->company[$ceo->id]['demand_elasticity'] = abs(round(($this->company[$ceo->id]['demand_change'] / $demand_u_t_ant) / ($this->company[$ceo->id]['price_change'] / $price_t_ant), 2));
                     }
                 }
 
