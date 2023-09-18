@@ -76,7 +76,7 @@ class Core
             $this->global['id_industry'] = 0;
 
             $arr_price = [];
-            $arr_risk_scores = [];
+            $arr_risk_scores = [1];
             $this->global['output_sum'] = 0;
             // Loop 1
             foreach ($this->game->ceos as $ceo) {
