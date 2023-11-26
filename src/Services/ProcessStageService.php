@@ -6,6 +6,7 @@ use Leantab\Sherpa\Models\Game;
 use Leantab\Sherpa\Events\StageProcessed;
 use Log;
 use DB;
+use Leantab\Sherpa\Jobs\ProcessUserStats;
 
 class ProcessStageService
 {
@@ -28,7 +29,7 @@ class ProcessStageService
         }
 
         if ($this->version == 'v1') {
-            $this->core = new \Leantab\Sherpa\Core\v1\Core($game);
+            $this->core = new \Leantab\Sherpa\Core\v1\CoreV1($game);
         }elseif ($this->version == 'v2') {
             $this->core = new \Leantab\Sherpa\Core\v2\Core($game);
         }
@@ -97,7 +98,7 @@ class ProcessStageService
 
                 $ceo->pivot->update($pivot_data_update);
 
-                // ProcessUserStats::dispatch($ceo, $this->core->game);
+                ProcessUserStats::dispatch($ceo, $this->core->game);
 
                 $ceo->save();
             }

@@ -5,7 +5,7 @@ namespace Leantab\Sherpa\Core\v1;
 use Leantab\Sherpa\Models\Game;
 use Exception;
 
-class Core
+class CoreV1
 {
 
   public $game;

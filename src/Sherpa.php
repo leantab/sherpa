@@ -256,7 +256,7 @@ class Sherpa
         $schema['game_parameters']['players'] = 8;
         $schema['game_parameters']['industry'] = 'cars';
         $schema['game_parameters']['scenario'] = 'argentina_crisis_2001';
-        $schema['game_parameters']['proficiency_rate'] = 'proficiency_senior';
+        $schema['game_parameters']['proficiency_rate'] = 'proficiency_junior';
         $schema['game_parameters']['company_type'] = 'company_type_corporate';
         $schema['game_parameters']['goverment_side'] = 'goverment_side_liberal';
         $schema['game_parameters']['country'] = 'arg';

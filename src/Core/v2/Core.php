@@ -545,10 +545,14 @@ class Core
                 $this->global['taxes_sum'] += $this->company[$ceo->id]['taxes'];
                 $this->company[$ceo->id]['un'] = $this->company[$ceo->id]['uai'] - $this->company[$ceo->id]['taxes'];
 
-                if ($this->stage == 0) {
-                    $this->company[$ceo->id]['earnings'] = $this->company[$ceo->id]['un'];
+                if ($ceo->pivot->bankrupt || $ceo->pivot->dismissed) {
+                    $this->company[$ceo->id]['earnings'] = 1;
                 } else {
-                    $this->company[$ceo->id]['earnings'] = $ceo->pivot->results['stage_' . ($this->stage - 1)]['earnings'] + $this->company[$ceo->id]['un'];
+                    if ($this->stage == 0) {
+                        $this->company[$ceo->id]['earnings'] = $this->company[$ceo->id]['un'];
+                    } else {
+                        $this->company[$ceo->id]['earnings'] = $ceo->pivot->results['stage_' . ($this->stage - 1)]['earnings'] + $this->company[$ceo->id]['un'];
+                    }
                 }
                 $arr_earnings[] = $this->company[$ceo->id]['earnings'];
 
@@ -699,7 +703,7 @@ class Core
             if ($this->global['lucky_player'] == 'None') {
                 $this->global['strength'] = 1;
             } else {
-                $this->global['strength'] = 1 + (rand(1, 200) / 100);
+                $this->global['strength'] = 1 + (rand(-100, 200) / 100);
             }
 
             if ($this->global['success_id'] == 1) {
