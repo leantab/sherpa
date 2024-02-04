@@ -416,6 +416,7 @@ class Core
             $this->global['taxes_sum'] = 0;
             $this->global['total_cost_sum'] = 0;
             $arr_earnings = [];
+            $arr_full_earnings = [];
             $arr_total_funds = [];
             foreach ($this->game->ceos as $ceo) {
                 $this->company[$ceo->id]['stock_share'] = ($this->global['final_stock_industry'] == 0) ? '-' : ($this->company[$ceo->id]['final_stock'] / $this->global['final_stock_industry']) * 100;
@@ -555,6 +556,7 @@ class Core
                     }
                 }
                 $arr_earnings[] = $this->company[$ceo->id]['earnings'];
+                $arr_full_earnings[] = [$ceo->id => $this->company[$ceo->id]['earnings']];
 
                 //opening_cash + un - capex + inventory_change + new_debt
                 $this->company[$ceo->id]['final_cash'] = $this->company[$ceo->id]['opening_cash']
@@ -661,6 +663,9 @@ class Core
             sort($arr_earnings, SORT_NUMERIC);
             $arr_earnings = array_reverse($arr_earnings);
 
+            arsort($arr_full_earnings, SORT_NUMERIC);
+            $arr_full_earnings = array_reverse($arr_full_earnings);
+            $this->global['ranking'] = $arr_full_earnings;
 
             // loop 12
             foreach ($this->game->ceos as $ceo) {
@@ -733,7 +738,7 @@ class Core
                 
                 $this->company[$ceo->id]['udr']  = round(($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['active_investements']) * 100000);
                 
-                $this->company[$ceo->id]['salaries_ budget']  = round(($this->company[$ceo->id]['salaries_expense'] / $this->company[$ceo->id]['total_revenue']) * 100);
+                $this->company[$ceo->id]['salaries_budget']  = round(($this->company[$ceo->id]['salaries_expense'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 $this->company[$ceo->id]['mkt_budget']  = round(($this->company[$ceo->id]['mkt'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 $this->company[$ceo->id]['id_budget']  = round(($this->company[$ceo->id]['id'] / $this->company[$ceo->id]['total_revenue']) * 100);
                 
@@ -747,10 +752,9 @@ class Core
                     , 2);
             }
 
-            $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR' . (string) $this->global['final_price_points_sum'] . ' != ' . (string) $this->industry['p_price'];
+            $this->global['price_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR - ' . (string) $this->global['final_price_points_sum'] . ' != ' . (string) $this->industry['p_price'];
             $this->global['id_checkpoint'] = ($this->global['final_id_points_sum'] == $this->industry['p_id']) ? 'OK' : 'ERROR - '. (string) $this->global['final_id_points_sum'] . ' != ' . (string) $this->industry['p_id'];
-            $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['p_mkt']) ? 'OK' : 'ERROR' . (string) $this->global['final_mkt_points_sum'] . ' != ' . (string) $this->industry['p_mkt'];
-            // $this->global['equity_checkpoint'] = ($this->global['final_price_points_sum'] == $this->industry['p_price']) ? 'OK' : 'ERROR';
+            $this->global['mkt_checkpoint'] = ($this->global['final_mkt_points_sum'] == $this->industry['p_mkt']) ? 'OK' : 'ERROR - ' . (string) $this->global['final_mkt_points_sum'] . ' != ' . (string) $this->industry['p_mkt'];
 
 
             // CALCULO DE TIPS (solo se muestran a partir del turno 2)
@@ -876,9 +880,9 @@ class Core
             foreach ($this->game->ceos as $ceo) {
                 if ($ceo->pivot->bankrupt || $ceo->pivot->dismissed) {
 
-                    $params[$ceo->id]['capital_inv'] = 0;
-                    $params[$ceo->id]['corp_debt'] = 0;
-                    $params[$ceo->id]['corp_debt_topay'] = 0;
+                    $params[$ceo->id]['capital_inv'] = 1;
+                    $params[$ceo->id]['corp_debt'] = 1;
+                    $params[$ceo->id]['corp_debt_topay'] = 1;
                     $params[$ceo->id]['design'] = 1;
                     $params[$ceo->id]['survey'] = 1;
                     $params[$ceo->id]['ibk'] = 1;
