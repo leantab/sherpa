@@ -655,7 +655,7 @@ class Sherpa
         $return->status = true;
         $return->parameters = [];
 
-        if ((bool) json_decode($input) === true) {
+        if (!is_array($input) && (bool) json_decode($input) === true) {
             $input = json_decode($input, true);
         }
 
