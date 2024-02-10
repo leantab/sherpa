@@ -102,7 +102,7 @@ class Sherpa
     {
         $game = Game::findOrFail($game_id);
         $user = $game->ceos()->where('user_id', $user_id)->first();
-        
+
         $schema = $this->getSchema($game->version);
 
         $ceo_parameters = [];
@@ -224,6 +224,9 @@ class Sherpa
                 }
             }
 
+            $industryVars = $this->getIndustryData($version, $res->parameters['industry']);
+            $res->parameters = array_merge($res->parameters, $industryVars);
+
             $game_data = [
                 'version' => $version,
                 'status_id' => 1,
@@ -278,10 +281,10 @@ class Sherpa
 
         $geme_params = $schema['game_parameters'];
 
-        $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/'.$version.'/scenarios/argentina_crisis_2001.json'), true);
+        $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/scenarios/argentina_crisis_2001.json'), true);
 
         //foreach ($scenarioGameParameters['game_parameters'] as $key => $value) {
-            //$geme_params[$key] = $value;
+        //$geme_params[$key] = $value;
         //}
 
         $game_data = [
@@ -296,10 +299,10 @@ class Sherpa
 
         $game = Game::create($game_data);
 
-        for ($i=1; $i <= $schema['game_parameters']['players']; $i++) { 
-            $this->addSimpleCeo($game->id, $i, 'Test Company '.$i, $i, true);
-            $this->addCeo($game->id, $i, 'Test Company '.$i, $i, true);
-        }        
+        for ($i = 1; $i <= $schema['game_parameters']['players']; $i++) {
+            $this->addSimpleCeo($game->id, $i, 'Test Company ' . $i, $i, true);
+            $this->addCeo($game->id, $i, 'Test Company ' . $i, $i, true);
+        }
 
         $service = new ProcessStageService($game);
         $service->processStage();
@@ -333,7 +336,7 @@ class Sherpa
         $randomFactor = rand(1, 5);
         $financialRand = (14 - $randomFactor) / 100;
         $marketingRand = (22 - $randomFactor) / 100;
-        
+
         $desitions = [];
         foreach ($schema as $key => $value) {
             if ($value['type'] == 'options') {
@@ -342,7 +345,7 @@ class Sherpa
                 if ($key == 'corp_debt' || $key == 'ibk' || $key == 'capital_inv') {
                     $desitions[$key] = round($value['max'] * $financialRand);
                 } elseif ($key == 'desing' || $key == 'survey' || $key == 'mkt') {
-                    $desitions[$key] = round($value['max'] * $marketingRand );
+                    $desitions[$key] = round($value['max'] * $marketingRand);
                 } else {
                     if (array_key_exists('min', $value) && array_key_exists('max', $value)) {
                         $desitions[$key] = rand($value['min'], $value['max']);
@@ -379,7 +382,7 @@ class Sherpa
         if (null === $game_user) {
             return false;
         }
-        
+
         $game_user->company_name = $company_name;
         $game_user->avatar = $avatar;
         $game_user->is_funded = true;
@@ -400,14 +403,14 @@ class Sherpa
         }
         return true;
     }
-    
+
     public function addSimpleCeo($game_id, $user_id, $company_name, $avatar)
     {
         $game = Game::findOrFail($game_id);
         if ($game->ceos()->count() >= $game->players) {
             throw new \Exception("No hay slots disponibles en esta partida");
         }
-        
+
         $game->ceos()->attach($user_id, [
             'company_name' => $company_name,
             'avatar' => $avatar,
@@ -496,7 +499,7 @@ class Sherpa
             $pivot->update([
                 'ceo_parameters' => $ceo_parameters
             ]);
-            
+
             $this->processGame($game_id);
             $return = new \StdClass();
             $return->status = true;
@@ -552,7 +555,7 @@ class Sherpa
         $game->delete();
         return true;
     }
-    
+
     public function deleteCeo($game_id, $user_id)
     {
         $game = Game::findOrFail($game_id);
@@ -848,5 +851,15 @@ class Sherpa
 
 
         return $schema;
+    }
+
+    private function getIndustryData($version, $industry)
+    {
+        $vars = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/industries/' . $industry . '.json'), true);
+        if ($vars) {
+            return $vars;
+        } else {
+            return [];
+        }
     }
 }
