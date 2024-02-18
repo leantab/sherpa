@@ -104,11 +104,11 @@
       "required_if": "type:country,custom",
       "type": "options",
       "options": [
-        "positive_events_none",
-        "positive_events_few",
-        "positive_events_medium",
-        "positive_events_full",
-        "random"
+        "positive_random_events_none",
+        "positive_random_events_few",
+        "positive_random_events_medium",
+        "positive_random_events_full",
+        "positive_random_events_random"
       ]
     },
     "risk_limit_min": {

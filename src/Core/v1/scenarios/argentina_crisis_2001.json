@@ -4,7 +4,7 @@
     "country_income_level" : "country_income_low_income",
     "industry_status" : "industry_status_demanding_customers",
     "accounting_period": 6,
-    "positive_random_events": "positive_events_medium",
+    "positive_random_events": "positive_random_events_medium",
     "risk_limit_min": 10,
     "risk_limit_max": 75,
     "initial_eq" : 1,

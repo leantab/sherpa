@@ -106,7 +106,7 @@
       "options": [
         "positive_events_none",
         "positive_events_few",
-        "positive_events_medium",
+        "positive_random_events_medium",
         "positive_events_full",
         "random"
       ]
