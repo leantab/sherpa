@@ -15,6 +15,10 @@
     "min": 0,
     "max": 10
   },
+  "easy_business_high": {
+    "min": 0,
+    "max": 10
+  },
   "easy_business_random": {
     "min": 0,
     "max": 70 
