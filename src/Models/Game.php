@@ -78,6 +78,10 @@ class Game extends Model
 
     public function hasAllCeoDecisions()
     {
+        if ($this->current_stage == 0) {
+            return true;
+        }
+
         $totalDecisions = 0;
         foreach ($this->ceos as $c) {
             if (isset($c->pivot->ceo_parameters['stage_' . $this->current_stage]) || $c->pivot->bankrupt || $c->pivot->dismissed) {
@@ -97,6 +101,10 @@ class Game extends Model
         if ($this->game_parameters['type'] == 'scenario') {
             return true;
         } else {
+            if ($this->current_stage == 0) {
+                return true;
+            }
+            
             if (isset($this->goverment_parameters['stage_' . $this->current_stage])) {
                 return true;
             } else {
