@@ -454,6 +454,10 @@ class Sherpa
     public function setCeoParameters($game_id, $ceo_parameters, $user_id)
     {
         $game = Game::find($game_id);
+        if (!is_array($ceo_parameters) && (bool) json_decode($ceo_parameters) === true) {
+            $ceo_parameters = json_decode($ceo_parameters, true);
+        }
+
         if ($game === null) {
             $return = new \StdClass();
             $return->errors = 'game_not_found_in_sherpa';
@@ -490,11 +494,24 @@ class Sherpa
         // $res = $this->validateJsonData($schema, $ceo_parameters, $game, $user);
         $res = new stdClass();
         $res->status = true;
-        $res->parameters = $ceo_parameters;
+        $res->parameters = [
+            'mkt' => $ceo_parameters['mkt'],
+            'desing' => $ceo_parameters['desing'],
+            'survey' => $ceo_parameters['survey'],
+            'corp_debt' => ($ceo_parameters['new_debt'] > 0) ? $ceo_parameters['new_debt'] : 0,            
+            'corp_debt_topay' => ($ceo_parameters['new_debt'] < 0) ? $ceo_parameters['new_debt'] : 0,
+            'ibk' => $ceo_parameters['ibk'],
+            'price' => $ceo_parameters['price'],
+            'production' => $ceo_parameters['production'],
+            'capital_inv' => $ceo_parameters['capital_inv'],
+            'quality_control' => $ceo_parameters['quality_control'],
+            'recycle' => $ceo_parameters['recycle'],
+            'safety' => $ceo_parameters['safety'],    
+        ];
 
         if ($res->status === true) {
             $ceo_parameters = $pivot->ceo_parameters;
-            $ceo_parameters['stage_' . $game->current_stage] = $res->parameters;
+            $ceo_parameters['stage_' . $game->current_stage] = json_encode($res->parameters);
 
             $pivot->update([
                 'ceo_parameters' => $ceo_parameters
