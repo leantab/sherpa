@@ -344,7 +344,7 @@ class Sherpa
             } elseif ($value['type'] == 'integer') {
                 if ($key == 'corp_debt' || $key == 'ibk' || $key == 'capital_inv') {
                     $desitions[$key] = round($value['max'] * $financialRand);
-                } elseif ($key == 'desing' || $key == 'survey' || $key == 'mkt') {
+                } elseif ($key == 'design' || $key == 'survey' || $key == 'mkt') {
                     $desitions[$key] = round($value['max'] * $marketingRand);
                 } else {
                     if (array_key_exists('min', $value) && array_key_exists('max', $value)) {
@@ -496,7 +496,7 @@ class Sherpa
         $res->status = true;
         $res->parameters = [
             'mkt' => $ceo_parameters['mkt'],
-            'desing' => $ceo_parameters['desing'],
+            'design' => $ceo_parameters['design'],
             'survey' => $ceo_parameters['survey'],
             'corp_debt' => ($ceo_parameters['new_debt'] > 0) ? $ceo_parameters['new_debt'] : 0,            
             'corp_debt_topay' => ($ceo_parameters['new_debt'] < 0) ? $ceo_parameters['new_debt'] : 0,
