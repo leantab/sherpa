@@ -134,3 +134,10 @@ if (!function_exists('checkDebtsFunds')) {
         }
     }
 }
+
+if (!function_exists('getMinNewDebt')) {
+    function getMinNewDebt($game, $ceo, $input)
+    {
+        return (getLineCredit($game, $ceo) + getFinancialDebt($game, $ceo)) * -1;
+    }
+}

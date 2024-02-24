@@ -69,6 +69,7 @@ class Core
                 $this->global['interest_rate'] = $this->game->game_parameters['interest_rate'];
             } else {
                 $this->global['interest_rate'] = $this->game->goverment_parameters['stage_' . $this->stage]['interest_rate'];
+                $this->global['delta_interest_rate'] = $this->global['interest_rate'] - $this->game->results['stage_' . ($this->stage - 1)]['interest_rate'];
             }
 
             $this->global['mkt_industry'] = 0;
@@ -471,10 +472,9 @@ class Core
                         $this->company[$ceo->id]['event_cost'] = 0;
                     }
 
-                    //REVISAR ESTO CON CIRO
-                    $this->company[$ceo->id]['new_debt'] = $this->ceo[$ceo->id]['corp_debt']
-                        - $this->ceo[$ceo->id]['capital_inv']
-                        - $this->ceo[$ceo->id]['corp_debt_topay'];
+                    if ($this->company[$ceo->id]['new_debt'] < 0 && abs($this->company[$ceo->id]['new_debt']) > $this->company[$ceo->id]['financial_debt']) {
+                        $this->company[$ceo->id]['new_financial_inv'] = (-1 * $this->company[$ceo->id]['new_debt'] - $this->company[$ceo->id]['financial_debt']);
+                    }
 
                     //financial_debt	= MAX (0; financial_debt (t-1) - financial_inv (t-1)+ new_debt)
                     $this->company[$ceo->id]['financial_debt'] = max(0, $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_debt'] - $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_inv'] + $this->company[$ceo->id]['new_debt']);
@@ -628,8 +628,8 @@ class Core
                     $this->company[$ceo->id]['sales_net_profitability'] = 0;
                 }
 
-                $this->company[$ceo->id]['roe'] = round(($this->company[$ceo->id]['un'] / $this->company[$ceo->id]['equity']) * 100, 2);
-                $this->company[$ceo->id]['roa'] = round(($this->company[$ceo->id]['ebit'] / $this->company[$ceo->id]['total_assets']) * 100, 2);
+                $this->company[$ceo->id]['roe'] = round(($this->company[$ceo->id]['un'] / $this->company[$ceo->id]['equity']), 3);
+                $this->company[$ceo->id]['roa'] = round(($this->company[$ceo->id]['ebit'] / $this->company[$ceo->id]['total_assets']), 3);
 
                 if ($this->ceo[$ceo->id]['production'] > 0) {
                     //{[(risk_slope ^ (2*production)) / (1 + 2*production)-1)] * risk_limit_min } / 132
@@ -885,9 +885,7 @@ class Core
             foreach ($this->game->ceos as $ceo) {
                 if ($ceo->pivot->bankrupt || $ceo->pivot->dismissed) {
 
-                    $params[$ceo->id]['capital_inv'] = 1;
-                    $params[$ceo->id]['corp_debt'] = 1;
-                    $params[$ceo->id]['corp_debt_topay'] = 1;
+                    $params[$ceo->id]['new_debt'] = 5000;
                     $params[$ceo->id]['design'] = 1;
                     $params[$ceo->id]['survey'] = 1;
                     $params[$ceo->id]['ibk'] = 1;

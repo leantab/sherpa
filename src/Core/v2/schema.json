@@ -348,23 +348,11 @@
       "min": 0,
       "max": "getTotalFunds()"
     },
-    "capital_inv": {
+    "new_debt": {
       "required": true,
       "type": "integer",
-      "min": 0,
-      "max": "getMaxCapitalInv()"
-    },
-    "corp_debt": {
-      "required": true,
-      "type": "integer",
-      "min": 0,
-      "max": "getMaxCorpDebt()"
-    },
-    "corp_debt_topay": {
-      "required": true,
-      "type": "integer",
-      "min": "getMinCorpDebToPay()",
-      "max": "getMaxCorpDebToPay()"
+      "min": "getMinNewDebt()",
+      "max": "getLineCredit()"
     }
   }
 }
