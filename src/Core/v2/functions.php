@@ -138,6 +138,6 @@ if (!function_exists('checkDebtsFunds')) {
 if (!function_exists('getMinNewDebt')) {
     function getMinNewDebt($game, $ceo)
     {
-        return (getLineCredit($game, $ceo) + getFinancialDebt($game, $ceo)) * -1;
+        return round((getLineCredit($game, $ceo) + getFinancialDebt($game, $ceo)) * -1, 0);
     }
 }

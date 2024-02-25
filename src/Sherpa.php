@@ -504,7 +504,6 @@ class Sherpa
             'ibk' => $ceo_parameters['ibk'],
             'price' => $ceo_parameters['price'],
             'production' => $ceo_parameters['production'],
-            'capital_inv' => $ceo_parameters['capital_inv'],
             'quality_control' => $ceo_parameters['quality_control'],
             'recycle' => $ceo_parameters['recycle'],
             'safety' => $ceo_parameters['safety'],    
