@@ -341,8 +341,8 @@ class Sherpa
         foreach ($schema as $key => $value) {
             if ($value['type'] == 'options') {
                 $desitions[$key] = $value['options'][array_rand($value['options'])];
-            } elseif ($value['type'] == 'integer') {
-                if ($key == 'corp_debt' || $key == 'ibk' || $key == 'capital_inv') {
+            } elseif ($value['type'] == 'integer' || $value['type'] == 'float') {
+                if ($key == 'corp_debt' || $key == 'ibk' || $key == 'new_debt') {
                     $desitions[$key] = round($value['max'] * $financialRand);
                 } elseif ($key == 'design' || $key == 'survey' || $key == 'mkt') {
                     $desitions[$key] = round($value['max'] * $marketingRand);

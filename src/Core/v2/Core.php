@@ -901,10 +901,11 @@ class Core
                     $params[$ceo->id]['safety'] = 'safety_1';
                     $params[$ceo->id]['safety_value'] = 1;
                 } else {
-                    $params[$ceo->id] = $ceo->pivot->ceo_parameters['stage_' . $this->stage];
-                    $params[$ceo->id]['recycle_value'] = $recycle_vars[$params[$ceo->id]['recycle']];
-                    $params[$ceo->id]['quality_control_value'] = $quality_control_vars[$params[$ceo->id]['quality_control']];
-                    $params[$ceo->id]['safety_value'] = $safety_vars[$params[$ceo->id]['safety']];
+                    $parameters = $ceo->pivot->ceo_parameters['stage_' . $this->stage];
+                    $params[$ceo->id] = $parameters;
+                    $params[$ceo->id]['recycle_value'] = $recycle_vars[$parameters['recycle']];
+                    $params[$ceo->id]['quality_control_value'] = $quality_control_vars[$parameters['quality_control']];
+                    $params[$ceo->id]['safety_value'] = $safety_vars[$parameters['safety']];
                 }
             }
         }
