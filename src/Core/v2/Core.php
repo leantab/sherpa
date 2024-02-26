@@ -882,6 +882,9 @@ class Core
             $recycle_vars = json_decode(file_get_contents(__DIR__ . '/data/recycle.json'), true);
             $quality_control_vars = json_decode(file_get_contents(__DIR__ . '/data/quality_control.json'), true);
             $safety_vars = json_decode(file_get_contents(__DIR__ . '/data/safety.json'), true);
+            if (!is_array($recycle_vars) || !is_array($quality_control_vars) || !is_array($safety_vars)) {
+                throw Exception('Could not read vars from files. recycle = ' . $recycle_vars . ', quality_control = ' . $quality_control_vars . ', safety = ' . $safety_vars);
+            }
             foreach ($this->game->ceos as $ceo) {
                 if ($ceo->pivot->bankrupt || $ceo->pivot->dismissed) {
 
