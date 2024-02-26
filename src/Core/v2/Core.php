@@ -905,6 +905,9 @@ class Core
                     $params[$ceo->id]['safety_value'] = 1;
                 } else {
                     $parameters = $ceo->pivot->ceo_parameters['stage_' . $this->stage];
+                    if (!is_array($parameters) && json_decode($parameters, true) !== false) {
+                        $parameters = json_decode($parameters, true);
+                    }
                     $params[$ceo->id] = $parameters;
                     $params[$ceo->id]['recycle_value'] = $recycle_vars[$parameters['recycle']];
                     $params[$ceo->id]['quality_control_value'] = $quality_control_vars[$parameters['quality_control']];
