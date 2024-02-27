@@ -384,8 +384,8 @@ class Core
                 $this->company[$ceo->id]['achieved_target'] = ($this->company[$ceo->id]['total_revenue'] / $this->company[$ceo->id]['target']) * 100;
                 $this->company[$ceo->id]['cost_sold_goods'] = $this->company[$ceo->id]['sold_u'] * $this->company[$ceo->id]['cbu'];
                 $this->company[$ceo->id]['gross_profit'] = $this->company[$ceo->id]['total_revenue'] - $this->company[$ceo->id]['cost_sold_goods'];
-                //{ 1- abs [((demand_u / offered_u) - 1)] } * 100
-                $this->company[$ceo->id]['demand_surplus'] = ((1 - abs(($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['offered_u']) - 1)) * 100);
+                $this->company[$ceo->id]['demand_surplus'] = ((($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['offered_u']) - 1) * 100);
+                $this->company[$ceo->id]['offer_precision'] = (100 - abs($this->company[$ceo->id]['demand_surplus']));
             }
 
             $this->global['revenue_employees'] = $this->global['total_revenue_industry'] / $this->global['employees_industry'];
@@ -883,7 +883,7 @@ class Core
             $quality_control_vars = json_decode(file_get_contents(__DIR__ . '/data/quality_control.json'), true);
             $safety_vars = json_decode(file_get_contents(__DIR__ . '/data/safety.json'), true);
             if (!is_array($recycle_vars) || !is_array($quality_control_vars) || !is_array($safety_vars)) {
-                throw Exception('Could not read vars from files. recycle = ' . $recycle_vars . ', quality_control = ' . $quality_control_vars . ', safety = ' . $safety_vars);
+                throw new \Exception('Could not read vars from files. recycle = ' . $recycle_vars . ', quality_control = ' . $quality_control_vars . ', safety = ' . $safety_vars);
             }
             foreach ($this->game->ceos as $ceo) {
                 if ($ceo->pivot->bankrupt || $ceo->pivot->dismissed) {
