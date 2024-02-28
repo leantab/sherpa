@@ -170,6 +170,7 @@ class Core
                 $this->company[$ceo->id]['recycle'] = $this->ceo[$ceo->id]['recycle'];
                 $this->company[$ceo->id]['quality_control'] = $this->ceo[$ceo->id]['quality_control'];
                 $this->company[$ceo->id]['safety'] = $this->ceo[$ceo->id]['safety'];
+                $this->company[$ceo->id]['new_debt'] = $this->ceo[$ceo->id]['new_debt'];
 
                 $this->global['price_sum'] += $this->ceo[$ceo->id]['price'];
                 $arr_price[] = $this->ceo[$ceo->id]['price'];
