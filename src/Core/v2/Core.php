@@ -876,6 +876,7 @@ class Core
                     'quality_control' => $this->quality_control_t0,
                     'survey' => 0,
                     'design' => 0,
+                    'new_debt' => rand(1000, 5000),
                 ];
             }
         } else {
@@ -912,6 +913,27 @@ class Core
                     $params[$ceo->id]['recycle_value'] = $recycle_vars[$parameters['recycle']];
                     $params[$ceo->id]['quality_control_value'] = $quality_control_vars[$parameters['quality_control']];
                     $params[$ceo->id]['safety_value'] = $safety_vars[$parameters['safety']];
+                }
+                if (!array_key_exists('new_debt', $params[$ceo->id])) {
+                    throw new \Exception('new_debt not found in ceo_parameters');
+                }
+                if (!array_key_exists('design', $params[$ceo->id])) {
+                    throw new \Exception('design not found in ceo_parameters');
+                }
+                if (!array_key_exists('survey', $params[$ceo->id])) {
+                    throw new \Exception('survey not found in ceo_parameters');
+                }
+                if (!array_key_exists('ibk', $params[$ceo->id])) {
+                    throw new \Exception('ibk not found in ceo_parameters');
+                }
+                if (!array_key_exists('mkt', $params[$ceo->id])) {
+                    throw new \Exception('mkt not found in ceo_parameters');
+                }
+                if (!array_key_exists('price', $params[$ceo->id])) {
+                    throw new \Exception('price not found in ceo_parameters');
+                }
+                if (!array_key_exists('production', $params[$ceo->id])) {
+                    throw new \Exception('production not found in ceo_parameters');
                 }
             }
         }
