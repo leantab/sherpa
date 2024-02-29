@@ -473,13 +473,13 @@ class Core
                         $this->company[$ceo->id]['event_cost'] = 0;
                     }
 
-                    if ($this->company[$ceo->id]['new_debt'] < 0 && abs($this->company[$ceo->id]['new_debt']) > $this->company[$ceo->id]['financial_debt']) {
-                        $this->company[$ceo->id]['new_financial_inv'] = (-1 * $this->company[$ceo->id]['new_debt'] - $this->company[$ceo->id]['financial_debt']);
-                    }
-
                     //financial_debt	= MAX (0; financial_debt (t-1) - financial_inv (t-1)+ new_debt)
                     $this->company[$ceo->id]['financial_debt'] = max(0, $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_debt'] - $ceo->pivot->results['stage_' . ($this->stage - 1)]['financial_inv'] + $this->company[$ceo->id]['new_debt']);
                     $this->company[$ceo->id]['inventory_change'] = $ceo->pivot->results['stage_' . ($this->stage - 1)]['inventories'] - $this->company[$ceo->id]['inventories'];
+                    
+                    if ($this->company[$ceo->id]['new_debt'] < 0 && abs($this->company[$ceo->id]['new_debt']) > $this->company[$ceo->id]['financial_debt']) {
+                        $this->company[$ceo->id]['new_financial_inv'] = (-1 * $this->company[$ceo->id]['new_debt'] - $this->company[$ceo->id]['financial_debt']);
+                    }
                 }
 
                 //MULTIPLICA POR TURNO + 1

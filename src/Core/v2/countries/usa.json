@@ -1,0 +1,14 @@
+{
+  "game_parameters":{
+    "country_income_level": "country_income_high_income",
+    "salary": 1187,
+    "loan_ratio": 0,
+    "profit_tax": 27.9,
+    "vat_tax": 12,
+    "labor_tax": 9.8,
+    "easy_business_score": "",
+    "compensation_cost": 0,
+    "interest_rate": 0.75,
+    "financial_cost": 0
+  }
+}
