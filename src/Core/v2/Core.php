@@ -254,6 +254,18 @@ class Core
                 $this->global['offered_u_industry'] += $this->company[$ceo->id]['offered_u'];
             }
 
+            if ($this->global['active_id_industry'] == 0) {
+                $this->global['active_id_industry'] = 1;
+            }
+            if ($this->global['offered_u_industry'] == 0) {
+                $this->global['offered_u_industry'] = 1;
+            }
+            if ($this->global['target_industry'] == 0) {
+                $this->global['target_industry'] = 1;
+            }
+            if ($this->global['output_industry'] == 0) {
+                $this->global['output_industry'] = 1;
+            }
             $this->global['added_offer'] = $this->global['output_industry'];
 
             $this->global['id_index_industry'] = 0;
