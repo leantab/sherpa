@@ -310,7 +310,7 @@ class Sherpa
 
         $game = Game::create($game_data);
 
-        for ($i = 1; $i <= $schema['game_parameters']['players']; $i++) {
+        for ($i = 1; $i <= $geme_params['players']; $i++) {
             $this->addSimpleCeo($game->id, $i, 'Test Company ' . $i, $i, true);
             $this->addCeo($game->id, $i, 'Test Company ' . $i, $i, true);
         }
@@ -417,7 +417,7 @@ class Sherpa
     {
         $game = Game::findOrFail($game_id);
         if ($game->ceos()->count() >= $game->players) {
-            throw new \Exception("No hay slots disponibles en esta partida");
+            throw new \Exception("Ya estan todos los jugadores asignados a esta partida.");
         }
 
         $game->ceos()->attach($user_id, [
