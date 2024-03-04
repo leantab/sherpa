@@ -287,6 +287,10 @@ class Core
                 $this->global['id_index_industry'] += $this->company[$ceo->id]['id_index'];
             }
 
+            if ($this->global['id_index_industry'] == 0) {
+                $this->global['id_index_industry'] = 1;
+            }
+
             // loop 4
             $arr_corrected_prices = [];
             foreach ($this->game->ceos as $ceo) {
