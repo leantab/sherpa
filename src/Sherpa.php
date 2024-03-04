@@ -254,48 +254,59 @@ class Sherpa
     {
         $schema = $this->getSchema($version);
 
-        $schema['game_parameters']['name'] = 'Test Game ' . rand(1, 1000);
-        $schema['game_parameters']['type'] = 'scenario';
-        $schema['game_parameters']['players'] = 8;
-        $schema['game_parameters']['industry'] = 'cars';
-        $schema['game_parameters']['scenario'] = 'argentina_crisis_2001';
-        $schema['game_parameters']['proficiency_rate'] = 'proficiency_junior';
-        $schema['game_parameters']['company_type'] = 'company_type_corporate';
-        $schema['game_parameters']['goverment_side'] = 'goverment_side_liberal';
-        $schema['game_parameters']['country'] = 'arg';
-        $schema['game_parameters']["stages"] = 4;
-        $schema['game_parameters']["country_income_level"] = "country_income_low_income";
-        $schema['game_parameters']["industry_status"] = "industry_status_constant_development";
-        $schema['game_parameters']["accounting_period"] = 6;
-        $schema['game_parameters']["positive_random_events"] = "positive_random_events_few";
-        $schema['game_parameters']["risk_limit_min"] = 20;
-        $schema['game_parameters']["risk_limit_max"] = 80;
-        $schema['game_parameters']["initial_eq"]  = rand(-10, 10);
-        $schema['game_parameters']["profit_tax"] = rand(1, 60);
-        $schema['game_parameters']["vat_tax"] = rand(1, 28);
-        $schema['game_parameters']["labor_tax"] = 2;
-        $schema['game_parameters']["easy_business_score"] = "easy_business_full";
-        $schema['game_parameters']["compensation_cost"] = rand(1, 5);
-        $schema['game_parameters']["interest_rate"] = rand(1, 30);
-        $schema['game_parameters']["financial_cost"] = 3;
+        $gameParams = [
+            'name' => 'Test Game ' . rand(1, 10000),
+            'type' => 'scenario',
+            'players' => 8,
+            'industry' => 'cars',
+            'scenario' => 'argentina_crisis_2001',
+            'proficiency_rate' => 'proficiency_junior',
+            'company_type' => 'company_type_start_up',
+        ];
 
-        $geme_params = $schema['game_parameters'];
+        $geme_params = $gameParams;
+
+        // $schema['game_parameters']['name'] = 'Test Game ' . rand(1, 1000);
+        // $schema['game_parameters']['type'] = 'scenario';
+        // $schema['game_parameters']['players'] = 8;
+        // $schema['game_parameters']['industry'] = 'cars';
+        // $schema['game_parameters']['scenario'] = 'argentina_crisis_2001';
+        // $schema['game_parameters']['proficiency_rate'] = 'proficiency_junior';
+        // $schema['game_parameters']['company_type'] = 'company_type_corporate';
+        // $schema['game_parameters']['goverment_side'] = 'goverment_side_liberal';
+        // $schema['game_parameters']['country'] = 'arg';
+        // $schema['game_parameters']["stages"] = 4;
+        // $schema['game_parameters']["country_income_level"] = "country_income_low_income";
+        // $schema['game_parameters']["industry_status"] = "industry_status_constant_development";
+        // $schema['game_parameters']["accounting_period"] = 6;
+        // $schema['game_parameters']["positive_random_events"] = "positive_random_events_few";
+        // $schema['game_parameters']["risk_limit_min"] = 20;
+        // $schema['game_parameters']["risk_limit_max"] = 80;
+        // $schema['game_parameters']["initial_eq"]  = rand(-10, 10);
+        // $schema['game_parameters']["profit_tax"] = rand(1, 60);
+        // $schema['game_parameters']["vat_tax"] = rand(1, 28);
+        // $schema['game_parameters']["labor_tax"] = 2;
+        // $schema['game_parameters']["easy_business_score"] = "easy_business_full";
+        // $schema['game_parameters']["compensation_cost"] = rand(1, 5);
+        // $schema['game_parameters']["interest_rate"] = rand(1, 30);
+        // $schema['game_parameters']["financial_cost"] = 3;
+
+        // $geme_params = $schema['game_parameters'];
 
         $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/scenarios/argentina_crisis_2001.json'), true);
 
-        //foreach ($scenarioGameParameters['game_parameters'] as $key => $value) {
-        //$geme_params[$key] = $value;
-        //}
+        foreach ($scenarioGameParameters['game_parameters'] as $key => $value) {
+            $geme_params[$key] = $value;
+        }
 
         $game_data = [
             'version' => $version,
             'status_id' => 1,
             'segment_id' => 1,
             'game_parameters' => $geme_params,
+            'goverment_parameters' => $scenarioGameParameters['goverment_parameters'],
             'creator_id' => 1
         ];
-
-        $game_data['goverment_parameters'] = $scenarioGameParameters['goverment_parameters'];
 
         $game = Game::create($game_data);
 
@@ -328,31 +339,29 @@ class Sherpa
 
     public function generateRandomDesitions(int $game_id, int $user_id)
     {
+        // This works for V2
         $game = Game::findOrFail($game_id);
         $ceo = $game->ceos()->where('user_id', $user_id)->first();
 
         $schema = $this->getCeoVariables($game_id, $user_id);
+        $total_funds = $schema['total_funds']['value'];
 
         $randomFactor = rand(1, 5);
         $financialRand = (14 - $randomFactor) / 100;
         $marketingRand = (22 - $randomFactor) / 100;
 
-        $desitions = [];
-        foreach ($schema as $key => $value) {
-            if ($value['type'] == 'options') {
-                $desitions[$key] = $value['options'][array_rand($value['options'])];
-            } elseif ($value['type'] == 'integer' || $value['type'] == 'float') {
-                if ($key == 'corp_debt' || $key == 'ibk' || $key == 'new_debt') {
-                    $desitions[$key] = round($value['max'] * $financialRand);
-                } elseif ($key == 'design' || $key == 'survey' || $key == 'mkt') {
-                    $desitions[$key] = round($value['max'] * $marketingRand);
-                } else {
-                    if (array_key_exists('min', $value) && array_key_exists('max', $value)) {
-                        $desitions[$key] = rand($value['min'], $value['max']);
-                    }
-                }
-            }
-        }
+        $desitions = [
+            'design' => round($total_funds * $marketingRand),
+            'survey' => round($total_funds * $marketingRand),
+            'mkt' => round($total_funds * $marketingRand),
+            'new_debt' => rand(-2000, 2000),
+            'ibk' => round($total_funds * $financialRand),
+            'price' => rand($schema['price']['min'], $schema['price']['max']),
+            'production' => rand(40, 80),
+            'quality_control' => rand($schema['quality_control']['options']),
+            'recycle' => rand($schema['recycle']['options']),
+            'safety' => rand($schema['safety']['options'])
+        ];
 
         $ceoParameters = $ceo->pivot->ceo_parameters;
         $ceoParameters['stage_' . $game->current_stage] = $desitions;

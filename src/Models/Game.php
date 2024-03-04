@@ -54,6 +54,19 @@ class Game extends Model
         return $this->belongsToMany(User::class, 'game_user', 'game_id', 'user_id')
             ->using('\Leantab\Sherpa\Models\GameUser')
             ->withPivot(['company_name', 'avatar', 'bankrupt', 'dismissed', 'ceo_parameters', 'results', 'created_at', 'is_funded']);
+            /* ->withPivot([
+                'company_name', 
+                'avatar', 
+                'bankrupt',
+                'dismissed', 
+                'ceo_parameters', 
+                'results', 
+                'created_at', 
+                'is_funded',
+                'final_position',
+                'is_winner',
+                'is_bot'
+            ]);*/
     }
 
     public function getPlayersAttribute()
