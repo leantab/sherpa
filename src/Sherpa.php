@@ -349,6 +349,23 @@ class Sherpa
         $randomFactor = rand(1, 5);
         $financialRand = (14 - $randomFactor) / 100;
         $marketingRand = (22 - $randomFactor) / 100;
+        
+        $qualityControl = [
+            "qc_start_up",
+            "qc_large_enterprise",
+            "qc_global_company"
+        ];
+        $recycle = [
+            "recycle_global_west_standards",
+            "recycle_latin_american_standards",
+            "recycle_asia_standards",
+            "recycle_sub_saharian_standards"
+        ];
+        $safety = [
+            "safety_1",
+            "safety_2",
+            "safety_3"
+        ];
 
         $desitions = [
             'design' => round($total_funds * $marketingRand),
@@ -358,22 +375,9 @@ class Sherpa
             'ibk' => round($total_funds * $financialRand),
             'price' => rand($schema['price']['min'], $schema['price']['max']),
             'production' => rand(40, 80),
-            'quality_control' => array_rand( [
-                "qc_start_up",
-                "qc_large_enterprise",
-                "qc_global_company"
-            ]),
-            'recycle' => array_rand([
-                "recycle_global_west_standards",
-                "recycle_latin_american_standards",
-                "recycle_asia_standards",
-                "recycle_sub_saharian_standards"
-            ]),
-            'safety' => array_rand([
-                "safety_1",
-                "safety_2",
-                "safety_3"
-            ])
+            'quality_control' => $qualityControl[array_rand($qualityControl)],
+            'recycle' => $recycle[array_rand($recycle)],
+            'safety' => $safety[array_rand($safety)]
         ];
 
         $ceoParameters = $ceo->pivot->ceo_parameters;
