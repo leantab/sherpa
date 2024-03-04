@@ -358,9 +358,9 @@ class Sherpa
             'ibk' => round($total_funds * $financialRand),
             'price' => rand($schema['price']['min'], $schema['price']['max']),
             'production' => rand(40, 80),
-            'quality_control' => rand($schema['quality_control']['options']),
-            'recycle' => rand($schema['recycle']['options']),
-            'safety' => rand($schema['safety']['options'])
+            'quality_control' => array_rand($schema['quality_control']['options']),
+            'recycle' => array_rand($schema['recycle']['options']),
+            'safety' => array_rand($schema['safety']['options'])
         ];
 
         $ceoParameters = $ceo->pivot->ceo_parameters;
