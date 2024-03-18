@@ -1,34 +1,34 @@
 {
   "proficiency_trainee" : {
-    "out_zone" : 30,
+    "out_zone" : 15,
     "opening_cash_min" : 80,
     "opening_cash_max" : 100,
     "price_t0_min" : 500,
     "price_t0_max" : 700
   },
   "proficiency_junior": {
-    "out_zone": 35,
+    "out_zone": 20,
     "opening_cash_min": 60,
     "opening_cash_max": 80,
     "price_t0_min": 401,
     "price_t0_max": 501
   },
   "proficiency_semi_senior": {
-    "out_zone": 50,
+    "out_zone": 30,
     "opening_cash_min": 40,
     "opening_cash_max": 60,
     "price_t0_min": 350,
     "price_t0_max": 400
   },
   "proficiency_senior": {
-    "out_zone": 65,
+    "out_zone": 40,
     "opening_cash_min": 20,
     "opening_cash_max": 40,
     "price_t0_min": 300,
     "price_t0_max": 350
   },
   "proficiency_big_company_ceo": {
-    "out_zone": 75,
+    "out_zone": 50,
     "opening_cash_min": 10,
     "opening_cash_max": 20,
     "price_t0_min": 200,

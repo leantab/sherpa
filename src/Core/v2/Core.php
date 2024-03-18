@@ -403,7 +403,7 @@ class Core
                 $this->company[$ceo->id]['gross_profit'] = $this->company[$ceo->id]['total_revenue'] - $this->company[$ceo->id]['cost_sold_goods'];
                 $this->company[$ceo->id]['demand_surplus'] = ((($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['offered_u']) - 1) * 100);
                 $this->company[$ceo->id]['offer_precision'] = (100 - abs($this->company[$ceo->id]['demand_surplus']));
-            }
+             }
 
             $this->global['revenue_employees'] = $this->global['total_revenue_industry'] / $this->global['employees_industry'];
             $this->global['sold_u_employees'] = $this->global['sold_u_industry'] / $this->global['employees_industry'];
@@ -705,7 +705,8 @@ class Core
                     if ($this->company[$ceo->id]['total_funds_ratio'] < $this->game->game_parameters['out_zone']) {
                         $this->company[$ceo->id]['dismissed'] = true;
                         $this->company[$ceo->id]['status_company'] = 'DISMISSED_CEO';
-                    } else if ($this->company[$ceo->id]['total_funds'] < $this->company[$ceo->id]['min_funds']) {
+                    // } else if ($this->company[$ceo->id]['total_funds'] < $this->company[$ceo->id]['min_funds']) {
+                    } else if ($this->company[$ceo->id]['total_funds'] < $this->company[$ceo->id]['depreciation']) {
                         $this->company[$ceo->id]['bankrupt'] = true;
                         $this->company[$ceo->id]['status_company'] = 'BANKRUPT';
                     }

@@ -1,26 +1,26 @@
 {
   "easy_business_none": {
-    "min": 23,
-    "max": 66
+    "min": 1,
+    "max": 40
   },
   "easy_business_few": {
-    "min": 19,
-    "max": 58
+    "min": 35,
+    "max": 70
   },
   "easy_business_medium": {
-    "min": 17,
-    "max": 48
+    "min": 65,
+    "max": 80
   },
   "easy_business_full": {
-    "min": 0,
-    "max": 10
+    "min": 80,
+    "max": 100
   },
   "easy_business_high": {
-    "min": 0,
-    "max": 10
+    "min": 80,
+    "max": 100
   },
   "easy_business_random": {
-    "min": 0,
-    "max": 70 
+    "min": 10,
+    "max": 70
   }
 }
