@@ -238,6 +238,10 @@ class Sherpa
             if ($res->parameters['type'] == 'scenario') {
                 $game_data['goverment_parameters'] = $scenarioGameParameters['goverment_parameters'];
             }
+            
+            if ($res->parameters['type'] == 'country') {
+                $game_data['goverment_parameters'] = $this->getGovermentParametersForCountry($res->parameters, $game_parameters['country'], $game_parameters['stages']);
+            }
 
 
             $game = Game::create($game_data);
@@ -688,6 +692,17 @@ class Sherpa
     {
         $game = Game::findOrFail($game_id);
         return $game->results;
+    }
+
+    public function getGovermentParametersForCountry($game_parameters, $country, $stages): array
+    {
+        $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $game_parameters['version'] . '/countries/' . $country . '.json'), true);
+        $return = [];
+        for ($i = 0; $i <= $stages; $i++) {
+            $return['stage_' . $i] = $countryGameParameters['goverment_parameters'];
+        }
+        
+        return $return;
     }
 
     /*
