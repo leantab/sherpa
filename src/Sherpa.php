@@ -214,7 +214,8 @@ class Sherpa
                 $res->parameters = array_merge($res->parameters, $scenarioGameParameters['game_parameters']);
             } elseif ($res->parameters['type'] == 'country') {
                 // Merge variables de pais
-                $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/countries/' . $game_parameters['country'] . '.json'), true);
+                // $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/countries/' . $game_parameters['country'] . '.json'), true);
+                $countryParams = $this->parseCountryData($res->parameters, $game_parameters['country']);
                 $res->parameters = array_merge($res->parameters, $countryGameParameters['game_parameters']);
             } else {
                 // Merge variables de tipo de gobierno
@@ -240,6 +241,7 @@ class Sherpa
             }
             
             if ($res->parameters['type'] == 'country') {
+                // $game_data['goverment_parameters'] = $this->getGovermentParametersForCountry($res->parameters, $game_parameters['country'], $game_parameters['stages']);
                 $game_data['goverment_parameters'] = $this->getGovermentParametersForCountry($res->parameters, $game_parameters['country'], $game_parameters['stages']);
             }
 
@@ -699,7 +701,47 @@ class Sherpa
         $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $game_parameters['version'] . '/countries/' . $country . '.json'), true);
         $return = [];
         for ($i = 0; $i <= $stages; $i++) {
-            $return['stage_' . $i] = $countryGameParameters['goverment_parameters'];
+            $return['stage_' . $i] = $this->parseGovernmentData($countryGameParameters['goverment_parameters']);
+        }
+        
+        return $return;
+    }
+
+    public function parseCountryData(array $game_parameters, string $country): array
+    {
+        $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $game_parameters['version'] . '/countries/' . $country . '.json'), true);
+        $return = [];
+        foreach ($countryGameParameters['game_parameters'] as $key => $value) {
+            if (is_array($value)) {
+                if (array_key_exists('relation', $value)) {
+                    $return[$key] = rand(
+                        $return[$value['relation']] * $value['min'],
+                        $return[$value['relation']] * $value['max']
+                    );
+                } else {
+                    $return[$key] = rand($value['min'], $value['max']);
+                }
+            }
+            $return[$key] = $value;
+        }
+
+        return $return;
+    }
+    
+    public function parseGovernmentData(array $goverment_parameters): array
+    {
+        foreach ($goverment_parameters as $key => $value) {
+            if (is_array($value)) {
+                if (array_key_exists('relation', $value)) {
+                    $return[$key] = rand(
+                        $return[$value['relation']] * $value['min'],
+                        $return[$value['relation']] * $value['max']
+                    );
+                } else {
+                    $return[$key] = rand($value['min'], $value['max']);
+                }
+            }
+            $return[$key] = $value;
         }
         
         return $return;

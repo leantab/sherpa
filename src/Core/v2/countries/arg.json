@@ -9,7 +9,12 @@
     "easy_business_score": "easy_business_medium",
     "compensation_cost": 2,
     "interest_rate": 105,
-    "financial_cost": 2,
+    "financial_cost": {
+      "type": "random",
+      "relation": "interest_rate",
+      "min": 0.1,
+      "max": 0.5
+    },
     "pib": 19691,
     "internal_credit": 15.98,
     "scorePayingTaxes": 49.3,
@@ -17,10 +22,27 @@
     "otherTaxes": 72.8
   },
   "goverment_parameters": {
-    "added_demand_variation": 8,
-    "compensation_cost": 1,
-    "financial_cost": 2,
-    "interest_rate": 105,
+    "added_demand_variation": {
+      "type": "random",
+      "min": -10,
+      "max": 10
+    },
+    "compensation_cost": {
+      "type": "random",
+      "min": 1,
+      "max": 5
+    },
+    "interest_rate": {
+      "type": "random",
+      "min": 95,
+      "max": 110
+    },
+    "financial_cost": {
+      "type": "random",
+      "relation": "interest_rate",
+      "min": 0.1,
+      "max": 0.5
+    },
     "profit_tax": 35,
     "vat_tax": 21,
     "labor_tax": 29.3
