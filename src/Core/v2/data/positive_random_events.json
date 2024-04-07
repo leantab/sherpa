@@ -1,5 +1,5 @@
 {
-  "positive_random_events_none": 0,
+  "positive_random_events_none": 0.1,
   "positive_random_events_few": 25,
   "positive_random_events_medium": 50,
   "positive_random_events_full": 75,

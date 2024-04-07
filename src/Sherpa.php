@@ -216,7 +216,7 @@ class Sherpa
                 // Merge variables de pais
                 // $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/countries/' . $game_parameters['country'] . '.json'), true);
                 $countryParams = $this->parseCountryData($res->parameters, $game_parameters['country']);
-                $res->parameters = array_merge($res->parameters, $countryGameParameters['game_parameters']);
+                $res->parameters = array_merge($res->parameters, $countryParams['game_parameters']);
             } else {
                 // Merge variables de tipo de gobierno
                 if ($res->parameters['goverment_side'] != 'custom') {
@@ -311,6 +311,57 @@ class Sherpa
             'segment_id' => 1,
             'game_parameters' => $geme_params,
             'goverment_parameters' => $scenarioGameParameters['goverment_parameters'],
+            'creator_id' => 1
+        ];
+
+        $game = Game::create($game_data);
+
+        for ($i = 1; $i <= $geme_params['players']; $i++) {
+            $this->addSimpleCeo($game->id, $i, 'Test Company ' . $i, $i, true);
+            $this->addCeo($game->id, $i, 'Test Company ' . $i, $i, true);
+        }
+
+        $service = new ProcessStageService($game);
+        $service->processStage();
+
+        return $game;
+    }
+    
+    public function createTestGameConqueror($version)
+    {
+        $schema = $this->getSchema($version);
+
+        $gameParams = [
+            'name' => 'Test Conqueror Game ' . rand(1, 10000),
+            'type' => 'country',
+            'players' => 8,
+            "stages" => 4,
+            'industry' => 'phones',
+            'country' => 'arg',
+            'proficiency_rate' => 'proficiency_junior',
+            'company_type' => 'company_type_start_up',
+            "positive_random_events" => "positive_random_events_none",
+            "industry_status" => "industry_status_war_prices",
+            "accounting_period" => 3,
+            "industry_status" => "industry_status_war_prices",
+            "positive_random_events" => "positive_random_events_none",
+            "risk_limit_min" => 10,
+            "risk_limit_max" => 75,
+        ];
+
+        $geme_params = $gameParams;
+
+        $countryParams = $this->parseCountryData($geme_params, $geme_params['country']);
+        $geme_params = array_merge($geme_params, $countryParams['game_parameters']);
+
+        $goverment_parameters = $this->getGovermentParametersForCountry($geme_params, $geme_params['country'], $geme_params['stages']);
+
+        $game_data = [
+            'version' => $version,
+            'status_id' => 1,
+            'segment_id' => 1,
+            'game_parameters' => $geme_params,
+            'goverment_parameters' => $goverment_parameters,
             'creator_id' => 1
         ];
 
@@ -730,6 +781,7 @@ class Sherpa
     
     public function parseGovernmentData(array $goverment_parameters): array
     {
+        $return = [];
         foreach ($goverment_parameters as $key => $value) {
             if (is_array($value)) {
                 if (array_key_exists('relation', $value)) {
