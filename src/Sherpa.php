@@ -215,7 +215,7 @@ class Sherpa
             } elseif ($res->parameters['type'] == 'country') {
                 // Merge variables de pais
                 // $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/countries/' . $game_parameters['country'] . '.json'), true);
-                $countryParams = $this->parseCountryData($res->parameters, $game_parameters['country']);
+                $countryParams = $this->parseCountryData($version, $game_parameters['country']);
                 $res->parameters = array_merge($res->parameters, $countryParams['game_parameters']);
             } else {
                 // Merge variables de tipo de gobierno
@@ -332,6 +332,7 @@ class Sherpa
         $schema = $this->getSchema($version);
 
         $gameParams = [
+            'version' => $version,
             'name' => 'Test Conqueror Game ' . rand(1, 10000),
             'type' => 'country',
             'players' => 8,
@@ -351,7 +352,7 @@ class Sherpa
 
         $geme_params = $gameParams;
 
-        $countryParams = $this->parseCountryData($geme_params, $geme_params['country']);
+        $countryParams = $this->parseCountryData($version, $geme_params['country']);
         $geme_params = array_merge($geme_params, $countryParams['game_parameters']);
 
         $goverment_parameters = $this->getGovermentParametersForCountry($geme_params, $geme_params['country'], $geme_params['stages']);
@@ -758,9 +759,9 @@ class Sherpa
         return $return;
     }
 
-    public function parseCountryData(array $game_parameters, string $country): array
+    public function parseCountryData(string $version, string $country): array
     {
-        $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $game_parameters['version'] . '/countries/' . $country . '.json'), true);
+        $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/countries/' . $country . '.json'), true);
         $return = [];
         foreach ($countryGameParameters['game_parameters'] as $key => $value) {
             if (is_array($value)) {

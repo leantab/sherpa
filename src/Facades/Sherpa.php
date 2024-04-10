@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
  * @method static array|Games[] getGames($user_id, $segment_id)
  * @method static Game createGame($version, $game_parameters, $creator_id, $segment_id)
  * @method static Game createTestGameScenario()
+ * @method static Game createTestGameConqueror()
  * @method static bool addGoverment($game_id, $user_id)
  * @method static bool addCeo($game_id, $user_id, $company_name, $avatar, $is_funded = false)
  * @method static bool addSimpleCeo($game_id, $user_id, $company_name, $avatar)
