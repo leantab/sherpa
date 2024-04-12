@@ -209,20 +209,25 @@ class Sherpa
         if ($res->status === true) {
 
             if ($res->parameters['type'] == 'scenario') {
+
                 // Merge variables de escenario
                 $scenarioGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/scenarios/' . $game_parameters['scenario'] . '.json'), true);
                 $res->parameters = array_merge($res->parameters, $scenarioGameParameters['game_parameters']);
+
             } elseif ($res->parameters['type'] == 'country') {
+
                 // Merge variables de pais
-                // $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/countries/' . $game_parameters['country'] . '.json'), true);
                 $countryParams = $this->parseCountryData($version, $game_parameters['country']);
-                $res->parameters = array_merge($res->parameters, $countryParams['game_parameters']);
+                $res->parameters = array_merge($res->parameters, $countryParams);
+
             } else {
+
                 // Merge variables de tipo de gobierno
                 if ($res->parameters['goverment_side'] != 'custom') {
                     $govermentSideGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $version . '/data/goverment_sides.json'), true);
                     $res->parameters = array_merge($res->parameters, $govermentSideGameParameters[$res->parameters['goverment_side']]);
                 }
+                
             }
 
             $industryVars = $this->getIndustryData($version, $res->parameters['industry']);
@@ -241,8 +246,7 @@ class Sherpa
             }
             
             if ($res->parameters['type'] == 'country') {
-                // $game_data['goverment_parameters'] = $this->getGovermentParametersForCountry($res->parameters, $game_parameters['country'], $game_parameters['stages']);
-                $game_data['goverment_parameters'] = $this->getGovermentParametersForCountry($res->parameters, $game_parameters['country'], $game_parameters['stages']);
+                $game_data['goverment_parameters'] = $this->getGovermentParametersForCountry($res->parameters);
             }
 
 
@@ -261,6 +265,7 @@ class Sherpa
         $schema = $this->getSchema($version);
 
         $gameParams = [
+            'version' => $version,
             'name' => 'Test Game ' . rand(1, 10000),
             'type' => 'scenario',
             'players' => 8,
@@ -352,10 +357,10 @@ class Sherpa
 
         $geme_params = $gameParams;
 
-        $countryParams = $this->parseCountryData($version, $geme_params['country']);
-        $geme_params = array_merge($geme_params, $countryParams['game_parameters']);
+        $countryGameParams = $this->parseCountryData($version, $geme_params['country']);
+        $geme_params = array_merge($geme_params, $countryGameParams);
 
-        $goverment_parameters = $this->getGovermentParametersForCountry($geme_params, $geme_params['country'], $geme_params['stages']);
+        $goverment_parameters = $this->getGovermentParametersForCountry($geme_params);
 
         $game_data = [
             'version' => $version,
@@ -748,11 +753,11 @@ class Sherpa
         return $game->results;
     }
 
-    public function getGovermentParametersForCountry($game_parameters, $country, $stages): array
+    public function getGovermentParametersForCountry(array $gameParams): array
     {
-        $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $game_parameters['version'] . '/countries/' . $country . '.json'), true);
+        $countryGameParameters = json_decode(file_get_contents(__DIR__ . '/Core/' . $gameParams['version'] . '/countries/' . $gameParams['country'] . '.json'), true);
         $return = [];
-        for ($i = 0; $i <= $stages; $i++) {
+        for ($i = 0; $i <= $gameParams['stages']; $i++) {
             $return['stage_' . $i] = $this->parseGovernmentData($countryGameParameters['goverment_parameters']);
         }
         
