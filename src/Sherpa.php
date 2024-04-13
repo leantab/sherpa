@@ -771,14 +771,20 @@ class Sherpa
         foreach ($countryGameParameters['game_parameters'] as $key => $value) {
             if (is_array($value)) {
                 if (array_key_exists('relation', $value)) {
+                    $relation = $value['relation'];
+                    $relValue = $return[$relation];
                     $return[$key] = rand(
-                        $return[$value['relation']] * $value['min'],
-                        $return[$value['relation']] * $value['max']
+                        $relValue * $value['min'],
+                        $relValue * $value['max']
                     );
-                } else {
+                    continue;
+
+                } elseif (array_key_exists('min', $value) && array_key_exists('max', $value)) {
                     $return[$key] = rand($value['min'], $value['max']);
+                    continue;
                 }
             }
+            
             $return[$key] = $value;
         }
 
