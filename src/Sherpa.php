@@ -207,6 +207,7 @@ class Sherpa
         $res = $this->validateJsonData($schema['game_parameters'], $game_parameters);
 
         if ($res->status === true) {
+            $res->parameters['version'] = $version;
 
             if ($res->parameters['type'] == 'scenario') {
 
