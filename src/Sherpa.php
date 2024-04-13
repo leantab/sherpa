@@ -784,7 +784,7 @@ class Sherpa
                     continue;
                 }
             }
-            
+
             $return[$key] = $value;
         }
 
@@ -801,8 +801,10 @@ class Sherpa
                         $return[$value['relation']] * $value['min'],
                         $return[$value['relation']] * $value['max']
                     );
+                    continue;
                 } else {
                     $return[$key] = rand($value['min'], $value['max']);
+                    continue;
                 }
             }
             $return[$key] = $value;
