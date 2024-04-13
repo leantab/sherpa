@@ -1,0 +1,75 @@
+{
+  "game_parameters": {
+    "stages": 6,
+    "country_income_level": "country_income_upper_middle_income",
+    "industry_status": "industry_status_demanding_customers",
+    "accounting_period": 6,
+    "positive_random_events": "positive_random_events_full",
+    "risk_limit_min": 10,
+    "risk_limit_max": 55,
+    "initial_eq": 0,
+    "profit_tax": 30,
+    "vat_tax": 18,
+    "labor_tax": 15,
+    "easy_business_score": "easy_business_few",
+    "compensation_cost": 2,
+    "interest_rate": 20,
+    "financial_cost": 10
+  },
+  "goverment_parameters": {
+    "stage_1": {
+      "added_demand_variation": 1,
+      "interest_rate": 20,
+      "financial_cost": 5,
+      "profit_tax": 30,
+      "vat_tax": 20,
+      "labor_tax": 10,
+      "compensation_cost": 1
+    },
+    "stage_2": {
+      "added_demand_variation": 1,
+      "interest_rate": 20,
+      "financial_cost": 5,
+      "profit_tax": 28,
+      "vat_tax": 18,
+      "labor_tax": 10,
+      "compensation_cost": 1
+    },
+    "stage_3": {
+      "added_demand_variation": 0,
+      "interest_rate": 22,
+      "financial_cost": 5,
+      "profit_tax": 30,
+      "vat_tax": 16,
+      "labor_tax": 10,
+      "compensation_cost": 1
+    },
+    "stage_4": {
+      "added_demand_variation": 1,
+      "interest_rate": 24,
+      "financial_cost": 5,
+      "profit_tax": 29,
+      "vat_tax": 14,
+      "labor_tax": 10,
+      "compensation_cost": 1
+    },
+    "stage_5": {
+      "added_demand_variation": 2,
+      "interest_rate": 20,
+      "financial_cost": 5,
+      "profit_tax": 30,
+      "vat_tax": 12,
+      "labor_tax": 10,
+      "compensation_cost": 1
+    },
+    "stage_6": {
+      "added_demand_variation": 2,
+      "interest_rate": 18,
+      "financial_cost": 5,
+      "profit_tax": 32,
+      "vat_tax": 12,
+      "labor_tax": 10,
+      "compensation_cost": 1
+    }
+  }
+}

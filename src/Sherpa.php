@@ -340,7 +340,7 @@ class Sherpa
             'version' => $version,
             'name' => 'Test Conqueror Game ' . rand(1, 10000),
             'type' => 'country',
-            'players' => 8,
+            'players' => 6,
             "stages" => 4,
             'industry' => 'phones',
             'country' => 'arg',
@@ -353,6 +353,10 @@ class Sherpa
             "positive_random_events" => "positive_random_events_none",
             "risk_limit_min" => 10,
             "risk_limit_max" => 75,
+            "initial_eq" => 2,
+            "compensation_cost" => 1,
+            "step" => 5,
+            "goverment_side" => "goverment_side_liberal",
         ];
 
         $geme_params = $gameParams;
