@@ -424,11 +424,9 @@ class Core
                 $this->global['inventories_sum'] += $this->company[$ceo->id]['inventories'];
 
                 $this->company[$ceo->id]['loan_ratio'] = $this->game->game_parameters['loan_ratio'];
-                if ($this->stage == 0) {
-                    $this->company[$ceo->id]['top_loan'] = $this->company[$ceo->id]['loan_ratio'] * ($this->global['total_revenue_industry'] / $this->game->game_parameters['players']);
-                } else {
-                    $this->company[$ceo->id]['top_loan'] = $this->company[$ceo->id]['loan_ratio'] * ($this->game->results['stage_0']['total_revenue_industry'] / $this->game->game_parameters['players']);
-                }
+                
+                $this->company[$ceo->id]['top_loan'] = ($this->company[$ceo->id]['loan_ratio'] * ($this->global['total_revenue_industry'] / $this->num_ceos)) / 100;
+                
             }
 
             $this->global['inventories_industry'] = ($this->global['final_stock_industry'] == 0) ? '-' : $this->global['average_cbu'] / $this->global['final_stock_industry'];

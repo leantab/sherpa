@@ -177,7 +177,6 @@ class Sherpa
                 'scenario' => $game->game_parameters['scenario'] ?? '',
                 'active' => ($game->status_id == 2) ? true : false,
                 'status_id' => $game->status_id,
-                'status' => $game->status->name
             ];
         }
         $ceos = $user->ceo_games()->where('segment_id', $segment_id)->latest()->get();
@@ -196,7 +195,6 @@ class Sherpa
                 'scenario' => $game->game_parameters['scenario'] ?? '',
                 'active' => ($game->status_id == 2) ? true : false,
                 'status_id' => $game->status_id,
-                'status' => $game->status->name
             ];
         }
 

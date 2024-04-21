@@ -34,8 +34,8 @@
     },
     "interest_rate": {
       "type": "random",
-      "min": 95,
-      "max": 110
+      "min": 10.1,
+      "max": 15.6
     },
     "financial_cost": {
       "type": "random",
