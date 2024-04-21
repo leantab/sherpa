@@ -163,36 +163,40 @@ class Sherpa
         $user = User::findOrFail($user_id);
         $govs = $user->goverment_games()->where('segment_id', $segment_id)->latest()->get();
 
-        foreach ($govs as $item) {
+        foreach ($govs as $game) {
             $gamees[] = [
                 'player_type' => 'goverment',
-                'id' => $item->id,
-                'name' => $item->name,
-                'current_stage' => $item->current_stage,
-                'type' => $item->game_parameters['type'] ?? '',
-                'players' => $item->game_parameters['players'] ?? '',
-                'industry' => $item->game_parameters['industry'] ?? '',
-                'stages' => $item->game_parameters['stages'] ?? '',
-                'country' => $item->game_parameters['country'] ?? '',
-                'scenario' => $item->game_parameters['scenario'] ?? '',
-                'active' => ($item->status_id == 2) ? true : false
+                'id' => $game->id,
+                'name' => $game->name,
+                'current_stage' => $game->current_stage,
+                'type' => $game->game_parameters['type'] ?? '',
+                'players' => $game->game_parameters['players'] ?? '',
+                'industry' => $game->game_parameters['industry'] ?? '',
+                'stages' => $game->game_parameters['stages'] ?? '',
+                'country' => $game->game_parameters['country'] ?? '',
+                'scenario' => $game->game_parameters['scenario'] ?? '',
+                'active' => ($game->status_id == 2) ? true : false,
+                'status_id' => $game->status_id,
+                'status' => $game->status->name
             ];
         }
         $ceos = $user->ceo_games()->where('segment_id', $segment_id)->latest()->get();
-        foreach ($ceos as $item) {
+        foreach ($ceos as $game) {
             $gamees[] = [
                 'player_type' => 'ceo',
-                'id' => $item->id,
-                'name' => $item->name,
-                'current_stage' => $item->current_stage,
-                'type' => $item->game_parameters['type'] ?? '',
-                'players' => $item->game_parameters['players'] ?? '',
-                'industry' => $item->game_parameters['industry'] ?? '',
-                'players' => $item->game_parameters['players'] ?? '',
-                'stages' => $item->game_parameters['stages'] ?? '',
-                'country' => $item->game_parameters['country'] ?? '',
-                'scenario' => $item->game_parameters['scenario'] ?? '',
-                'active' => ($item->status_id == 2) ? true : false
+                'id' => $game->id,
+                'name' => $game->name,
+                'current_stage' => $game->current_stage,
+                'type' => $game->game_parameters['type'] ?? '',
+                'players' => $game->game_parameters['players'] ?? '',
+                'industry' => $game->game_parameters['industry'] ?? '',
+                'players' => $game->game_parameters['players'] ?? '',
+                'stages' => $game->game_parameters['stages'] ?? '',
+                'country' => $game->game_parameters['country'] ?? '',
+                'scenario' => $game->game_parameters['scenario'] ?? '',
+                'active' => ($game->status_id == 2) ? true : false,
+                'status_id' => $game->status_id,
+                'status' => $game->status->name
             ];
         }
 

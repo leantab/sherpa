@@ -43,8 +43,8 @@
       "min": 0.1,
       "max": 0.5
     },
-    "profit_tax": 35,
-    "vat_tax": 21,
-    "labor_tax": 29.3
+    "profit_tax": 22.4,
+    "vat_tax": 17,
+    "labor_tax": 39.4
   }
 }
