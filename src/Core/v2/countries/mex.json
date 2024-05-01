@@ -1,0 +1,51 @@
+{
+  "game_parameters": {
+    "country_income_level": "country_income_upper_middle_income",
+    "salary": 188,
+    "loan_ratio": 34.6,
+    "profit_tax": 26.9,
+    "vat_tax": 16,
+    "labor_tax": 25.6,
+    "easy_business_score": "easy_business_medium",
+    "compensation_cost": 2,
+    "interest_rate": 7,
+    "financial_cost": {
+      "type": "random",
+      "relation": "interest_rate",
+      "min": 0.1,
+      "max": 0.5
+    },
+    "pib": 17852,
+    "internal_credit": 15.98,
+    "scorePayingTaxes": 66.5,
+    "totalTaxAndContributionRate": 53.4,
+    "otherTaxes": 0.9
+  },
+  "goverment_parameters": {
+    "added_demand_variation": {
+      "type": "random",
+      "min": -10,
+      "max": 10
+    },
+    "compensation_cost": {
+      "type": "random",
+      "min": 1,
+      "max": 5
+    },
+    "interest_rate": {
+      "type": "random",
+      "min": 6.1,
+      "max": 8.1
+    },
+    "financial_cost": {
+      "type": "random",
+      "relation": "interest_rate",
+      "min": 0.1,
+      "max": 0.5
+    },
+    "profit_tax": 26.9,
+    "vat_tax": 16,
+    "labor_tax": 25.6
+  }
+  
+}
