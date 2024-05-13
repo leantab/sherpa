@@ -136,7 +136,7 @@ class Core
                     $this->company[$ceo->id]['cbu'] = round(
                         (
                             ($this->global['reference_cost'] * pow(8, 7)) /
-                            ($this->company[$ceo->id]['ppe'] * ($this->company[$ceo->id]['production'] / 100)) * (1 - ($this->company[$ceo->id]['event_prob'] / 100) / 2)
+                            ($this->company[$ceo->id]['ppe'] * ($this->company[$ceo->id]['production'] / 100)) * (1 - ($this->company[$ceo->id]['event_prob']  / 2))
                         ),
                         2
                     );
@@ -612,6 +612,11 @@ class Core
                 $this->company[$ceo->id]['asset_indebtedness'] = ($this->company[$ceo->id]['liabilities'] <= 0) ? 0 : round($this->company[$ceo->id]['liabilities'] / $this->company[$ceo->id]['total_assets'], 2);
                 $this->company[$ceo->id]['equity_indebtedness'] = ($this->company[$ceo->id]['liabilities'] <= 0) ? 0 : round($this->company[$ceo->id]['liabilities'] / $this->company[$ceo->id]['equity'], 2);
                 $this->company[$ceo->id]['fix_assets_indebtedness'] = ($this->company[$ceo->id]['liabilities'] <= 0) ? 0 : round($this->company[$ceo->id]['liabilities'] / $this->company[$ceo->id]['fix_assets'], 2);
+                
+                if ($this->stage == 0 && $this->company[$ceo->id]['final_cash'] < 0) {
+                    $this->company[$ceo->id]['line_credit'] = $this->company[$ceo->id]['final_cash'] * -3;
+                    $this->company[$ceo->id]['total_funds'] = $this->company[$ceo->id]['final_cash'] + $this->company[$ceo->id]['line_credit'];
+                }
 
                 if ($this->stage == 0) {
                     $this->company[$ceo->id]['demand_change'] = $this->company[$ceo->id]['demand_u'];
