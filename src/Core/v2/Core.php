@@ -705,11 +705,12 @@ class Core
 
                 $this->company[$ceo->id]['status_company'] = 'OK';
                 if (!$ceo->pivot->bankrupt && !$ceo->pivot->dismissed && $this->stage > 0) {
-                    if ($this->company[$ceo->id]['total_funds_ratio'] < $this->game->game_parameters['out_zone']) {
-                        $this->company[$ceo->id]['dismissed'] = true;
-                        $this->company[$ceo->id]['status_company'] = 'DISMISSED_CEO';
-                    // } else if ($this->company[$ceo->id]['total_funds'] < $this->company[$ceo->id]['min_funds']) {
-                    } else if ($this->company[$ceo->id]['total_funds'] < $this->company[$ceo->id]['depreciation']) {
+                    // if ($this->company[$ceo->id]['total_funds_ratio'] < $this->game->game_parameters['out_zone']) {
+                    //     $this->company[$ceo->id]['dismissed'] = true;
+                    //     $this->company[$ceo->id]['status_company'] = 'DISMISSED_CEO';
+                    // // } else if ($this->company[$ceo->id]['total_funds'] < $this->company[$ceo->id]['min_funds']) {
+                    // } else if ($this->company[$ceo->id]['total_funds'] < $this->company[$ceo->id]['depreciation']) {
+                    if ($this->company[$ceo->id]['total_funds'] < $this->company[$ceo->id]['depreciation']) {
                         $this->company[$ceo->id]['bankrupt'] = true;
                         $this->company[$ceo->id]['status_company'] = 'BANKRUPT';
                     }
