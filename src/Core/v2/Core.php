@@ -970,10 +970,15 @@ class Core
         $industry_status = $this->game->game_parameters['industry_status'];
         $status_vars = json_decode(file_get_contents(__DIR__ . '/data/industry_statuses.json'), true);
 
-        $vars['id_sensibility'] = rand(
-            $status_vars[$industry_status]['id_sensibility']['min'],
-            $status_vars[$industry_status]['id_sensibility']['max'],
-        );
+        if ($industry_status === 'random') {
+            $industry_status = array_rand([
+                "industry_status_war_prices",
+                "industry_status_demanding_customers",
+                "industry_status_constant_development",
+                "industry_status_faithful_clients"
+            ]);
+        }
+
         $vars['price_sensibility'] = rand(
             $status_vars[$industry_status]['price_sensibility']['min'],
             $status_vars[$industry_status]['price_sensibility']['max'],
