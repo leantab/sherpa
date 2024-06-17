@@ -103,21 +103,25 @@ if (!function_exists('checkTotalFunds')) {
 if (!function_exists('forceStageCopyCeoDecisions')) {
     function forceStageCopyCeoDecisions($game, $ceo)
     {
-
-        return [
-            'capital_inv' => ($game->current_stage > 1) ? $ceo->pivot->ceo_parameters['stage_' . ($game->current_stage - 1)]['capital_inv'] : 0,
-            'corp_debt' => ($game->current_stage > 1) ? $ceo->pivot->ceo_parameters['stage_' . ($game->current_stage - 1)]['corp_debt'] : 0,
-            'corp_debt_topay' => ($game->current_stage > 1) ? $ceo->pivot->ceo_parameters['stage_' . ($game->current_stage - 1)]['corp_debt_topay'] : 0,
-            'design' => ($game->current_stage > 1) ? $ceo->pivot->ceo_parameters['stage_' . ($game->current_stage - 1)]['design'] : 0,
-            'survey' => ($game->current_stage > 1) ? $ceo->pivot->ceo_parameters['stage_' . ($game->current_stage - 1)]['survey'] : 0,
-            'ibk' => $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['ibk'],
-            'mkt' => $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['mkt'],
-            'price' => $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['price'],
-            'production' => $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['production'],
-            'quality_control' => ($game->current_stage > 1) ? $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['quality_control'] : 'qc_start_up',
-            'recycle' => ($game->current_stage > 1) ? $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['recycle'] : 'recycle_sub_saharian_standards',
-            'safety' => ($game->current_stage > 1) ? $ceo->pivot->results['stage_' . ($game->current_stage - 1)]['safety'] : 'safety_1',
-        ];
+        if ($game->current_stage > 1) {
+            return $ceo->pivot->ceo_parameters['stage_' . ($game->current_stage - 1)];
+        } else {
+            return [
+                'capital_inv' => 1,
+                'new_debt' => 1,
+                "taken_debt" => 1,
+                "payed_debt" => 0,
+                'design' => 1,
+                'survey' => 1,
+                'ibk' => 1,
+                'mkt' => 1,
+                'price' => 1,
+                'production' => 1,
+                'quality_control' => 'qc_start_up',
+                'recycle' => 'recycle_sub_saharian_standards',
+                'safety' => 'safety_1',
+            ];
+        }
     }
 }
 

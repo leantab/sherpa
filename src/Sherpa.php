@@ -613,7 +613,9 @@ class Sherpa
                 'ceo_parameters' => $ceo_parameters
             ]);
 
-            $this->processGame($game_id);
+            if ($game->hasAllCeoDecisions()) {
+                $this->processGame($game_id);
+            }
             $return = new \StdClass();
             $return->status = true;
             return $return;
@@ -726,8 +728,8 @@ class Sherpa
 
     public function forceProcessGame($game_id)
     {
-
         $game = Game::findOrFail($game_id);
+        
         if ($game->hasGovermentDecisions()) {
             include(__DIR__ . '/Core/' . $game->version . '/functions.php');
             foreach ($game->ceos as $ceo) {

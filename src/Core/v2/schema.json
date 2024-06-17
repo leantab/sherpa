@@ -75,8 +75,7 @@
         "industry_status_war_prices",
         "industry_status_demanding_customers",
         "industry_status_constant_development",
-        "industry_status_faithful_clients",
-        "random"
+        "industry_status_faithful_clients"
       ]
     },
     "company_type": {
@@ -85,8 +84,7 @@
       "options": [
         "company_type_start_up",
         "company_type_pyme",
-        "company_type_corporate",
-        "random"
+        "company_type_corporate"
       ]
     },
     "accounting_period": {
@@ -308,7 +306,7 @@
       "type": "float",
       "value": "getLineCredit()"
     },
-    "financial_debt": { 
+    "financial_debt": {
       "type": "float",
       "value": "getFinancialDebt()"
     },
