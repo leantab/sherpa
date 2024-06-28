@@ -979,6 +979,11 @@ class Core
             ]);
         }
 
+        $vars['id_sensibility'] = rand(
+            $status_vars[$industry_status]['id_sensibility']['min'],
+            $status_vars[$industry_status]['id_sensibility']['max'],
+        );
+        
         $vars['price_sensibility'] = rand(
             $status_vars[$industry_status]['price_sensibility']['min'],
             $status_vars[$industry_status]['price_sensibility']['max'],
