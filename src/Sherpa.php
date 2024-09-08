@@ -728,22 +728,23 @@ class Sherpa
 
     public function forceProcessGame($game_id)
     {
-        $game = Game::findOrFail($game_id);
+        $game = Game::findOrFail( (int) $game_id);
         
         if ($game->hasGovermentDecisions()) {
-            include(__DIR__ . '/Core/' . $game->version . '/functions.php');
             foreach ($game->ceos as $ceo) {
-                if (!isset($ceo->pivot->ceo_parameters['stage_' . $game->current_stage])) {
-                    if ($ceo->pivot->ceo_parameters) {
-                        $ceo_parameters = $ceo->pivot->ceo_parameters;
+                $pivot = $ceo->pivot;
+                $stage = $game->current_stage;
+                if (!isset($pivot->ceo_parameters['stage_' . $stage])) {
+                    if ($pivot->ceo_parameters) {
+                        $ceo_parameters = $pivot->ceo_parameters;
                     } else {
                         $ceo_parameters = [];
                     }
 
-                    $ceo_parameters['stage_' . $game->current_stage] = forceStageCopyCeoDecisions($game, $ceo);
-                    $ceo_parameters['stage_' . $game->current_stage]['copy_force_stage'] = true;
+                    $ceo_parameters['stage_' . $stage] = $this->forceStageCopyCeoDecisions($game, $ceo, $stage);
+                    $ceo_parameters['stage_' . $stage]['copy_force_stage'] = true;
 
-                    $ceo->pivot->update([
+                    $pivot->update([
                         'ceo_parameters' => $ceo_parameters
                     ]);
                 }
@@ -1035,6 +1036,29 @@ class Sherpa
             return $vars;
         } else {
             return [];
+        }
+    }
+
+    private function forceStageCopyCeoDecisions($game, $ceo, $stage)
+    {
+        if ($stage > 1) {
+            return $ceo->pivot->ceo_parameters['stage_' . ($stage - 1)];
+        } else {
+            return [
+                'capital_inv' => 1,
+                'new_debt' => 1000,
+                "taken_debt" => 1,
+                "payed_debt" => 1,
+                'design' => 1,
+                'survey' => 1,
+                'ibk' => 1,
+                'mkt' => 1,
+                'price' => 10,
+                'production' => 10,
+                'quality_control' => 'qc_start_up',
+                'recycle' => 'recycle_sub_saharian_standards',
+                'safety' => 'safety_1',
+            ];
         }
     }
 }
