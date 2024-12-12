@@ -644,7 +644,12 @@ class Core
                 $this->company[$ceo->id]['fix_asset_rotation'] = round($this->company[$ceo->id]['total_revenue'] / $this->company[$ceo->id]['fix_assets'], 2);
                 $this->company[$ceo->id]['total_asset_rotation'] = round($this->company[$ceo->id]['total_revenue'] / $this->company[$ceo->id]['total_assets'], 2);
 
-                if (!$ceo->pivot->bankrupt && !$ceo->pivot->dismissed) {
+                if ($this->company[$ceo->id]['total_revenue'] == 0) {
+                    $this->company[$ceo->id]['financial_impact'] = 0;
+                    $this->company[$ceo->id]['asset_net_profitability'] = 0;
+                    $this->company[$ceo->id]['gross_profitability'] = 0;
+                    $this->company[$ceo->id]['sales_net_profitability'] = 0;
+                } elseif (!$ceo->pivot->bankrupt && !$ceo->pivot->dismissed) {
                     $this->company[$ceo->id]['financial_impact'] = abs(round(($this->company[$ceo->id]['financial_result'] / $this->company[$ceo->id]['total_revenue']) * 100, 2));
                     $this->company[$ceo->id]['asset_net_profitability'] = round(($this->company[$ceo->id]['un'] / $this->company[$ceo->id]['total_assets']) * 100, 2);
                     $this->company[$ceo->id]['gross_profitability'] = round(($this->company[$ceo->id]['gross_profit'] / $this->company[$ceo->id]['total_revenue']) * 100, 2);
