@@ -418,6 +418,10 @@ class Core
             $this->global['inventories_sum'] = 0;
             $this->global['hirschman_sum'] = 0;
 
+            if ($this->global['sold_u_industry'] == 0) {
+                $this->global['sold_u_industry'] = 1;
+            }
+
             foreach ($this->game->ceos as $ceo) {
                 $this->company[$ceo->id]['market_share'] = ($this->company[$ceo->id]['sold_u'] / $this->global['sold_u_industry']) * 100;
                 //Hirschman_index=(Σmarket_share^2(n)/ 2500) * 100             
