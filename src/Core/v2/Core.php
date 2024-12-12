@@ -350,10 +350,14 @@ class Core
                 $this->global['mkt_index_industry'] += $this->company[$ceo->id]['mkt_index'];
             }
 
+            if ($this->global['mkt_index_industry'] == 0) {
+                $this->global['mkt_index_industry'] = 1;
+            }
+
             // loop 8
             $this->global['total_points_industry'] = 0;
             foreach ($this->game->ceos as $ceo) {
-                $this->company[$ceo->id]['final_mkt_points'] = $this->company[$ceo->id]['mkt_index'] / ($this->global['mkt_index_industry'] == 0 ? 0.1 : $this->global['mkt_index_industry']) * $this->industry['p_mkt'];
+                $this->company[$ceo->id]['final_mkt_points'] = $this->company[$ceo->id]['mkt_index'] / $this->global['mkt_index_industry'] * $this->industry['p_mkt'];
                 $this->global['final_mkt_points_sum'] += $this->company[$ceo->id]['final_mkt_points'];
 
                 if (!$ceo->pivot->bankrupt && !$ceo->pivot->dismissed) {
