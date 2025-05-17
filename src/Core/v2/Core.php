@@ -350,6 +350,10 @@ class Core
                 $this->global['mkt_index_industry'] += $this->company[$ceo->id]['mkt_index'];
             }
 
+            if ($this->global['mkt_index_industry'] == 0) {
+                $this->global['mkt_index_industry'] = 1;
+            }
+
             // loop 8
             $this->global['total_points_industry'] = 0;
             foreach ($this->game->ceos as $ceo) {
@@ -413,6 +417,10 @@ class Core
             $this->global['final_stock_industry'] = 0;
             $this->global['inventories_sum'] = 0;
             $this->global['hirschman_sum'] = 0;
+
+            if ($this->global['sold_u_industry'] == 0) {
+                $this->global['sold_u_industry'] = 1;
+            }
 
             foreach ($this->game->ceos as $ceo) {
                 $this->company[$ceo->id]['market_share'] = ($this->company[$ceo->id]['sold_u'] / $this->global['sold_u_industry']) * 100;
@@ -636,7 +644,12 @@ class Core
                 $this->company[$ceo->id]['fix_asset_rotation'] = round($this->company[$ceo->id]['total_revenue'] / $this->company[$ceo->id]['fix_assets'], 2);
                 $this->company[$ceo->id]['total_asset_rotation'] = round($this->company[$ceo->id]['total_revenue'] / $this->company[$ceo->id]['total_assets'], 2);
 
-                if (!$ceo->pivot->bankrupt && !$ceo->pivot->dismissed) {
+                if ($this->company[$ceo->id]['total_revenue'] == 0) {
+                    $this->company[$ceo->id]['financial_impact'] = 0;
+                    $this->company[$ceo->id]['asset_net_profitability'] = 0;
+                    $this->company[$ceo->id]['gross_profitability'] = 0;
+                    $this->company[$ceo->id]['sales_net_profitability'] = 0;
+                } elseif (!$ceo->pivot->bankrupt && !$ceo->pivot->dismissed) {
                     $this->company[$ceo->id]['financial_impact'] = abs(round(($this->company[$ceo->id]['financial_result'] / $this->company[$ceo->id]['total_revenue']) * 100, 2));
                     $this->company[$ceo->id]['asset_net_profitability'] = round(($this->company[$ceo->id]['un'] / $this->company[$ceo->id]['total_assets']) * 100, 2);
                     $this->company[$ceo->id]['gross_profitability'] = round(($this->company[$ceo->id]['gross_profit'] / $this->company[$ceo->id]['total_revenue']) * 100, 2);
