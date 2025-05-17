@@ -730,30 +730,40 @@ class Sherpa
     {
         $game = Game::findOrFail( (int) $game_id);
         
-        if ($game->hasGovermentDecisions()) {
-            foreach ($game->ceos as $ceo) {
-                $pivot = $ceo->pivot;
-                $stage = $game->current_stage;
-                if (!isset($pivot->ceo_parameters['stage_' . $stage])) {
-                    if ($pivot->ceo_parameters) {
-                        $ceo_parameters = $pivot->ceo_parameters;
-                    } else {
-                        $ceo_parameters = [];
-                    }
-
-                    $ceo_parameters['stage_' . $stage] = $this->forceStageCopyCeoDecisions($game, $ceo, $stage);
-                    $ceo_parameters['stage_' . $stage]['copy_force_stage'] = true;
-
-                    $pivot->update([
-                        'ceo_parameters' => $ceo_parameters
-                    ]);
-                }
-            }
-            ProcessStage::dispatch($game);
-            return true;
-        } else {
+        if (!$game->isActive()) {
             return false;
         }
+        
+        if (!$game->hasGovermentDecisions()) {
+            return false;
+        }
+        
+        if ($game->hasAllCeoDecisions()) {
+            ProcessStage::dispatch($game);
+            return true;
+        }
+
+        foreach ($game->ceos as $ceo) {
+            $pivot = $ceo->pivot;
+            $stage = $game->current_stage;
+            if (!isset($pivot->ceo_parameters['stage_' . $stage])) {
+                if ($pivot->ceo_parameters) {
+                    $ceo_parameters = $pivot->ceo_parameters;
+                } else {
+                    $ceo_parameters = [];
+                }
+
+                $ceo_parameters['stage_' . $stage] = $this->forceStageCopyCeoDecisions($game, $ceo, $stage);
+                $ceo_parameters['stage_' . $stage]['copy_force_stage'] = true;
+
+                $pivot->update([
+                    'ceo_parameters' => $ceo_parameters
+                ]);
+            }
+        }
+        
+        ProcessStage::dispatch($game);
+        return true;
     }
 
 
