@@ -1,7 +1,7 @@
 {
   "game_parameters": {
     "country_income_level": "country_income_upper_middle_income",
-    "salary": 425,
+    "salary": 270,
     "loan_ratio": 15.98,
     "profit_tax": 35,
     "vat_tax": 21,
