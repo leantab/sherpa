@@ -8,7 +8,7 @@
     "labor_tax": 29.3,
     "easy_business_score": "easy_business_medium",
     "compensation_cost": 2,
-    "interest_rate": 105,
+    "interest_rate": 15,
     "financial_cost": {
       "type": "random",
       "relation": "interest_rate",
@@ -34,8 +34,8 @@
     },
     "interest_rate": {
       "type": "random",
-      "min": 95,
-      "max": 110
+      "min": 15,
+      "max": 90
     },
     "financial_cost": {
       "type": "random",
