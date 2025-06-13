@@ -529,7 +529,7 @@ class Core
 
                 //SI(financial_debt>0,-1*financial_debt*interest_rate, financial_inv*(interest_rate-financial_cost))/(12/accounting_period)
                 if ($this->company[$ceo->id]['financial_debt'] > 0) {
-                    $this->company[$ceo->id]['financial_result'] = $neg_finacial_debt * $this->global['interest_rate'] / 100;
+                    $this->company[$ceo->id]['financial_result'] = $neg_finacial_debt * ($this->global['interest_rate'] / 100) / $this->global['annual_rounds'];
                 } else {
                     $this->company[$ceo->id]['financial_result'] = $this->company[$ceo->id]['financial_inv'] * (($this->global['interest_rate'] - $this->game->game_parameters['financial_cost']) / 100) / $this->global['annual_rounds'];
                 }
