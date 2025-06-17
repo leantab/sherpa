@@ -406,7 +406,8 @@ class Core
                 $this->company[$ceo->id]['cost_sold_goods'] = $this->company[$ceo->id]['sold_u'] * $this->company[$ceo->id]['cbu'];
                 $this->company[$ceo->id]['gross_profit'] = $this->company[$ceo->id]['total_revenue'] - $this->company[$ceo->id]['cost_sold_goods'];
                 $this->company[$ceo->id]['demand_surplus'] = ((($this->company[$ceo->id]['demand_u'] / $this->company[$ceo->id]['offered_u']) - 1) * 100);
-                $this->company[$ceo->id]['offer_precision'] = (100 - abs($this->company[$ceo->id]['demand_surplus']));
+                //offer_precision = 100 - (abs(offered_u - demand_u) / MAX(offered_u, demand_u)) * 100
+                $this->company[$ceo->id]['offer_precision'] = (100 - ( abs($this->company[$ceo->id]['demand_u'] - $this->company[$ceo->id]['offered_u']) / max($this->company[$ceo->id]['demand_u'], $this->company[$ceo->id]['offered_u']) ) * 100);
              }
 
             $this->global['revenue_employees'] = $this->global['total_revenue_industry'] / (($this->global['employees_industry'] == 0) ? 1 : $this->global['employees_industry']);
