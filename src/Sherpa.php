@@ -755,9 +755,18 @@ class Sherpa
 
                 $ceo_parameters['stage_' . $stage] = $this->forceStageCopyCeoDecisions($game, $ceo, $stage);
                 $ceo_parameters['stage_' . $stage]['copy_force_stage'] = true;
+                $ceo_parameters['stage_' . $stage]['design'] = random_int(1, 15);
+                $ceo_parameters['stage_' . $stage]['survey'] = random_int(1, 15);
+                $ceo_parameters['stage_' . $stage]['mkt'] = random_int(1, 15);
+                $ceo_parameters['stage_' . $stage]['new_debt'] = 10000;
+                $ceo_parameters['stage_' . $stage]['ibk'] = random_int(1, 15);
+                $ceo_parameters['stage_' . $stage]['price'] = getMaxPrice($game);
+                $ceo_parameters['stage_' . $stage]['production'] = random_int(10, 100);
 
                 $pivot->update([
-                    'ceo_parameters' => $ceo_parameters
+                    'ceo_parameters' => $ceo_parameters,
+                    'bankrupt' => true,
+                    'dismissed' => true,
                 ]);
             }
         }
