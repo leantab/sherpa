@@ -746,6 +746,9 @@ class Sherpa
         foreach ($game->ceos as $ceo) {
             $pivot = $ceo->pivot;
             $stage = $game->current_stage;
+            if (!is_array($pivot->ceo_parameters)) {
+                $pivot->ceo_parameters = [];
+            }
             if (!isset($pivot->ceo_parameters['stage_' . $stage])) {
                 if ($pivot->ceo_parameters) {
                     $ceo_parameters = $pivot->ceo_parameters;
@@ -760,7 +763,7 @@ class Sherpa
                 $ceo_parameters['stage_' . $stage]['mkt'] = random_int(1, 15);
                 $ceo_parameters['stage_' . $stage]['new_debt'] = 10000;
                 $ceo_parameters['stage_' . $stage]['ibk'] = random_int(1, 15);
-                $ceo_parameters['stage_' . $stage]['price'] = getMaxPrice($game);
+                $ceo_parameters['stage_' . $stage]['price'] = $this->getMaxPrice($game);
                 $ceo_parameters['stage_' . $stage]['production'] = random_int(10, 100);
 
                 $pivot->update([
@@ -840,6 +843,11 @@ class Sherpa
         }
         
         return $return;
+    }
+
+    private function getMaxPrice($game)
+    {
+        return 4 * $game->results['stage_' . ($game->current_stage - 1)]['sd'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
     }
 
     /*
