@@ -847,7 +847,10 @@ class Sherpa
 
     private function getMaxPrice($game)
     {
-        return 4 * $game->results['stage_' . ($game->current_stage - 1)]['sd'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
+        if ($game->current_stage == 0 ||  !array_key_exists('sd_price', $game->results['stage_' . ($game->current_stage - 1)]) ||  !array_key_exists('average_price', $game->results['stage_' . ($game->current_stage - 1)]) ) {
+            return 50000;
+        }
+        return 4 * $game->results['stage_' . ($game->current_stage - 1)]['sd_price'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
     }
 
     /*
