@@ -132,14 +132,18 @@ class Core
                 if ($ceo->pivot->bankrupt || $ceo->pivot->dismissed) {
                     $this->company[$ceo->id]['cbu'] = 1;
                 } else {
-                    //(reference_cost * (8^7) / (ppe_t * production)*(1-event_prob/2))
-                    $this->company[$ceo->id]['cbu'] = round(
-                        (
-                            ($this->global['reference_cost'] * pow(8, 7)) /
-                            ($this->company[$ceo->id]['ppe'] * ($this->company[$ceo->id]['production'] / 100)) * (1 - ($this->company[$ceo->id]['event_prob']  / 2))
-                        ),
-                        2
-                    );
+                    if ($this->company[$ceo->id]['ppe'] == 0 || $this->company[$ceo->id]['production'] == 0) {
+                        $this->company[$ceo->id]['cbu'] = $this->global['reference_cost'];
+                    } else {
+                        //(reference_cost * (8^7) / (ppe_t * production)*(1-event_prob/2))
+                        $this->company[$ceo->id]['cbu'] = round(
+                            (
+                                ($this->global['reference_cost'] * pow(8, 7)) /
+                                ($this->company[$ceo->id]['ppe'] * ($this->company[$ceo->id]['production'] / 100)) * (1 - ($this->company[$ceo->id]['event_prob']  / 2))
+                            ),
+                            2
+                        );
+                    }
                 }
 
                 $this->global['cbu_sum'] += $this->company[$ceo->id]['cbu'];

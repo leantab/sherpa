@@ -263,7 +263,7 @@
     "production": {
       "required": true,
       "type": "integer",
-      "min": 10,
+      "min": 0,
       "max": 100
     },
     "recycle": {
