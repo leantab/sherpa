@@ -18,21 +18,22 @@ if (!function_exists('sd')) {
 if (!function_exists('getMinPrice')) {
     function getMinPrice($game)
     {
-        if ($game->current_stage == 0 ||  !array_key_exists('sd_price', $game->results['stage_' . ($game->current_stage - 1)]) || !array_key_exists('average_price', $game->results['stage_' . ($game->current_stage - 1)]) ) {
+        if ($game->current_stage == 0 || !array_key_exists('average_price', $game->results['stage_' . ($game->current_stage - 1)]) ) {
             return 10;
         }
-        $min_price =  -3 * $game->results['stage_' . ($game->current_stage - 1)]['sd_price'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
+        // $min_price =  -3 * $game->results['stage_' . ($game->current_stage - 1)]['sd_price'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
+        $min_price = 0.2 * $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
         return ($min_price < 0) ? 10 : $min_price;
-    }
+    } 
 }
 
 if (!function_exists('getMaxPrice')) {
     function getMaxPrice($game)
     {
-        if ($game->current_stage == 0 ||  !array_key_exists('sd_price', $game->results['stage_' . ($game->current_stage - 1)]) ||  !array_key_exists('average_price', $game->results['stage_' . ($game->current_stage - 1)]) ) {
+        if ($game->current_stage == 0 || !array_key_exists('average_price', $game->results['stage_' . ($game->current_stage - 1)]) ) {
             return 50000;
         }
-        return 4 * $game->results['stage_' . ($game->current_stage - 1)]['sd_price'] + $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
+        return 5 * $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
     }
 }
 
