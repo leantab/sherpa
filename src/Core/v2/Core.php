@@ -222,6 +222,14 @@ class Core
 
                 $this->company[$ceo->id]['necesary_funds'] = $this->company[$ceo->id]['ibk'] + $this->company[$ceo->id]['id'] + $this->company[$ceo->id]['mkt'] + $this->company[$ceo->id]['salaries_expense'] + $this->company[$ceo->id]['output'];
                 $this->company[$ceo->id]['target'] = $this->company[$ceo->id]['offered_u'] * $this->ceo[$ceo->id]['price'];
+                if ($this->company[$ceo->id]['target'] == 0) {
+                    \Log::error("Target = 0 for company " . $ceo->id, [
+                        'ceo' => json_encode($ceo),
+                        'company' => $this->company[$ceo->id],
+                        'global' => $this->global
+                    ]);
+                    $this->company[$ceo->id]['target'] = 2;
+                }
             } // end foreach
 
             $this->global['average_production'] = $this->global['production_sum'] / $this->num_ceos;
