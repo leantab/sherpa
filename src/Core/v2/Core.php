@@ -406,7 +406,10 @@ class Core
             $this->global['sum_total_revenue'] = 0;
             foreach ($this->game->ceos as $ceo) {
                 //MAX(0, total_points_player / total_points_industry * u_dem_industry)
-                $this->company[$ceo->id]['demand_u'] = max(round($this->company[$ceo->id]['total_points_player'] / $this->global['total_points_industry'] * $this->global['u_dem_industry'], 0), 0);
+                $this->company[$ceo->id]['demand_u'] = max(round($this->company[$ceo->id]['total_points_player'] / $this->global['total_points_industry'] * $this->global['u_dem_industry'], 0), 0.1);
+                if ($this->company[$ceo->id]['demand_u'] == 0) {
+                    $this->company[$ceo->id]['demand_u'] = 1;
+                }
                 $this->company[$ceo->id]['offer_surplus'] = $this->company[$ceo->id]['u_prod'] - $this->company[$ceo->id]['demand_u'];
                 $this->company[$ceo->id]['sold_u'] = round(min($this->company[$ceo->id]['demand_u'], $this->company[$ceo->id]['offered_u']), 0);
                 $this->global['sold_u_industry'] += $this->company[$ceo->id]['sold_u'];
