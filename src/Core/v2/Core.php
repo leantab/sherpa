@@ -186,6 +186,9 @@ class Core
                 }
 
                 $this->company[$ceo->id]['offered_u'] = round($this->company[$ceo->id]['current_stock'] + $this->company[$ceo->id]['u_prod']);
+                if ($this->company[$ceo->id]['offered_u'] == 0) {
+                    $this->company[$ceo->id]['offered_u'] = 1;
+                }
                 $this->company[$ceo->id]['vpe'] = round($this->company[$ceo->id]['cbu'] * $this->company[$ceo->id]['worker_productivity'], 2);
                 // $this->company[$ceo->id]['max_w'] = $this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'] * log(10);
                 $this->company[$ceo->id]['max_e'] = round($this->company[$ceo->id]['ppe'] / $this->company[$ceo->id]['vpe'], 2);
