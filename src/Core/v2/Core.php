@@ -156,6 +156,9 @@ class Core
                 $this->global['max_u_industry'] += $this->company[$ceo->id]['max_u'];
 
                 $this->company[$ceo->id]['u_prod'] = round(($this->company[$ceo->id]['production'] / 100) * $this->company[$ceo->id]['max_u'], 0);
+                if ($this->company[$ceo->id]['u_prod'] == 0) {
+                    $this->company[$ceo->id]['u_prod'] = 1;
+                }
                 $this->company[$ceo->id]['output'] = $this->company[$ceo->id]['cbu'] * $this->company[$ceo->id]['u_prod'];
                 $this->global['output_sum'] += $this->company[$ceo->id]['output'];
 
