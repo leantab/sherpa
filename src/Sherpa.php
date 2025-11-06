@@ -2,6 +2,7 @@
 
 namespace Leantab\Sherpa;
 
+use Exception;
 use Leantab\Sherpa\Jobs\ProcessStage;
 use Leantab\Sherpa\Models\Game;
 use Leantab\Sherpa\Models\GameUser;
@@ -1047,7 +1048,8 @@ class Sherpa
     private function parseSchema(string $version): array
     {
         if (!file_exists(__DIR__ . '/Core/' . $version . '/schema.json')) {
-            return false;
+            // return false;
+            throw new Exception("Schema not found for version: " . $version);
         }
 
         /** @var array $schema */
@@ -1081,20 +1083,21 @@ class Sherpa
 
     private function forceStageCopyCeoDecisions($game, $ceo, $stage)
     {
-        if ($stage > 1) {
-            return $ceo->pivot->ceo_parameters['stage_' . ($stage - 1)];
+        $previous_decisions = $ceo->pivot->ceo_parameters['stage_' . ($stage - 1)];
+        if ($stage > 1 && is_array($previous_decisions) && !empty($previous_decisions)) {
+            return $previous_decisions;
         } else {
             return [
                 'capital_inv' => 1,
-                'new_debt' => 1000,
-                "taken_debt" => 1,
-                "payed_debt" => 1,
+                'new_debt' => random_int(1000, 10000),
+                "taken_debt" => random_int(1000, 10000),
+                "payed_debt" => random_int(1000, 10000),
                 'design' => 1,
                 'survey' => 1,
                 'ibk' => 1,
                 'mkt' => 1,
-                'price' => 10,
-                'production' => 10,
+                'price' => random_int(10, 100),
+                'production' => random_int(10, 30),
                 'quality_control' => 'qc_start_up',
                 'recycle' => 'recycle_sub_saharian_standards',
                 'safety' => 'safety_1',
