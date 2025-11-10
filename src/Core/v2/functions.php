@@ -33,7 +33,7 @@ if (!function_exists('getMaxPrice')) {
         if ($game->current_stage == 0 || !array_key_exists('average_price', $game->results['stage_' . ($game->current_stage - 1)]) ) {
             return 50000;
         }
-        return 5 * $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
+        return 2 * $game->results['stage_' . ($game->current_stage - 1)]['average_price'];
     }
 }
 
