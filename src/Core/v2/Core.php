@@ -455,7 +455,8 @@ class Core
 
                 $this->company[$ceo->id]['loan_ratio'] = $this->game->game_parameters['loan_ratio'];
                 
-                $this->company[$ceo->id]['top_loan'] = ($this->company[$ceo->id]['loan_ratio'] * ($this->global['total_revenue_industry'] / ($this->num_ceos * 2)));
+                // $this->company[$ceo->id]['top_loan'] = ($this->company[$ceo->id]['loan_ratio'] * ($this->global['total_revenue_industry'] / ($this->num_ceos * 2)));
+                $this->company[$ceo->id]['top_loan'] = $ceo->pivot->results['stage_' . ($this->stage - 1)]['ppe'] * 0.8;
                 
             }
 
