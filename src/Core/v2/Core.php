@@ -305,6 +305,8 @@ class Core
                 $this->global['id_index_industry'] += $this->company[$ceo->id]['id_index'];
             }
 
+            $this->global['technology_index'] = $this->global['id_index_industry'] / $this->num_ceos;
+
             if ($this->global['id_index_industry'] == 0) {
                 $this->global['id_index_industry'] = 1;
             }
